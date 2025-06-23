@@ -1,50 +1,167 @@
 import React from 'react'
-import { cva, type VariantProps } from 'class-variance-authority'
-import { clsx } from 'clsx'
+import { colors } from '../../theme/colors'
+import { typography } from '../../theme/typography'
+import { padding } from '../../theme/spacing'
 
-const buttonVariants = cva(
-  'inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50',
-  {
-    variants: {
-      variant: {
-        default: 'bg-primary text-primary-foreground shadow hover:bg-primary/90',
-        destructive: 'bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90',
-        outline: 'border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground',
-        secondary: 'bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80',
-        ghost: 'hover:bg-accent hover:text-accent-foreground',
-        link: 'text-primary underline-offset-4 hover:underline',
-      },
-      size: {
-        default: 'h-9 px-4 py-2',
-        sm: 'h-8 rounded-md px-3 text-xs',
-        lg: 'h-10 rounded-md px-8',
-        icon: 'h-9 w-9',
-      },
-    },
-    defaultVariants: {
-      variant: 'default',
-      size: 'default',
-    },
-  }
-)
-
-export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {
-  asChild?: boolean
+export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost'
+  size?: 'small' | 'medium' | 'large'
+  loading?: boolean
+  icon?: React.ReactNode
 }
 
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
-    return (
-      <button
-        className={clsx(buttonVariants({ variant, size }), className)}
-        ref={ref}
-        {...props}
-      />
-    )
-  }
-)
-Button.displayName = 'Button'
+export const Button: React.FC<ButtonProps> = ({
+  variant = 'primary',
+  size = 'medium',
+  children,
+  disabled = false,
+  loading = false,
+  icon,
+  className = '',
+  style,
+  ...props
+}) => {
+  const getButtonStyles = () => {
+    const baseStyles: React.CSSProperties = {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: '8px',
+      borderRadius: '8px',
+      border: 'none',
+      cursor: disabled || loading ? 'not-allowed' : 'pointer',
+      transition: 'all 0.2s ease',
+      fontFamily: typography.button[size === 'small' ? 2 : 1].fontFamily,
+      fontWeight: typography.button[size === 'small' ? 2 : 1].fontWeight,
+      fontSize: typography.button[size === 'small' ? 2 : 1].fontSize,
+      lineHeight: typography.button[size === 'small' ? 2 : 1].lineHeight,
+      outline: 'none',
+      opacity: disabled ? 0.6 : 1,
+    }
 
-export { Button, buttonVariants } 
+    // Size styles
+    const sizeStyles: Record<string, React.CSSProperties> = {
+      small: {
+        padding: padding.sm,
+        height: '30px',
+        minWidth: '64px',
+      },
+      medium: {
+        padding: padding.md,
+        height: '36px',
+        minWidth: '80px',
+      },
+      large: {
+        padding: padding.lg,
+        height: '48px',
+        minWidth: '120px',
+      },
+    }
+
+    // Variant styles
+    const variantStyles: Record<string, React.CSSProperties> = {
+      primary: {
+        backgroundColor: disabled ? colors.primary.disabled : colors.primary.normal,
+        color: colors.neutral.white,
+      },
+      secondary: {
+        backgroundColor: colors.neutral.gray50,
+        color: colors.neutral.gray900,
+      },
+      outline: {
+        backgroundColor: 'transparent',
+        color: colors.primary.normal,
+        border: `1px solid ${colors.primary.normal}`,
+      },
+      ghost: {
+        backgroundColor: 'transparent',
+        color: colors.neutral.gray900,
+      },
+    }
+
+    return {
+      ...baseStyles,
+      ...sizeStyles[size],
+      ...variantStyles[variant],
+      ...style,
+    }
+  }
+
+  const handleMouseEnter = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (disabled || loading) return
+    
+    const button = e.currentTarget
+    switch (variant) {
+      case 'primary':
+        button.style.backgroundColor = colors.primary.hover
+        break
+      case 'secondary':
+        button.style.backgroundColor = colors.neutral.gray100
+        break
+      case 'outline':
+        button.style.backgroundColor = colors.primary.normal
+        button.style.color = colors.neutral.white
+        break
+      case 'ghost':
+        button.style.backgroundColor = colors.neutral.gray50
+        break
+    }
+  }
+
+  const handleMouseLeave = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (disabled || loading) return
+    
+    const button = e.currentTarget
+    switch (variant) {
+      case 'primary':
+        button.style.backgroundColor = colors.primary.normal
+        break
+      case 'secondary':
+        button.style.backgroundColor = colors.neutral.gray50
+        break
+      case 'outline':
+        button.style.backgroundColor = 'transparent'
+        button.style.color = colors.primary.normal
+        break
+      case 'ghost':
+        button.style.backgroundColor = 'transparent'
+        break
+    }
+  }
+
+  const handleMouseDown = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (disabled || loading) return
+    
+    const button = e.currentTarget
+    if (variant === 'primary') {
+      button.style.backgroundColor = colors.primary.pressed
+    }
+  }
+
+  return (
+    <button
+      style={getButtonStyles()}
+      disabled={disabled || loading}
+      className={className}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      onMouseDown={handleMouseDown}
+      {...props}
+    >
+      {loading && (
+        <div 
+          style={{
+            width: '16px',
+            height: '16px',
+            border: '2px solid currentColor',
+            borderTop: '2px solid transparent',
+            borderRadius: '50%',
+            animation: 'spin 1s linear infinite',
+          }}
+        />
+      )}
+      {icon && !loading && icon}
+      {children}
+    </button>
+  )
+} 
