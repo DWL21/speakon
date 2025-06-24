@@ -4,19 +4,7 @@ import { Logo } from './Logo'
 import { ChatButton } from './ChatButton'
 import { Typography } from './ui/Typography'
 
-interface TopNavBarProps {
-  onChatClick?: () => void
-}
-
-export const TopNavBar: React.FC<TopNavBarProps> = ({ onChatClick }) => {
-  const handleChatClick = () => {
-    if (onChatClick) {
-      onChatClick()
-    } else {
-      alert('음성으로 대화를 시작합니다!')
-    }
-  }
-
+export const TopNavBar: React.FC = () => {
   return (
     <nav style={{
       width: '100vw',
@@ -41,7 +29,7 @@ export const TopNavBar: React.FC<TopNavBarProps> = ({ onChatClick }) => {
         display: 'flex', 
         alignItems: 'center'
       }}>
-        <Logo width={104} height={21} />
+        <Logo />
       </Link>
       
       {/* 오른쪽: 텍스트 + 대화 버튼 */}
@@ -50,10 +38,12 @@ export const TopNavBar: React.FC<TopNavBarProps> = ({ onChatClick }) => {
         alignItems: 'center', 
         gap: '16px'
       }}>
-        <Typography variant="body1" color="black">
-          음성으로 대화
-        </Typography>
-        <ChatButton onClick={handleChatClick} width={64} height={30} />
+        <Link to="/" style={{ textDecoration: 'none' }}>
+          <Typography variant="body1" color="black" style={{ cursor: 'pointer' }}>
+            홈으로
+          </Typography>
+        </Link>
+        <ChatButton width={64} height={30} />
       </div>
     </nav>
   )
