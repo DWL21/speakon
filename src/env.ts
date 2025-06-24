@@ -1,8 +1,13 @@
-const env = {
-  API_BASE_URL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000',
-  NODE_ENV: import.meta.env.NODE_ENV || 'development',
-  IS_PRODUCTION: import.meta.env.NODE_ENV === 'production',
-  IS_DEVELOPMENT: import.meta.env.NODE_ENV === 'development',
+// 환경변수 타입 정의
+interface Env {
+  VITE_API_URL?: string;
+  VITE_APP_NAME?: string;
+}
+
+// 환경변수 가져오기
+const env: Env = {
+  VITE_API_URL: import.meta.env.VITE_API_URL,
+  VITE_APP_NAME: import.meta.env.VITE_APP_NAME || '새 프로젝트',
 }
 
 export default env 
