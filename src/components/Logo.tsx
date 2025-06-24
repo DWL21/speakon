@@ -1,33 +1,17 @@
 import React from 'react'
 
-interface LogoProps {
-  width?: number | string
-  height?: number | string
-  className?: string
-  style?: React.CSSProperties
-  title?: string
-}
-
-export const Logo: React.FC<LogoProps> = ({
-  width = 104,
-  height = 21,
-  className = '',
-  style,
-  title = 'SpeakOn 로고'
-}) => {
+export const Logo: React.FC = () => {
   return (
     <svg
-      width={width}
-      height={height}
+      width={104}
+      height={21}
       viewBox="0 0 105 21"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className={className}
-      style={style}
       role="img"
-      aria-label={title}
+      aria-label="SpeakOn 로고"
     >
-      {title && <title>{title}</title>}
+      <title>SpeakOn 로고</title>
       
       {/* "speak" 부분 - 검은색 */}
       <path 

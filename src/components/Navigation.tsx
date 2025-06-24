@@ -31,7 +31,7 @@ export function Navigation() {
         alignItems: 'center'
       }}>
         <Link to="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
-          <Logo width={120} height={24} />
+          <Logo />
         </Link>
         
         <div style={{ display: 'flex', gap: '32px' }}>
