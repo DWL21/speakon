@@ -1,6 +1,10 @@
 .app {
+  width: 100vw;
   min-height: 100vh;
   background-color: #ffffff;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
 }
 
 .home-page,
@@ -28,18 +32,10 @@
   resize: vertical;
 }
 
-/* 반응형 디자인 */
-@media (max-width: 768px) {
-  .app main {
-    padding: 0 16px !important;
-  }
-  
-  .home-page {
-    padding: 24px 0;
-  }
-  
-  .home-page div {
-    flex-direction: column !important;
-    gap: 12px !important;
-  }
+/* 데스크톱 전용 설계 - 반응형 미디어 쿼리 제거 */
+body {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  overflow-x: hidden;
 } 
