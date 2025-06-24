@@ -41,7 +41,7 @@ export const TopNavBar: React.FC<TopNavBarProps> = ({ onChatClick }) => {
         display: 'flex', 
         alignItems: 'center'
       }}>
-        <Logo width={149} height={31} />
+        <Logo width={104} height={21} />
       </Link>
       
       {/* 오른쪽: 텍스트 + 대화 버튼 */}
