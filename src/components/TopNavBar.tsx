@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { Logo } from './Logo'
-import { ChatButton } from './ChatButton'
+import { LoginButton } from './LoginButton'
 import { Typography } from './ui/Typography'
 
 export const TopNavBar: React.FC = () => {
@@ -43,7 +43,7 @@ export const TopNavBar: React.FC = () => {
             홈으로
           </Typography>
         </Link>
-        <ChatButton width={64} height={30} />
+        <LoginButton width={80} height={30} />
       </div>
     </nav>
   )
