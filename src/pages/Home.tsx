@@ -1,6 +1,15 @@
 export function Home() {
   return (
     <div className="home-page">
+      {/* Frame 229 - 텍스트 섹션 */}
+      <div className="text-section">
+        <div className="text-content">
+          <div className="title-text">발표 연습, 이젠 SpeakON에서 끝내세요!</div>
+          <div className="subtitle-text">파일 업로드하고 발표 연습을 시작해보세요.</div>
+        </div>
+      </div>
+      
+      {/* 둥근 사각형 업로드 박스 */}
       <div className="upload-container">
         <div className="upload-content">
           {/* File Add Icon */}

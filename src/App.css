@@ -14,43 +14,77 @@
 }
 
 .home-page {
-  text-align: center;
+  text-align: left;
   padding: 40px 0;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: flex-start;
   align-items: center;
   min-height: 100vh;
+  gap: 32px;
 }
 
-/* 둥근 사각형 컨테이너 */
-.upload-container {
+/* Frame 229 - 텍스트 섹션 */
+.text-section {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
   padding: 0px;
-  gap: 28px;
+  gap: 15px;
   width: 1080px;
-  height: 618px;
-  background: #F1F2F5;
-  border-radius: 30px;
+  height: 51px;
   flex: none;
-  order: 1;
+  order: 0;
   align-self: stretch;
   flex-grow: 0;
 }
 
-/* Frame 94 - 메인 콘텐츠 컨테이너 */
-.upload-content {
+/* Frame 93/228 - 텍스트 콘텐츠 */
+.text-content {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  justify-content: flex-start;
+  align-items: flex-start;
   padding: 0px;
-  gap: 10px;
-  width: 184px;
-  height: 86px;
+  gap: 6px;
+  width: 1080px;
+  height: 51px;
   flex: none;
   order: 0;
+  flex-grow: 0;
+}
+
+/* 타이틀: 발표 연습, 이젠 SpeakON에서 끝내세요! */
+.title-text {
+  width: auto;
+  height: 26px;
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 22px;
+  line-height: 26px;
+  letter-spacing: -0.02em;
+  color: #171719;
+  text-align: left;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+}
+
+/* 서브타이틀: 파일 업로드하고 발표 연습을 시작해보세요. */
+.subtitle-text {
+  width: auto;
+  height: 19px;
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 19px;
+  color: #3282FF;
+  text-align: left;
+  flex: none;
+  order: 1;
   flex-grow: 0;
 }
 
@@ -133,4 +167,36 @@ body {
   padding: 0;
   width: 100vw;
   overflow-x: hidden;
+}
+
+/* Frame 94 - 업로드 콘텐츠 컨테이너 */
+.upload-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0px;
+  gap: 10px;
+  width: 184px;
+  height: 86px;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+}
+
+/* 둥근 사각형 컨테이너 */
+.upload-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0px;
+  gap: 28px;
+  width: 1080px;
+  height: 618px;
+  background: #F1F2F5;
+  border-radius: 30px;
+  flex: none;
+  order: 1;
+  align-self: stretch;
+  flex-grow: 0;
 } 
