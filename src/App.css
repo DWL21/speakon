@@ -16,6 +16,101 @@
 .home-page {
   text-align: center;
   padding: 40px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+/* 둥근 사각형 컨테이너 */
+.upload-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0px;
+  gap: 28px;
+  width: 1080px;
+  height: 618px;
+  background: #F1F2F5;
+  border-radius: 30px;
+  flex: none;
+  order: 1;
+  align-self: stretch;
+  flex-grow: 0;
+}
+
+/* Frame 94 - 메인 콘텐츠 컨테이너 */
+.upload-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0px;
+  gap: 10px;
+  width: 184px;
+  height: 86px;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+}
+
+/* File Add Icon */
+.file-icon {
+  width: 36px;
+  height: 36px;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+}
+
+/* Frame 34 - 텍스트 컨테이너 */
+.text-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0px;
+  gap: 5px;
+  width: 184px;
+  height: 40px;
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+}
+
+/* 메인 텍스트: PDF 파일을 업로드 해주세요. */
+.main-text {
+  width: 184px;
+  height: 19px;
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 19px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: #171719;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+}
+
+/* 서브 텍스트: 최대 100페이지 이하 / 50MB 이하 */
+.sub-text {
+  width: 178px;
+  height: 16px;
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 16px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: #7D7E83;
+  flex: none;
+  order: 1;
+  flex-grow: 0;
 }
 
 .about-page ul {
