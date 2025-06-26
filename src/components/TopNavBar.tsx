@@ -43,7 +43,7 @@ export const TopNavBar: React.FC = () => {
             홈으로
           </Typography>
         </Link>
-        <LoginButton width={80} height={30} />
+        <LoginButton width={64} height={30} />
       </div>
     </nav>
   )
