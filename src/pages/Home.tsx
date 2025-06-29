@@ -155,7 +155,7 @@ export function Home() {
                 color: '#AEAFB0',
                 minWidth: '70px'
               }}>
-                {selectedFile ? `${formatFileSize(selectedFile.size * (progress / 100))}/${formatFileSize(selectedFile.size)}` : '00MB/00MB'}
+                {selectedFile ? `${Math.ceil(progress / 100)}MB/1MB` : '00MB/1MB'}
               </div>
             </div>
           </div>

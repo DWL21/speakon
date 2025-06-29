@@ -96,7 +96,7 @@ export function PdfUploader({ onFileSelect, onUploadComplete }: PdfUploaderProps
             </div>
             
             <div style={progressTextStyle}>
-              {selectedFile ? formatFileSize(selectedFile.size * (progress / 100)) : '00MB'}
+              {selectedFile ? `${Math.ceil(progress / 100)}MB/1MB` : '0MB/1MB'}
             </div>
           </div>
         </div>
