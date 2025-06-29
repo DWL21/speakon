@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react'
+import { UploadProgress } from '../components/ui/UploadProgress'
 
 export function Home() {
   const [isUploading, setIsUploading] = useState(false);
@@ -119,45 +120,10 @@ export function Home() {
             </div>
             
             {/* 진행률 바 */}
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '10px',
-              marginTop: '10px'
-            }}>
-              <div style={{
-                position: 'relative',
-                width: '200px',
-                height: '5px'
-              }}>
-                <div style={{
-                  position: 'absolute',
-                  width: '100%',
-                  height: '100%',
-                  background: '#AEAFB0',
-                  borderRadius: '22px'
-                }} />
-                <div style={{
-                  position: 'absolute',
-                  width: `${progress}%`,
-                  height: '100%',
-                  background: '#0A64FF',
-                  borderRadius: '22px',
-                  transition: 'width 0.2s ease-in-out'
-                }} />
-              </div>
-              
-              <div style={{
-                fontFamily: 'Pretendard',
-                fontWeight: 400,
-                fontSize: '13px',
-                lineHeight: '16px',
-                color: '#AEAFB0',
-                minWidth: '70px'
-              }}>
-                {selectedFile ? `${Math.ceil(progress / 100)}MB/1MB` : '00MB/1MB'}
-              </div>
-            </div>
+            <UploadProgress 
+              progress={progress}
+              fileName={selectedFile?.name}
+            />
           </div>
         )}
 

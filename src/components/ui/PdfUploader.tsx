@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react';
+import { UploadProgress } from './UploadProgress';
 
 interface PdfUploaderProps {
   onFileSelect?: (file: File) => void;
@@ -84,21 +85,10 @@ export function PdfUploader({ onFileSelect, onUploadComplete }: PdfUploaderProps
             파일을 업로드 중입니다
           </div>
           
-          <div style={progressContainerStyle}>
-            <div style={progressBarContainerStyle}>
-              <div style={progressBarBackgroundStyle} />
-              <div 
-                style={{
-                  ...progressBarFillStyle,
-                  width: `${(progress / 100) * 200}px`
-                }} 
-              />
-            </div>
-            
-            <div style={progressTextStyle}>
-              {selectedFile ? `${Math.ceil(progress / 100)}MB/1MB` : '0MB/1MB'}
-            </div>
-          </div>
+          <UploadProgress 
+            progress={progress}
+            fileName={selectedFile?.name}
+          />
         </div>
       )}
 
@@ -208,64 +198,7 @@ const descriptionStyle: React.CSSProperties = {
   textAlign: 'center',
 };
 
-const progressContainerStyle: React.CSSProperties = {
-  display: 'flex',
-  flexDirection: 'row',
-  justifyContent: 'center',
-  alignItems: 'center',
-  padding: '0px',
-  gap: '10px',
-  width: '245px',
-  height: '16px',
-  flex: 'none',
-  order: 1,
-  flexGrow: 0,
-};
 
-const progressBarContainerStyle: React.CSSProperties = {
-  position: 'relative',
-  width: '200px',
-  height: '5px',
-  flex: 'none',
-  order: 0,
-  flexGrow: 0,
-};
-
-const progressBarBackgroundStyle: React.CSSProperties = {
-  position: 'absolute',
-  width: '200px',
-  height: '5px',
-  left: '0px',
-  top: '0px',
-  background: '#AEAFB0',
-  borderRadius: '22px',
-};
-
-const progressBarFillStyle: React.CSSProperties = {
-  position: 'absolute',
-  height: '100%',
-  left: '0px',
-  top: '0px',
-  background: '#0A64FF',
-  borderRadius: '22px',
-  transition: 'width 0.2s ease-in-out',
-};
-
-const progressTextStyle: React.CSSProperties = {
-  width: '35px',
-  height: '16px',
-  fontFamily: 'Pretendard',
-  fontStyle: 'normal',
-  fontWeight: 400,
-  fontSize: '13px',
-  lineHeight: '16px',
-  display: 'flex',
-  alignItems: 'center',
-  color: '#AEAFB0',
-  flex: 'none',
-  order: 0,
-  flexGrow: 0,
-};
 
 const completedStateStyle: React.CSSProperties = {
   display: 'flex',
