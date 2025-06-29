@@ -47,10 +47,7 @@ export function PdfUploader({ onFileSelect, onUploadComplete }: PdfUploaderProps
     }, 200);
   };
 
-  const formatFileSize = (bytes: number): string => {
-    const mb = bytes / (1024 * 1024);
-    return `${mb.toFixed(0)}MB`;
-  };
+
 
   return (
     <div style={containerStyle} onClick={handleClick}>

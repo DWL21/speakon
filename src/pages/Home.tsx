@@ -1,6 +1,5 @@
-import React from 'react'
-import { TextSection } from '../components/TextSection'
-import { FileUploadBox } from '../components/FileUploadBox'
+import { TextSection } from '../components/ui/TextSection'
+import { FileUploadBox } from '../components/upload/FileUploadBox'
 
 export function Home() {
   return (

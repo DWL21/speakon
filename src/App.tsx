@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { TopNavBar } from './components/TopNavBar'
+import { TopNavBar } from './components/ui/TopNavBar'
 import { Home } from './pages/Home'
 import { NotFound } from './pages/NotFound'
 import './App.css'

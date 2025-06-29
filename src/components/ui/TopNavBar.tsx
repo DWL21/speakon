@@ -1,8 +1,8 @@
-import React from 'react'
+
 import { Link } from 'react-router-dom'
 import { Logo } from './Logo'
-import { LoginButton } from './LoginButton'
-import { Typography } from './ui/Typography'
+import { LoginButton } from '../auth/LoginButton'
+import { Typography } from './Typography'
 
 export const TopNavBar: React.FC = () => {
   return (

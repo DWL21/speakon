@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { UploadProgress } from './ui/UploadProgress';
+import { UploadProgress } from './UploadProgress';
 
 interface FileUploadBoxProps {
   className?: string;

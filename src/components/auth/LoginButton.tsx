@@ -1,7 +1,7 @@
 import React from 'react'
-import { colors } from '../theme/colors'
-import { typography } from '../theme/typography'
-import { spacing, padding } from '../theme/spacing'
+import { colors } from '../../theme/colors'
+import { typography } from '../../theme/typography'
+import { spacing, padding } from '../../theme/spacing'
 
 interface LoginButtonProps {
   width?: number | string
