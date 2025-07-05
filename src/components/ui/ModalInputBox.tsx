@@ -69,7 +69,8 @@ export const ModalInputBox: React.FC<ModalInputBoxProps> = ({
         width: '597px',
         height: '120px',
         background: '#F1F2F5',
-        borderRadius: '10px'
+        borderRadius: '10px',
+        boxSizing: 'border-box'
       }}>
         <textarea
           value={script}
