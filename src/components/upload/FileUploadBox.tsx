@@ -19,13 +19,23 @@ export const FileUploadBox: React.FC<FileUploadBoxProps> = ({ className = '' }) 
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (file && file.type === 'application/pdf') {
+    if (file) {
+      if (file.type !== 'application/pdf') {
+        alert('PDF 파일만 업로드 가능합니다.');
+        return;
+      }
+      
+      // 20MB = 20 * 1024 * 1024 bytes
+      const maxSize = 20 * 1024 * 1024;
+      if (file.size > maxSize) {
+        alert('파일 크기가 20MB를 초과합니다. 20MB 이하의 파일을 업로드해주세요.');
+        return;
+      }
+      
       setSelectedFile(file);
       setIsUploading(true);
       
       simulateUpload(file);
-    } else {
-      alert('PDF 파일만 업로드 가능합니다.');
     }
   };
 
@@ -58,7 +68,7 @@ export const FileUploadBox: React.FC<FileUploadBoxProps> = ({ className = '' }) 
       {renderFileIcon()}
       <div className="text-container">
         <div className="main-text">PDF 파일을 업로드 해주세요.</div>
-        <div className="sub-text">최대 100페이지 이하 / 50MB 이하</div>
+        <div className="sub-text">최대 20MB 이하</div>
       </div>
     </div>
   );
