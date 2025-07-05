@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { TextSection } from '../components/ui/TextSection'
 import { FileUploadBox } from '../components/upload/FileUploadBox'
 
@@ -10,6 +11,25 @@ export function Home() {
       />
       
       <FileUploadBox />
+      
+      <div style={{ marginTop: '40px', textAlign: 'center' }}>
+        <Link 
+          to="/page-preview" 
+          style={{ 
+            color: '#3282FF', 
+            textDecoration: 'none', 
+            fontSize: '16px',
+            fontWeight: 500,
+            padding: '8px 16px',
+            border: '1px solid #3282FF',
+            borderRadius: '6px',
+            display: 'inline-block',
+            transition: 'all 0.2s ease'
+          }}
+        >
+          페이지 미리보기 컴포넌트 예시 보기
+        </Link>
+      </div>
     </div>
   )
 } 
