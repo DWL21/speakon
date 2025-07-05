@@ -12,7 +12,7 @@ export function Home() {
       
       <FileUploadBox />
       
-      <div style={{ marginTop: '40px', textAlign: 'center' }}>
+      <div style={{ marginTop: '40px', textAlign: 'center', display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
         <Link 
           to="/page-preview" 
           style={{ 
@@ -28,6 +28,22 @@ export function Home() {
           }}
         >
           페이지 미리보기 컴포넌트 예시 보기
+        </Link>
+        <Link 
+          to="/modal-page-input" 
+          style={{ 
+            color: '#3282FF', 
+            textDecoration: 'none', 
+            fontSize: '16px',
+            fontWeight: 500,
+            padding: '8px 16px',
+            border: '1px solid #3282FF',
+            borderRadius: '6px',
+            display: 'inline-block',
+            transition: 'all 0.2s ease'
+          }}
+        >
+          모달 페이지 입력 컴포넌트 예시 보기
         </Link>
       </div>
     </div>

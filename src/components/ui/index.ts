@@ -2,6 +2,7 @@ export { Button } from './Button';
 export { Dialog } from './Dialog';
 export { Logo } from './Logo';
 export { ModalInputBox } from './ModalInputBox';
+export { ModalPageInput } from './ModalPageInput';
 export { Progress } from './Progress';
 export { TextSection } from './TextSection';
 export { TopNavBar } from './TopNavBar';

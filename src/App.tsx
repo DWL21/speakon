@@ -3,6 +3,7 @@ import { TopNavBar } from './components/ui/TopNavBar'
 import { Home } from './pages/Home'
 import { NotFound } from './pages/NotFound'
 import { PagePreviewExample } from './pages/PagePreviewExample'
+import { ModalPageInputExample } from './pages/ModalPageInputExample'
 import './App.css'
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/page-preview" element={<PagePreviewExample />} />
+            <Route path="/modal-page-input" element={<ModalPageInputExample />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
