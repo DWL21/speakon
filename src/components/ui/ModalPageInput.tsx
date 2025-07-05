@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { PagePreview } from './PagePreview';
+import { ModalInputBox } from './ModalInputBox';
 
 interface SlideInput {
   slideNumber: number;
@@ -96,36 +97,17 @@ export const ModalPageInput: React.FC<ModalPageInputProps> = ({
                     
                     return (
                       <div key={slideKey} style={{
-                        ...slideInputContainerStyle,
                         marginTop: '20px',
                         marginBottom: '25px',
                       }}>
-                        {/* 슬라이드 제목 */}
-                        <div style={slideTitleWrapperStyle}>
-                          <div style={slideTitleStyle}>
-                            슬라이드{currentPage}
-                          </div>
-                        </div>
-
-                        {/* 입력 박스 */}
-                        <div style={inputBoxStyle}>
-                          <textarea
-                            value={currentSlide.content}
-                            onChange={(e) => handleSlideChange(currentPage, slideNumber, e.target.value)}
-                            placeholder="내용을 입력하세요."
-                            style={textareaStyle}
-                          />
-                        </div>
+                        <ModalInputBox
+                          slideNumber={slideNumber}
+                          onScriptChange={(slideNum, script) => handleSlideChange(currentPage, slideNum, script)}
+                          initialScript={currentSlide.content}
+                        />
                       </div>
                     );
                   })}
-                </div>
-
-                {/* 스크롤바 */}
-                <div style={scrollbarStyle}>
-                  <svg width="7" height="143" viewBox="0 0 7 143" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="0.0332031" y="0.688354" width="6.53906" height="142" rx="3" fill="#D9D9D9"/>
-                  </svg>
                 </div>
               </div>
             </div>
@@ -252,7 +234,9 @@ const inputSectionStyle: React.CSSProperties = {
   justifyContent: 'center',
   alignItems: 'flex-start',
   padding: '0px',
-  width: '620px',
+  width: '597px',
+  minWidth: '597px',
+  maxWidth: '597px',
   height: '100%',
   flex: 'none',
   order: 2,
@@ -267,6 +251,8 @@ const inputWrapperStyle: React.CSSProperties = {
   padding: '0px',
   gap: '0px',
   width: '597px',
+  minWidth: '597px',
+  maxWidth: '597px',
   height: '100%',
   flex: 'none',
   order: 0,
@@ -274,100 +260,9 @@ const inputWrapperStyle: React.CSSProperties = {
   overflowY: 'auto',
 };
 
-const slideInputContainerStyle: React.CSSProperties = {
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'flex-start',
-  padding: '0px',
-  gap: '0px',
-  width: '597px',
-  height: '120px',
-  flex: 'none',
-  alignSelf: 'stretch',
-  flexGrow: 0,
-};
 
-const slideTitleWrapperStyle: React.CSSProperties = {
-  display: 'flex',
-  flexDirection: 'row',
-  alignItems: 'center',
-  padding: '0px',
-  gap: '5px',
-  width: '95px',
-  height: '21px',
-  flex: 'none',
-  order: 0,
-  flexGrow: 0,
-};
 
-const slideTitleStyle: React.CSSProperties = {
-  width: '71px',
-  height: '21px',
-  fontFamily: 'Pretendard',
-  fontStyle: 'normal',
-  fontWeight: 500,
-  fontSize: '18px',
-  lineHeight: '21px',
-  display: 'flex',
-  padding: '0px 10px',
-  justifyContent: 'center',
-  alignItems: 'center',
-  gap: '10px',
-  color: '#171719',
-  flex: 'none',
-  order: 0,
-  flexGrow: 0,
-};
 
-const inputBoxStyle: React.CSSProperties = {
-  display: 'flex',
-  flexDirection: 'row',
-  alignItems: 'flex-start',
-  padding: '15px 27px',
-  gap: '10px',
-  width: '597px',
-  height: '87px',
-  background: '#F1F2F5',
-  borderRadius: '10px',
-  flex: 'none',
-  order: 1,
-  alignSelf: 'stretch',
-  flexGrow: 0,
-};
-
-const textareaStyle: React.CSSProperties = {
-  width: '543px',
-  height: '57px',
-  fontFamily: 'Pretendard',
-  fontStyle: 'normal',
-  fontWeight: 400,
-  fontSize: '13px',
-  lineHeight: 'normal',
-  color: 'var(--Label-Alternative, #78787B)',
-  border: 'none',
-  outline: 'none',
-  resize: 'none',
-  background: 'transparent',
-  flex: 'none',
-  order: 0,
-  alignSelf: 'stretch',
-  flexGrow: 1,
-};
-
-const scrollbarStyle: React.CSSProperties = {
-  display: 'flex',
-  flexDirection: 'row',
-  alignItems: 'center',
-  justifyContent: 'center',
-  padding: '11px 8px',
-  gap: '10px',
-  width: '22.54px',
-  height: '100%',
-  flex: 'none',
-  order: 1,
-  alignSelf: 'stretch',
-  flexGrow: 0,
-};
 
 
 
