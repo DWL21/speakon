@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { ModalPageInput } from '../components/ui';
+import { useState } from 'react';
+import { ScriptInput } from '../components/ui';
 
 interface SlideData {
   slideNumber: number;
@@ -230,7 +230,7 @@ export function ModalPageInputExample() {
 
       {/* 모달 */}
       {isModalOpen && (
-        <ModalPageInput
+        <ScriptInput
           totalPages={10}
           currentPage={currentPage}
           renderPageContent={renderPageContent}

@@ -17,7 +17,7 @@ interface PagePreviewProps {
 }
 
 export function PagePreview({
-  totalPages,
+  totalPages: _totalPages,
   currentPage,
   renderPageContent,
   onPageChange,

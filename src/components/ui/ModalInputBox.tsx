@@ -13,6 +13,12 @@ export const ModalInputBox: React.FC<ModalInputBoxProps> = ({
 }) => {
   const [script, setScript] = useState(initialScript);
 
+  const handleScriptChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const newScript = e.target.value;
+    setScript(newScript);
+    onScriptChange(slideNumber, newScript);
+  };
+
   return (
     <div style={{
       display: 'flex',
@@ -30,11 +36,11 @@ export const ModalInputBox: React.FC<ModalInputBoxProps> = ({
         alignItems: 'center',
         padding: '0px',
         gap: '5px',
-        width: '95px',
+        width: 'auto',
         height: '21px'
       }}>
         <div style={{
-          width: '71px',
+          minWidth: '90px',
           height: '21px',
           fontFamily: 'Pretendard',
           fontStyle: 'normal',
@@ -46,7 +52,8 @@ export const ModalInputBox: React.FC<ModalInputBoxProps> = ({
           justifyContent: 'center',
           alignItems: 'center',
           gap: '10px',
-          color: '#171719'
+          color: '#171719',
+          whiteSpace: 'nowrap'
         }}>
           슬라이드{slideNumber}
         </div>
@@ -64,22 +71,26 @@ export const ModalInputBox: React.FC<ModalInputBoxProps> = ({
         background: '#F1F2F5',
         borderRadius: '10px'
       }}>
-        <div style={{
-          width: '543px',
-          height: '80px',
-          fontFamily: 'Pretendard',
-          fontStyle: 'normal',
-          fontWeight: 400,
-          fontSize: '13px',
-          lineHeight: 'normal',
-          color: 'var(--Label-Alternative, #78787B)',
-          background: 'transparent',
-          display: 'flex',
-          alignItems: 'flex-start',
-          padding: '0px'
-        }}>
-          {script || "내용을 입력하세요."}
-        </div>
+        <textarea
+          value={script}
+          onChange={handleScriptChange}
+          placeholder="내용을 입력하세요."
+          style={{
+            width: '543px',
+            height: '80px',
+            fontFamily: 'Pretendard',
+            fontStyle: 'normal',
+            fontWeight: 400,
+            fontSize: '13px',
+            lineHeight: 'normal',
+            color: '#171719',
+            background: 'transparent',
+            border: 'none',
+            outline: 'none',
+            resize: 'none',
+            padding: '0px'
+          }}
+        />
       </div>
     </div>
   );

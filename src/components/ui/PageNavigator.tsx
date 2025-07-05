@@ -14,7 +14,7 @@ interface PageNavigatorProps {
 export function PageNavigator({
   currentPage,
   totalPages,
-  onPageChange,
+  onPageChange: _onPageChange,
   canGoPrevious,
   canGoNext,
   onPreviousPage,
