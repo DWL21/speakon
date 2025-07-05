@@ -68,7 +68,7 @@ export const FileUploadBox: React.FC<FileUploadBoxProps> = ({ className = '' }) 
       {renderFileIcon()}
       <div className="text-container">
         <div className="main-text">PDF 파일을 업로드 해주세요.</div>
-        <div className="sub-text">최대 20MB 이하</div>
+        <div className="sub-text" style={{ textAlign: 'center', justifyContent: 'center', display: 'flex', alignItems: 'center' }}>최대 20MB 이하</div>
       </div>
     </div>
   );
