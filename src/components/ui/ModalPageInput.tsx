@@ -78,10 +78,8 @@ export const ModalPageInput: React.FC<ModalPageInputProps> = ({
                 />
               </div>
 
-              {/* 세로 구분선 */}
-              <div style={verticalDividerStyle}>
-                <div style={dividerLineStyle} />
-              </div>
+              {/* 세로 구분선 - PagePreview와 ModalInputBox 사이 */}
+              <div style={verticalDividerStyle} />
 
               {/* 슬라이드 입력 영역 */}
               <div style={inputSectionStyle}>
@@ -236,26 +234,15 @@ const previewSectionStyle: React.CSSProperties = {
 
 const verticalDividerStyle: React.CSSProperties = {
   display: 'flex',
-  flexDirection: 'row',
+  flexDirection: 'column',
   alignItems: 'center',
-  padding: '5px 10px',
-  gap: '10px',
-  width: '20px',
+  justifyContent: 'center',
+  padding: '0px',
+  width: '1px',
   height: '100%',
+  background: '#EEEEEE',
   flex: 'none',
-  order: 1,
-  alignSelf: 'stretch',
-  flexGrow: 0,
-};
-
-const dividerLineStyle: React.CSSProperties = {
-  width: '598.2px',
-  height: '0px',
-  border: '1px solid #EEEEEE',
-  transform: 'rotate(90deg)',
-  flex: 'none',
-  order: 0,
-  flexGrow: 0,
+  flexShrink: 0,
 };
 
 const inputSectionStyle: React.CSSProperties = {
