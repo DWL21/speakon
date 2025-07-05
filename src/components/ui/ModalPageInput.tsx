@@ -97,7 +97,8 @@ export const ModalPageInput: React.FC<ModalPageInputProps> = ({
                     return (
                       <div key={slideKey} style={{
                         ...slideInputContainerStyle,
-                        margin: '20px 0px',
+                        marginTop: '20px',
+                        marginBottom: '25px',
                       }}>
                         {/* 슬라이드 제목 */}
                         <div style={slideTitleWrapperStyle}>
@@ -265,7 +266,7 @@ const inputWrapperStyle: React.CSSProperties = {
   alignItems: 'center',
   padding: '0px',
   gap: '0px',
-  width: '597.46px',
+  width: '597px',
   height: '100%',
   flex: 'none',
   order: 0,
@@ -279,7 +280,7 @@ const slideInputContainerStyle: React.CSSProperties = {
   alignItems: 'flex-start',
   padding: '0px',
   gap: '0px',
-  width: '597.46px',
+  width: '597px',
   height: '120px',
   flex: 'none',
   alignSelf: 'stretch',
@@ -297,7 +298,6 @@ const slideTitleWrapperStyle: React.CSSProperties = {
   flex: 'none',
   order: 0,
   flexGrow: 0,
-  marginBottom: '8px',
 };
 
 const slideTitleStyle: React.CSSProperties = {
@@ -309,7 +309,10 @@ const slideTitleStyle: React.CSSProperties = {
   fontSize: '18px',
   lineHeight: '21px',
   display: 'flex',
+  padding: '0px 10px',
+  justifyContent: 'center',
   alignItems: 'center',
+  gap: '10px',
   color: '#171719',
   flex: 'none',
   order: 0,
@@ -322,7 +325,7 @@ const inputBoxStyle: React.CSSProperties = {
   alignItems: 'flex-start',
   padding: '15px 27px',
   gap: '10px',
-  width: '597.46px',
+  width: '597px',
   height: '87px',
   background: '#F1F2F5',
   borderRadius: '10px',
@@ -333,14 +336,14 @@ const inputBoxStyle: React.CSSProperties = {
 };
 
 const textareaStyle: React.CSSProperties = {
-  width: '543.46px',
+  width: '543px',
   height: '57px',
   fontFamily: 'Pretendard',
   fontStyle: 'normal',
-  fontWeight: 500,
-  fontSize: '14px',
-  lineHeight: '17px',
-  color: '#171719',
+  fontWeight: 400,
+  fontSize: '13px',
+  lineHeight: 'normal',
+  color: 'var(--Label-Alternative, #78787B)',
   border: 'none',
   outline: 'none',
   resize: 'none',
