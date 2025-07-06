@@ -11,6 +11,8 @@ export interface ErrorModalProps {
   style?: React.CSSProperties;
   /** 컨테이너 추가 클래스명 */
   className?: string;
+  /** 알림 표시 여부 */
+  isVisible?: boolean;
 }
 
 export const ErrorModal: React.FC<ErrorModalProps> = ({
@@ -19,11 +21,14 @@ export const ErrorModal: React.FC<ErrorModalProps> = ({
   onClose,
   style,
   className = "",
+  isVisible = true,
 }) => {
+  if (!isVisible) return null;
+
   return (
     <div 
-      className={`error-modal ${className}`}
-      style={{ ...containerStyle, ...style }}
+      className={`error-notification ${className}`}
+      style={{ ...notificationStyle, ...style }}
     >
       <div style={contentStyle}>
         <div style={leftContentStyle}>
@@ -96,13 +101,18 @@ export const ErrorModal: React.FC<ErrorModalProps> = ({
 };
 
 // 스타일 정의
-const containerStyle: React.CSSProperties = {
+const notificationStyle: React.CSSProperties = {
+  position: 'fixed',
+  top: '20px',
+  left: '50%',
+  transform: 'translateX(-50%)',
   backgroundColor: '#ffffff',
   borderRadius: '15px',
   boxShadow: '2px 3px 8px 0px rgba(0,0,0,0.1)',
   width: '100%',
   maxWidth: '640px',
-  margin: '0 auto',
+  zIndex: 1000,
+  animation: 'slideDown 0.3s ease-out',
 };
 
 const contentStyle: React.CSSProperties = {

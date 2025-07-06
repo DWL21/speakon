@@ -88,4 +88,16 @@ button:focus-visible {
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+/* 에러 알림 슬라이드 다운 애니메이션 */
+@keyframes slideDown {
+  0% { 
+    transform: translate(-50%, -100%);
+    opacity: 0;
+  }
+  100% { 
+    transform: translate(-50%, 0);
+    opacity: 1;
+  }
 } 

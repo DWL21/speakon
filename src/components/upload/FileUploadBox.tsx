@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { UploadProgress } from './UploadProgress';
+import { ErrorModal } from '../ui/ErrorModal';
 import { colors } from '../../theme/colors';
 import { typography } from '../../theme/typography';
 
@@ -12,6 +13,7 @@ export const FileUploadBox: React.FC<FileUploadBoxProps> = ({ className = '', on
   const [isUploading, setIsUploading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [error, setError] = useState<{ title: string; message: string } | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleClick = () => {
@@ -24,14 +26,20 @@ export const FileUploadBox: React.FC<FileUploadBoxProps> = ({ className = '', on
     const file = event.target.files?.[0];
     if (file) {
       if (file.type !== 'application/pdf') {
-        alert('PDF 파일만 업로드 가능합니다.');
+        setError({
+          title: "업로드 실패",
+          message: "PDF 파일만 업로드 가능합니다."
+        });
         return;
       }
       
       // 20MB = 20 * 1024 * 1024 bytes
       const maxSize = 20 * 1024 * 1024;
       if (file.size > maxSize) {
-        alert('파일 크기가 20MB를 초과합니다. 20MB 이하의 파일을 업로드해주세요.');
+        setError({
+          title: "파일 크기 초과",
+          message: "파일 크기가 20MB를 초과합니다. 20MB 이하의 파일을 업로드해주세요."
+        });
         return;
       }
       
@@ -40,6 +48,10 @@ export const FileUploadBox: React.FC<FileUploadBoxProps> = ({ className = '', on
       
       simulateUpload(file);
     }
+  };
+
+  const handleErrorClose = () => {
+    setError(null);
   };
 
   const simulateUpload = (file: File) => {
@@ -203,6 +215,16 @@ export const FileUploadBox: React.FC<FileUploadBoxProps> = ({ className = '', on
 
   return (
     <>
+      {/* 에러 모달 */}
+      {error && (
+        <ErrorModal
+          title={error.title}
+          message={error.message}
+          onClose={handleErrorClose}
+          isVisible={true}
+        />
+      )}
+      
       <input
         type="file"
         accept=".pdf"
