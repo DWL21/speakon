@@ -34,9 +34,16 @@ export const ScriptInputFooter: React.FC<ScriptInputFooterProps> = ({
 };
 
 const bottomSectionStyle: React.CSSProperties = {
+  position: 'absolute',
+  bottom: 0,
+  left: 0,
+  right: 0,
   display: 'flex',
   flexDirection: 'column',
   flex: 'none',
+  width: '100%',
+  backgroundColor: '#FFFFFF',
+  zIndex: 10,
 };
 
 const horizontalDividerStyle: React.CSSProperties = {

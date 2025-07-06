@@ -15,6 +15,7 @@ export const ScriptInputContainer: React.FC<ScriptInputContainerProps> = ({
 };
 
 const containerStyle: React.CSSProperties = {
+  position: 'relative',
   display: 'flex',
   flexDirection: 'column',
   width: '1050px',

@@ -18,7 +18,10 @@ const mainContentStyle: React.CSSProperties = {
   display: 'flex',
   flexDirection: 'row',
   flex: 1,
-  padding: '20px',
+  paddingTop: '20px',
+  paddingLeft: '20px',
+  paddingRight: '20px',
+  paddingBottom: '80px',
   gap: '24px',
   alignItems: 'stretch',
 }; 
