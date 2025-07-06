@@ -1,10 +1,22 @@
 import React, { useState } from 'react';
 import { ScriptInputForm } from '../components/ui/ScriptInput';
+import { ScriptInputModal, SlideInput } from '../components/ScriptInputModal';
 import { colors } from '../theme/colors';
 
 export function ModalPageInputExample() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState<any>(null);
+  
+  // 새로운 ScriptInputModal 상태
+  const [isScriptModalOpen, setIsScriptModalOpen] = useState(false);
+  const [slideCount, setSlideCount] = useState(5);
+  const [slides, setSlides] = useState<SlideInput[]>([
+    { slideNumber: 1, pageNumber: 1, content: '' },
+    { slideNumber: 2, pageNumber: 1, content: '' },
+    { slideNumber: 3, pageNumber: 1, content: '' },
+    { slideNumber: 4, pageNumber: 1, content: '' },
+    { slideNumber: 5, pageNumber: 1, content: '' },
+  ]);
 
   const handleSubmit = (data: any) => {
     console.log('저장된 스크립트 데이터:', data);
@@ -12,6 +24,43 @@ export function ModalPageInputExample() {
     alert('스크립트가 저장되었습니다!');
     setIsModalOpen(false);
   };
+
+  // 새로운 ScriptInputModal 핸들러들
+  const handleSlideChange = (slideNumber: number, content: string) => {
+    console.log(`슬라이드 ${slideNumber} 내용 변경:`, content);
+    setSlides(prev => 
+      prev.map(slide => 
+        slide.slideNumber === slideNumber 
+          ? { ...slide, content }
+          : slide
+      )
+    );
+  };
+
+  const handleSlidesSave = () => {
+    console.log('저장된 슬라이드 내용:', slides);
+    alert('슬라이드가 저장되었습니다!');
+    setIsScriptModalOpen(false);
+  };
+
+  const renderPreviewContent = () => (
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+      <div style={{ 
+        width: '80%', 
+        height: '80%', 
+        backgroundColor: '#ffffff', 
+        borderRadius: '8px', 
+        border: '1px solid #ddd',
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'center',
+        fontSize: '14px',
+        color: '#666'
+      }}>
+        PDF 미리보기 영역
+      </div>
+    </div>
+  );
 
   const renderFormData = () => {
     if (!formData) return null;
@@ -48,11 +97,30 @@ export function ModalPageInputExample() {
           >
             스크립트 입력 폼 열기
           </button>
+          <button
+            onClick={() => setIsScriptModalOpen(true)}
+            style={{...openButtonStyle, backgroundColor: colors.primary.strong, marginLeft: '16px'}}
+          >
+            새 스크립트 모달 열기
+          </button>
         </div>
 
         {renderFormData()}
 
-        {/* 모달 */}
+        {/* 새로운 ScriptInputModal */}
+        <ScriptInputModal
+          isOpen={isScriptModalOpen}
+          onClose={() => setIsScriptModalOpen(false)}
+          title="발표 대본"
+          description="피그마 디자인 기반 모달"
+          slideCount={slideCount}
+          slides={slides}
+          onSlideChange={handleSlideChange}
+          onSave={handleSlidesSave}
+          renderPreviewContent={renderPreviewContent}
+        />
+
+        {/* 기존 모달 */}
         {isModalOpen && (
           <div style={modalOverlayStyle}>
             <div style={modalContainerStyle}>
