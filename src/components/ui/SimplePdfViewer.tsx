@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { colors } from '../../theme/colors';
 
 interface SimplePdfViewerProps {
@@ -13,6 +13,8 @@ export const SimplePdfViewer: React.FC<SimplePdfViewerProps> = ({
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [canvasDataUrl, setCanvasDataUrl] = useState<string | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   console.log('🖼️ SimplePdfViewer props:', { 
     fileName: file?.name || 'null', 
@@ -21,12 +23,14 @@ export const SimplePdfViewer: React.FC<SimplePdfViewerProps> = ({
     fileType: file?.type || 'unknown'
   });
 
+  // PDF 파일 URL 생성
   useEffect(() => {
     console.log('📄 SimplePdfViewer useEffect - 파일 변경:', file?.name || 'null');
     
     if (!file) {
       console.log('📄 파일이 없음, URL 초기화');
       setPdfUrl(null);
+      setCanvasDataUrl(null);
       setError(null);
       return;
     }
@@ -40,13 +44,12 @@ export const SimplePdfViewer: React.FC<SimplePdfViewerProps> = ({
     setIsLoading(true);
     setError(null);
 
-    // 간단한 PDF URL 생성
+    // PDF URL 생성
     try {
       console.log('🔗 PDF URL 생성 중...');
       const url = URL.createObjectURL(file);
       setPdfUrl(url);
       console.log('✅ PDF URL 생성 완료:', url);
-      setIsLoading(false);
 
       // Cleanup function
       return () => {
@@ -59,6 +62,60 @@ export const SimplePdfViewer: React.FC<SimplePdfViewerProps> = ({
       setIsLoading(false);
     }
   }, [file]);
+
+  // PDF 페이지 렌더링
+  useEffect(() => {
+    if (!pdfUrl || !file) {
+      setIsLoading(false);
+      return;
+    }
+
+    const renderPdfPage = async () => {
+      try {
+        console.log('🎨 PDF 페이지 렌더링 시작 - 페이지:', currentPage);
+        
+        // PDF.js가 로드되지 않은 경우 iframe 방식으로 폴백
+        if (!(window as any).pdfjsLib) {
+          console.log('📄 PDF.js 없음, iframe 방식 사용');
+          setIsLoading(false);
+          return;
+        }
+
+        const pdf = await (window as any).pdfjsLib.getDocument(pdfUrl).promise;
+        const page = await pdf.getPage(currentPage);
+        
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+
+        const context = canvas.getContext('2d');
+        if (!context) return;
+
+        const viewport = page.getViewport({ scale: 1.5 });
+        canvas.height = viewport.height;
+        canvas.width = viewport.width;
+
+        const renderContext = {
+          canvasContext: context,
+          viewport: viewport
+        };
+
+        await page.render(renderContext).promise;
+        
+        // Canvas를 이미지로 변환
+        const dataUrl = canvas.toDataURL();
+        setCanvasDataUrl(dataUrl);
+        
+        console.log('✅ PDF 페이지 렌더링 완료');
+        setIsLoading(false);
+      } catch (err) {
+        console.error('❌ PDF 렌더링 오류:', err);
+        console.log('📄 PDF.js 렌더링 실패, iframe 방식으로 폴백');
+        setIsLoading(false);
+      }
+    };
+
+    renderPdfPage();
+  }, [pdfUrl, currentPage, file]);
 
   const renderContent = () => {
     if (isLoading) {
@@ -93,7 +150,25 @@ export const SimplePdfViewer: React.FC<SimplePdfViewerProps> = ({
       );
     }
 
-    const iframeSrc = `${pdfUrl}#page=${currentPage}&toolbar=0&navpanes=0&scrollbar=0&zoom=page-fit`;
+    // Canvas로 렌더링된 이미지가 있으면 사용
+    if (canvasDataUrl) {
+      console.log('🎨 Canvas 렌더링된 PDF 표시');
+      return (
+        <div style={viewerContainerStyle}>
+          <img 
+            src={canvasDataUrl} 
+            alt={`PDF Page ${currentPage}`}
+            style={pdfImageStyle}
+          />
+          <div style={pageInfoStyle}>
+            페이지 {currentPage}
+          </div>
+        </div>
+      );
+    }
+
+    // PDF.js가 없거나 실패한 경우 iframe 방식으로 폴백
+    const iframeSrc = `${pdfUrl}#page=${currentPage}&toolbar=0&navpanes=0&scrollbar=0&zoom=page-fit&view=FitH`;
     console.log('🎬 PDF iframe 렌더링 - 페이지:', currentPage, 'URL:', iframeSrc);
     
     return (
@@ -115,6 +190,10 @@ export const SimplePdfViewer: React.FC<SimplePdfViewerProps> = ({
   return (
     <div style={containerStyle}>
       {renderContent()}
+      <canvas 
+        ref={canvasRef} 
+        style={{ display: 'none' }} 
+      />
     </div>
   );
 };
@@ -210,4 +289,11 @@ const placeholderIconStyle: React.CSSProperties = {
 const placeholderTextStyle: React.CSSProperties = {
   fontSize: '14px',
   color: colors.label.alternative,
+};
+
+const pdfImageStyle: React.CSSProperties = {
+  width: '100%',
+  height: '100%',
+  objectFit: 'contain',
+  borderRadius: '4px',
 }; 

@@ -8,14 +8,12 @@ export interface SlideInput {
 }
 
 interface ScriptModalFormProps {
-  slideCount: number;
   slides: SlideInput[];
   onSlideChange: (slideNumber: number, content: string) => void;
   onFocus?: (slideNumber: number) => void;
 }
 
 export const ScriptModalForm: React.FC<ScriptModalFormProps> = ({
-  slideCount,
   slides,
   onSlideChange,
   onFocus
@@ -23,24 +21,15 @@ export const ScriptModalForm: React.FC<ScriptModalFormProps> = ({
   return (
     <div style={formSectionStyle}>
       <div style={inputListStyle}>
-        {Array.from({ length: slideCount }, (_, index) => {
-          const slideNumber = index + 1;
-          const currentSlide = slides.find(s => s.slideNumber === slideNumber) || { 
-            slideNumber, 
-            pageNumber: 1, 
-            content: '' 
-          };
-          
-          return (
-            <ScriptModalItem
-              key={slideNumber}
-              slideNumber={slideNumber}
-              value={currentSlide.content}
-              onChange={(content: string) => onSlideChange(slideNumber, content)}
-              onFocus={onFocus}
-            />
-          );
-        })}
+        {slides.map((slide) => (
+          <ScriptModalItem
+            key={slide.slideNumber}
+            slideNumber={slide.slideNumber}
+            value={slide.content}
+            onChange={(content: string) => onSlideChange(slide.slideNumber, content)}
+            onFocus={onFocus}
+          />
+        ))}
       </div>
       <div style={scrollbarStyle} />
     </div>
