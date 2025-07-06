@@ -61,8 +61,9 @@ export const ModalInputBox: React.FC<ModalInputBoxProps> = ({
           justifyContent: 'center',
           alignItems: 'center',
           gap: '10px',
-          color: '#171719',
-          whiteSpace: 'nowrap'
+          color: isFocused ? '#3282ff' : '#171719',
+          whiteSpace: 'nowrap',
+          transition: 'color 0.2s ease'
         }}>
           슬라이드{slideNumber}
         </div>

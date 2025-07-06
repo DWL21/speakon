@@ -24,7 +24,11 @@ export const ScriptModalItem: React.FC<ScriptModalItemProps> = ({
   return (
     <div style={itemStyle}>
       <div style={headerStyle}>
-        <div style={slideNumberStyle}>
+        <div style={{
+          ...slideNumberStyle,
+          color: isFocused ? '#3282ff' : '#171719',
+          transition: 'color 0.2s ease'
+        }}>
           <span>슬라이드{slideNumber}</span>
         </div>
       </div>
