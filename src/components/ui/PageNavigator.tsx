@@ -1,110 +1,150 @@
 import React from 'react';
 import { colors } from '../../theme/colors';
+import { typography } from '../../theme/typography';
 
 interface PageNavigatorProps {
   currentPage: number;
   totalPages: number;
   onPageChange: (page: number) => void;
-  canGoPrevious: boolean;
-  canGoNext: boolean;
-  onPreviousPage: () => void;
-  onNextPage: () => void;
 }
 
 export function PageNavigator({
   currentPage,
   totalPages,
-  onPageChange: _onPageChange,
-  canGoPrevious,
-  canGoNext,
-  onPreviousPage,
-  onNextPage,
+  onPageChange,
 }: PageNavigatorProps) {
-  return (
-    <div style={navigationStyle}>
+  const renderPageButton = (pageNumber: number) => {
+    const isActive = pageNumber === currentPage;
+    
+    return (
       <button
+        key={pageNumber}
         style={{
-          ...navButtonStyle,
-          ...(canGoPrevious ? {} : disabledButtonStyle),
+          ...pageButtonStyle,
+          ...(isActive ? activePageButtonStyle : {}),
         }}
-        onClick={onPreviousPage}
-        disabled={!canGoPrevious}
+        onClick={() => onPageChange(pageNumber)}
       >
-        ‹
+        {pageNumber}
       </button>
-      
-      <div style={pageInfoStyle}>
-        <span style={currentPageStyle}>{currentPage}</span>
-        <span style={separatorStyle}>/</span>
-        <span style={totalPagesStyle}>{totalPages}</span>
-      </div>
+    );
+  };
 
-      <button
-        style={{
-          ...navButtonStyle,
-          ...(canGoNext ? {} : disabledButtonStyle),
-        }}
-        onClick={onNextPage}
-        disabled={!canGoNext}
-      >
-        ›
-      </button>
+  const renderScrollbar = () => {
+    const scrollPercentage = (currentPage - 1) / (totalPages - 1) * 100;
+    
+    return (
+      <div style={scrollbarContainerStyle}>
+        <div style={scrollbarTrackStyle}>
+          <div 
+            style={{
+              ...scrollbarThumbStyle,
+              top: `${scrollPercentage}%`,
+            }}
+          />
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <div style={containerStyle}>
+      <div style={headerStyle}>
+        <span style={titleStyle}>페이지</span>
+        <span style={pageCountStyle}>{currentPage}/{totalPages}</span>
+      </div>
+      
+      <div style={pagesContainerStyle}>
+        {Array.from({ length: totalPages }, (_, index) => renderPageButton(index + 1))}
+      </div>
+      
+      {totalPages > 4 && renderScrollbar()}
     </div>
   );
 }
 
-// 스타일 정의
-const navigationStyle: React.CSSProperties = {
+const containerStyle: React.CSSProperties = {
   display: 'flex',
-  alignItems: 'center',
-  gap: '12px',
-  width: '100%',
-  justifyContent: 'center',
-  marginTop: '20px',
+  flexDirection: 'column',
+  width: '80px',
+  height: '100%',
+  backgroundColor: colors.background.normal,
+  borderRadius: '8px',
+  padding: '16px 12px',
+  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)',
 };
 
-const navButtonStyle: React.CSSProperties = {
-  width: '32px',
-  height: '32px',
-  borderRadius: '6px',
-  border: `1px solid ${colors.neutral.gray100}`,
-  backgroundColor: colors.neutral.white,
+const headerStyle: React.CSSProperties = {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  gap: '4px',
+  marginBottom: '16px',
+};
+
+const titleStyle: React.CSSProperties = {
+  ...typography.label,
+  color: colors.label.normal,
+  fontWeight: 500,
+};
+
+const pageCountStyle: React.CSSProperties = {
+  ...typography.caption,
+  color: colors.label.assistive,
+};
+
+const pagesContainerStyle: React.CSSProperties = {
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '4px',
+  flex: 1,
+};
+
+const pageButtonStyle: React.CSSProperties = {
+  ...typography.body.reading,
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
+  width: '56px',
+  height: '32px',
+  backgroundColor: colors.background.normal,
+  border: `1px solid ${colors.line.normal}`,
+  borderRadius: '6px',
+  color: colors.label.normal,
   cursor: 'pointer',
-  fontSize: '18px',
-  fontWeight: 'bold',
-  color: colors.neutral.gray900,
   transition: 'all 0.2s ease',
   outline: 'none',
 };
 
-const disabledButtonStyle: React.CSSProperties = {
-  backgroundColor: colors.neutral.gray50,
-  color: colors.neutral.gray300,
-  cursor: 'not-allowed',
+const activePageButtonStyle: React.CSSProperties = {
+  backgroundColor: colors.primary.normal,
+  color: colors.static.white,
+  border: `1px solid ${colors.primary.normal}`,
 };
 
-const pageInfoStyle: React.CSSProperties = {
-  display: 'flex',
-  alignItems: 'center',
-  gap: '4px',
-  fontFamily: 'Pretendard, sans-serif',
-  fontSize: '14px',
-  fontWeight: 500,
+const scrollbarContainerStyle: React.CSSProperties = {
+  position: 'relative',
+  width: '4px',
+  height: '100%',
+  marginLeft: '8px',
 };
 
-const currentPageStyle: React.CSSProperties = {
-  color: colors.neutral.gray900,
-  fontWeight: 600,
+const scrollbarTrackStyle: React.CSSProperties = {
+  position: 'absolute',
+  top: 0,
+  right: 0,
+  width: '4px',
+  height: '100%',
+  backgroundColor: colors.fill.normal,
+  borderRadius: '2px',
 };
 
-const separatorStyle: React.CSSProperties = {
-  color: colors.neutral.gray300,
-  margin: '0 2px',
-};
-
-const totalPagesStyle: React.CSSProperties = {
-  color: colors.neutral.gray500,
+const scrollbarThumbStyle: React.CSSProperties = {
+  position: 'absolute',
+  right: 0,
+  width: '4px',
+  height: '20px',
+  backgroundColor: colors.primary.normal,
+  borderRadius: '2px',
+  transition: 'top 0.2s ease',
 }; 

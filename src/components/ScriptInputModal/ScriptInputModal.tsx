@@ -10,10 +10,9 @@ interface ModalInputProps {
   slideNumber: number;
   value: string;
   onChange: (value: string) => void;
-  focused?: boolean;
 }
 
-const ModalInput: React.FC<ModalInputProps> = ({ slideNumber, value, onChange, focused }) => {
+const ModalInput: React.FC<ModalInputProps> = ({ slideNumber, value, onChange }) => {
   return (
     <div style={modalInputStyle}>
       <div style={headerStyle}>

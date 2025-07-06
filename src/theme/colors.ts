@@ -1,17 +1,37 @@
 export const colors = {
   primary: {
     normal: '#3282FF',
-    hover: '#2768E3',
-    pressed: '#1F57C7',
-    disabled: '#A6C6FF',
+    strong: '#0A64FF',
   },
-  neutral: {
+  label: {
+    normal: '#171719',
+    strong: '#000000',
+    alternative: '#78787B',
+    neutral: '#7D7E83',
+    assistive: '#AEAFB0',
+    disable: '#C2C2C3',
+  },
+  fill: {
+    normal: '#F1F2F5',
+    strong: '#D9D9D9',
+    alternative: '#D8D8D8',
+    neutral: '#EEEEEE',
+  },
+  background: {
+    normal: '#FFFFFF',
+    alternative: '#F7F7F8',
+  },
+  line: {
+    normal: '#C5C5C7',
+    alternative: '#D5D5D6',
+    neutralOpacity: 'rgba(112, 115, 124, 0.16)',
+  },
+  interaction: {
+    inactive: '#989BA2',
+    disable: '#F4F4F5',
+  },
+  static: {
     white: '#FFFFFF',
-    gray50: '#F1F2F5',
-    gray100: '#EEEEEE',
-    gray300: '#A6A6A6',
-    gray500: '#78787B',
-    gray900: '#171719',
     black: '#000000',
   },
   semantic: {

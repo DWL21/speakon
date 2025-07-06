@@ -1,10 +1,10 @@
 import React from 'react';
 import { PagePreview } from '../PagePreview';
+import { colors } from '../../../theme/colors';
 
-interface ScriptInputPreviewProps {
+export interface ScriptInputPreviewProps {
   totalPages: number;
   currentPage: number;
-  renderPageContent?: (pageNumber: number) => React.ReactNode;
   onPageChange?: (pageNumber: number) => void;
   title?: string;
   description?: string;
@@ -13,29 +13,24 @@ interface ScriptInputPreviewProps {
 export const ScriptInputPreview: React.FC<ScriptInputPreviewProps> = ({
   totalPages,
   currentPage,
-  renderPageContent,
   onPageChange,
   title,
-  description
+  description,
 }) => {
   return (
-    <div style={previewSectionStyle}>
+    <div style={{
+      padding: '24px',
+      backgroundColor: colors.background.normal,
+      borderRadius: '12px',
+      border: `1px solid ${colors.line.normal}`,
+    }}>
       <PagePreview
         totalPages={totalPages}
         currentPage={currentPage}
-        renderPageContent={renderPageContent}
         onPageChange={onPageChange}
         title={title}
         description={description}
       />
     </div>
   );
-};
-
-const previewSectionStyle: React.CSSProperties = {
-  display: 'flex',
-  flex: 1,
-  minWidth: 0,
-  justifyContent: 'center',
-  alignItems: 'center',
 }; 

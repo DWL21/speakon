@@ -1,60 +1,57 @@
 import React from 'react'
 import { colors } from '../../theme/colors'
-import { typography } from '../../theme/typography'
-import { spacing, padding } from '../../theme/spacing'
 
 interface LoginButtonProps {
-  width?: number | string
-  height?: number | string
+  width?: number
+  height?: number
   className?: string
   style?: React.CSSProperties
   onClick?: () => void
 }
 
 export const LoginButton: React.FC<LoginButtonProps> = ({
-  width,
-  height,
+  width = 64,
+  height = 30,
   className = '',
   style,
   onClick
 }) => {
   return (
     <button
+      className={`login-button ${className}`}
       style={{
-        display: 'inline-flex',
-        padding: padding.sm, // 7px 15px
-        justifyContent: 'center',
-        alignItems: 'center',
-        gap: spacing.xl, // 20px
-        width,
-        height,
+        width: `${width}px`,
+        height: `${height}px`,
         backgroundColor: colors.primary.normal,
-        color: colors.neutral.white,
+        color: colors.static.white,
         border: 'none',
-        borderRadius: '8px',
-        cursor: onClick ? 'pointer' : 'default',
-        fontFamily: typography.button[2].fontFamily,
-        fontWeight: typography.button[2].fontWeight,
-        fontSize: typography.button[2].fontSize,
-        lineHeight: typography.button[2].lineHeight,
+        borderRadius: '6px',
+        fontSize: '13px',
+        fontWeight: 500,
+        fontFamily: 'Pretendard, sans-serif',
+        cursor: 'pointer',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
         transition: 'background-color 0.2s ease',
         outline: 'none',
-        whiteSpace: 'nowrap',
         ...style
       }}
-      className={className}
       onClick={onClick}
       onMouseEnter={(e) => {
-        e.currentTarget.style.backgroundColor = colors.primary.hover
+        e.currentTarget.style.backgroundColor = colors.primary.strong
       }}
       onMouseLeave={(e) => {
         e.currentTarget.style.backgroundColor = colors.primary.normal
       }}
       onMouseDown={(e) => {
-        e.currentTarget.style.backgroundColor = colors.primary.pressed
+        e.currentTarget.style.backgroundColor = colors.primary.strong
+      }}
+      onMouseUp={(e) => {
+        e.currentTarget.style.backgroundColor = colors.primary.normal
       }}
     >
-      로그인
+      대화
     </button>
   )
 } 

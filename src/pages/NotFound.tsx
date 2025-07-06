@@ -11,8 +11,8 @@ export function NotFound() {
       <Typography variant="title2" color="black" style={{ marginBottom: '16px' }}>
         페이지를 찾을 수 없습니다
       </Typography>
-      <Typography variant="body1" color="gray500" style={{ marginBottom: '32px' }}>
-        요청하신 페이지가 존재하지 않거나 이동되었을 수 있습니다.
+      <Typography variant="body" color="alternative" style={{ marginBottom: '32px' }}>
+        요청하신 페이지를 찾을 수 없습니다.
       </Typography>
       
       <Link to="/">

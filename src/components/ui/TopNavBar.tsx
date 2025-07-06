@@ -1,4 +1,3 @@
-
 import { Link } from 'react-router-dom'
 import { Logo } from './Logo'
 import { LoginButton } from '../auth/LoginButton'
@@ -39,7 +38,7 @@ export const TopNavBar: React.FC = () => {
         gap: '16px'
       }}>
         <Link to="/" style={{ textDecoration: 'none' }}>
-          <Typography variant="body1" color="black" style={{ cursor: 'pointer' }}>
+          <Typography variant="body" color="black" style={{ cursor: 'pointer' }}>
             홈으로
           </Typography>
         </Link>

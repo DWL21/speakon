@@ -1,258 +1,157 @@
 import React from 'react';
 import { colors } from '../../theme/colors';
+import { typography } from '../../theme/typography';
 
 interface PagePreviewProps {
   /** 전체 페이지 수 */
   totalPages: number;
-  /** 현재 페이지 번호 */
-  currentPage: number;
-  /** 미리보기 콘텐츠 렌더링 함수 */
-  renderPageContent?: (pageNumber: number) => React.ReactNode;
+  /** 현재 선택된 페이지 번호 */
+  currentPage?: number;
   /** 페이지 변경 시 호출되는 콜백 */
   onPageChange?: (pageNumber: number) => void;
   /** 제목 */
   title?: string;
   /** 설명 */
   description?: string;
+  /** 페이지당 표시할 아이템 수 */
+  itemsPerPage?: number;
 }
 
 export function PagePreview({
-  totalPages: _totalPages,
-  currentPage,
-  renderPageContent,
+  totalPages,
+  currentPage = 1,
   onPageChange,
   title = "발표 대본",
   description = "설명을 입력하세요",
+  itemsPerPage = 20,
 }: PagePreviewProps) {
-  React.useEffect(() => {
-    onPageChange?.(currentPage);
-  }, [currentPage, onPageChange]);
-
-  const defaultPageContent = (pageNumber: number) => (
-    <div style={defaultPageContentStyle}>
-      <div style={pageNumberDisplayStyle}>
-        {pageNumber}
-      </div>
-      <div style={pageTextStyle}>
-        페이지 {pageNumber}
-      </div>
-    </div>
-  );
-
-  return (
-    <div style={frame222Style}>
-      <div style={frame220Style}>
-        {/* 헤더 영역 - Frame 232 */}
-        <div style={frame232Style}>
-          <div style={frame203Style}>
-            <div style={frame110Style}>
-              <div style={titleStyle}>
-                {title}
-              </div>
-            </div>
-          </div>
-          <div style={frame212Style}>
-            <div style={frame110DescStyle}>
-              <div style={descriptionStyle}>
-                {description}
-              </div>
-            </div>
+  const renderPageThumbnails = () => {
+    const thumbnails = [];
+    
+    for (let i = 1; i <= Math.min(totalPages, itemsPerPage); i++) {
+      const isSelected = i === currentPage;
+      
+      thumbnails.push(
+        <div
+          key={i}
+          style={{
+            ...thumbnailStyle,
+            ...(isSelected ? selectedThumbnailStyle : {}),
+          }}
+          onClick={() => onPageChange?.(i)}
+        >
+          <div style={thumbnailContentStyle}>
+            <span style={thumbnailNumberStyle}>{i}</span>
           </div>
         </div>
+      );
+    }
+    
+    return thumbnails;
+  };
 
-        {/* 미리보기 영역 - Frame 211 */}
-        <div style={frame211Style}>
-          <div style={frame35Style}>
-            {renderPageContent ? renderPageContent(currentPage) : defaultPageContent(currentPage)}
-          </div>
+  return (
+    <div style={containerStyle}>
+      <div style={headerStyle}>
+        <div style={titleContainerStyle}>
+          <span style={titleStyle}>{title}</span>
+          <span style={descriptionStyle}>{description}</span>
+        </div>
+      </div>
+      
+      <div style={gridContainerStyle}>
+        <div style={gridStyle}>
+          {renderPageThumbnails()}
         </div>
       </div>
     </div>
   );
 }
 
-// 스타일 정의
-const frame222Style: React.CSSProperties = {
-  display: 'flex',
-  flexDirection: 'row',
-  justifyContent: 'center',
-  alignItems: 'center',
-  padding: '0px',
-  gap: '10px',
-  width: '350px',
-  maxWidth: '350px',
-  height: '503px',
-  flex: 'none',
-  order: 0,
-  flexGrow: 1,
-};
-
-const frame220Style: React.CSSProperties = {
+const containerStyle: React.CSSProperties = {
   display: 'flex',
   flexDirection: 'column',
-  justifyContent: 'center',
-  alignItems: 'center',
-  padding: '0px',
-  gap: '20px',
-  width: '350px',
-  height: '503px',
-  flex: 'none',
-  order: 0,
-  flexGrow: 1,
+  width: '100%',
+  maxWidth: '400px',
+  padding: '20px',
+  backgroundColor: colors.background.normal,
+  borderRadius: '12px',
+  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)',
 };
 
-const frame232Style: React.CSSProperties = {
+const headerStyle: React.CSSProperties = {
   display: 'flex',
-  flexDirection: 'row',
+  justifyContent: 'space-between',
   alignItems: 'flex-end',
-  padding: '0px',
-  width: '350px',
-  height: '24px',
-  flex: 'none',
-  order: 0,
-  alignSelf: 'stretch',
-  flexGrow: 0,
+  marginBottom: '20px',
 };
 
-const frame203Style: React.CSSProperties = {
+const titleContainerStyle: React.CSSProperties = {
   display: 'flex',
-  flexDirection: 'row',
-  alignItems: 'center',
-  padding: '0px',
-  width: '94px',
-  height: '24px',
-  flex: 'none',
-  order: 0,
-  flexGrow: 0,
-};
-
-const frame110Style: React.CSSProperties = {
-  display: 'flex',
-  flexDirection: 'row',
-  justifyContent: 'center',
-  alignItems: 'center',
-  padding: '0px 10px',
-  gap: '10px',
-  width: '94px',
-  height: '24px',
-  flex: 'none',
-  order: 0,
-  flexGrow: 0,
+  flexDirection: 'column',
+  gap: '4px',
 };
 
 const titleStyle: React.CSSProperties = {
-  width: '74px',
-  height: '24px',
-  fontFamily: 'Pretendard',
-  fontStyle: 'normal',
-  fontWeight: 600,
-  fontSize: '20px',
-  lineHeight: '24px',
-  display: 'flex',
-  alignItems: 'center',
-  color: '#171719',
-  flex: 'none',
-  order: 0,
-  flexGrow: 0,
-};
-
-const frame212Style: React.CSSProperties = {
-  display: 'flex',
-  flexDirection: 'row',
-  alignItems: 'center',
-  padding: '2px 0px',
-  width: '94px',
-  height: '20px',
-  flex: 'none',
-  order: 1,
-  flexGrow: 0,
-};
-
-const frame110DescStyle: React.CSSProperties = {
-  display: 'flex',
-  flexDirection: 'row',
-  justifyContent: 'center',
-  alignItems: 'center',
-  padding: '0px',
-  gap: '10px',
-  width: '94px',
-  height: '16px',
-  flex: 'none',
-  order: 0,
-  flexGrow: 0,
+  ...typography.title[2],
+  color: colors.label.normal,
 };
 
 const descriptionStyle: React.CSSProperties = {
-  width: '94px',
-  height: '16px',
-  fontFamily: 'Pretendard',
-  fontStyle: 'normal',
-  fontWeight: 400,
-  fontSize: '13px',
-  lineHeight: '16px',
-  display: 'flex',
-  alignItems: 'center',
-  color: '#78787B',
-  flex: 'none',
-  order: 0,
-  flexGrow: 0,
+  ...typography.label,
+  color: colors.label.alternative,
 };
 
-const frame211Style: React.CSSProperties = {
+const gridContainerStyle: React.CSSProperties = {
   display: 'flex',
-  flexDirection: 'column',
   justifyContent: 'center',
   alignItems: 'center',
-  padding: '10px',
-  gap: '10px',
-  width: '340px',
-  maxWidth: '340px',
-  height: '459px',
-  background: '#F1F2F5',
-  borderRadius: '12px',
-  flex: 'none',
-  order: 1,
-  alignSelf: 'stretch',
-  flexGrow: 0,
+  minHeight: '300px',
+  border: `1px solid ${colors.line.normal}`,
+  borderRadius: '8px',
+  backgroundColor: colors.background.alternative,
 };
 
-const frame35Style: React.CSSProperties = {
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'center',
-  alignItems: 'center',
-  padding: '0px',
-  gap: '28px',
-  width: '320px',
-  height: '439px',
-  flex: 'none',
-  order: 0,
-  alignSelf: 'stretch',
-  flexGrow: 1,
-  position: 'relative',
-  overflow: 'hidden',
-};
-
-const defaultPageContentStyle: React.CSSProperties = {
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'center',
-  gap: '20px',
+const gridStyle: React.CSSProperties = {
+  display: 'grid',
+  gridTemplateColumns: 'repeat(5, 1fr)',
+  gridTemplateRows: 'repeat(4, 1fr)',
+  gap: '8px',
+  padding: '20px',
   width: '100%',
   height: '100%',
 };
 
-const pageNumberDisplayStyle: React.CSSProperties = {
-  fontSize: '48px',
-  fontWeight: 'bold',
-  color: colors.neutral.gray300,
-  fontFamily: 'Pretendard, sans-serif',
+const thumbnailStyle: React.CSSProperties = {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  width: '60px',
+  height: '60px',
+  backgroundColor: colors.background.normal,
+  border: `1px solid ${colors.line.normal}`,
+  borderRadius: '6px',
+  cursor: 'pointer',
+  transition: 'all 0.2s ease',
+  position: 'relative',
 };
 
-const pageTextStyle: React.CSSProperties = {
-  fontSize: '16px',
+const selectedThumbnailStyle: React.CSSProperties = {
+  backgroundColor: colors.primary.normal,
+  border: `1px solid ${colors.primary.normal}`,
+  boxShadow: '0 0 0 2px rgba(50, 130, 255, 0.2)',
+};
+
+const thumbnailContentStyle: React.CSSProperties = {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  width: '100%',
+  height: '100%',
+};
+
+const thumbnailNumberStyle: React.CSSProperties = {
+  ...typography.body.reading,
+  color: colors.label.normal,
   fontWeight: 500,
-  color: colors.neutral.gray500,
-  fontFamily: 'Pretendard, sans-serif',
 }; 

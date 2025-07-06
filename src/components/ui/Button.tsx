@@ -3,23 +3,28 @@ import { colors } from '../../theme/colors'
 import { typography } from '../../theme/typography'
 import { padding } from '../../theme/spacing'
 
-export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonProps {
   variant?: 'primary' | 'secondary' | 'outline' | 'ghost'
   size?: 'small' | 'medium' | 'large'
   loading?: boolean
   icon?: React.ReactNode
+  disabled?: boolean
+  onClick?: () => void
+  children: React.ReactNode
+  className?: string
+  type?: 'button' | 'submit' | 'reset'
 }
 
 export const Button: React.FC<ButtonProps> = ({
   variant = 'primary',
   size = 'medium',
-  children,
-  disabled = false,
   loading = false,
   icon,
+  disabled = false,
+  onClick,
+  children,
   className = '',
-  style,
-  ...props
+  type = 'button',
 }) => {
   const getButtonStyles = () => {
     const baseStyles: React.CSSProperties = {
@@ -61,29 +66,28 @@ export const Button: React.FC<ButtonProps> = ({
     // Variant styles
     const variantStyles: Record<string, React.CSSProperties> = {
       primary: {
-        backgroundColor: disabled ? colors.primary.disabled : colors.primary.normal,
-        color: colors.neutral.white,
+        backgroundColor: disabled ? colors.interaction.disable : colors.primary.normal,
+        color: colors.static.white,
       },
       secondary: {
-        backgroundColor: colors.neutral.gray50,
-        color: colors.neutral.gray900,
+        backgroundColor: colors.fill.normal,
+        color: colors.label.normal,
       },
       outline: {
         backgroundColor: 'transparent',
-        color: colors.primary.normal,
-        border: `1px solid ${colors.primary.normal}`,
+        color: colors.label.normal,
+        border: `1px solid ${colors.line.normal}`,
       },
-      ghost: {
-        backgroundColor: 'transparent',
-        color: colors.neutral.gray900,
-      },
+              ghost: {
+          backgroundColor: 'transparent',
+          color: colors.label.normal,
+        },
     }
 
     return {
       ...baseStyles,
       ...sizeStyles[size],
       ...variantStyles[variant],
-      ...style,
     }
   }
 
@@ -93,18 +97,18 @@ export const Button: React.FC<ButtonProps> = ({
     const button = e.currentTarget
     switch (variant) {
       case 'primary':
-        button.style.backgroundColor = colors.primary.hover
+        button.style.backgroundColor = colors.primary.strong
         break
       case 'secondary':
-        button.style.backgroundColor = colors.neutral.gray100
+        button.style.backgroundColor = colors.fill.strong
         break
       case 'outline':
-        button.style.backgroundColor = colors.primary.normal
-        button.style.color = colors.neutral.white
+        button.style.color = colors.static.white
+        button.style.backgroundColor = colors.fill.strong
         break
-      case 'ghost':
-        button.style.backgroundColor = colors.neutral.gray50
-        break
+              case 'ghost':
+          button.style.backgroundColor = colors.fill.normal
+          break
     }
   }
 
@@ -117,11 +121,11 @@ export const Button: React.FC<ButtonProps> = ({
         button.style.backgroundColor = colors.primary.normal
         break
       case 'secondary':
-        button.style.backgroundColor = colors.neutral.gray50
+        button.style.backgroundColor = colors.fill.normal
         break
       case 'outline':
         button.style.backgroundColor = 'transparent'
-        button.style.color = colors.primary.normal
+        button.style.color = colors.label.normal
         break
       case 'ghost':
         button.style.backgroundColor = 'transparent'
@@ -134,19 +138,30 @@ export const Button: React.FC<ButtonProps> = ({
     
     const button = e.currentTarget
     if (variant === 'primary') {
-      button.style.backgroundColor = colors.primary.pressed
+      button.style.backgroundColor = colors.primary.strong
+    }
+  }
+
+  const handleMouseUp = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (disabled || loading) return
+    
+    const button = e.currentTarget
+    if (variant === 'primary') {
+      button.style.backgroundColor = colors.primary.normal
     }
   }
 
   return (
     <button
-      style={getButtonStyles()}
+      type={type}
+      className={`button ${className}`}
       disabled={disabled || loading}
-      className={className}
+      onClick={onClick}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onMouseDown={handleMouseDown}
-      {...props}
+      onMouseUp={handleMouseUp}
+      style={getButtonStyles()}
     >
       {loading && (
         <div 
