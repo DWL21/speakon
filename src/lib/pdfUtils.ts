@@ -24,68 +24,84 @@ export async function getPdfPageCount(file: File): Promise<number> {
           return;
         }
         
-        // PDF 내용을 문자열로 변환 (바이너리 데이터 제외)
-        let pdfContent = '';
-        for (let i = 0; i < uint8Array.length; i++) {
-          const byte = uint8Array[i];
-          // 출력 가능한 ASCII 문자만 포함
-          if (byte >= 32 && byte <= 126) {
-            pdfContent += String.fromCharCode(byte);
-          } else {
-            pdfContent += ' ';
-          }
-        }
-        
-        console.log('PDF 내용 길이:', pdfContent.length);
+        // PDF 내용을 여러 방식으로 처리
+        console.log('PDF 내용 길이:', uint8Array.length);
         
         let pageCount = 0;
         
-        // 방법 1: /Type /Pages 객체에서 /Count 찾기 (가장 정확한 방법)
-        const pagesObjectRegex = /\/Type\s*\/Pages[^>]*?\/Count\s+(\d+)/gi;
-        let match = pagesObjectRegex.exec(pdfContent);
-        if (match) {
-          pageCount = parseInt(match[1], 10);
-          console.log('방법 1 - Pages 객체에서 Count 발견:', pageCount);
-        }
+        // 방법 1: 바이너리 데이터에서 직접 패턴 검색
+        const uint8String = Array.from(uint8Array).map(b => String.fromCharCode(b)).join('');
         
-        // 방법 2: 단순히 /Count 키워드 찾기
-        if (pageCount === 0) {
-          const countMatches = pdfContent.match(/\/Count\s+(\d+)/gi);
-          if (countMatches && countMatches.length > 0) {
-            // 가장 큰 숫자를 페이지 수로 추정
-            const counts = countMatches.map(m => {
-              const num = m.match(/\d+/);
-              return num ? parseInt(num[0], 10) : 0;
-            });
+        // /Type /Pages 와 /Count 패턴 찾기
+        const pagesTypePattern = /\/Type\s*\/Pages/gi;
+        const countPattern = /\/Count\s+(\d+)/gi;
+        
+        let pagesMatches = [...uint8String.matchAll(pagesTypePattern)];
+        let countMatches = [...uint8String.matchAll(countPattern)];
+        
+        console.log('방법 1 - Pages 타입 발견:', pagesMatches.length, '개');
+        console.log('방법 1 - Count 패턴 발견:', countMatches.length, '개');
+        
+        if (countMatches.length > 0) {
+          const counts = countMatches.map(match => parseInt(match[1], 10)).filter(n => !isNaN(n));
+          if (counts.length > 0) {
             pageCount = Math.max(...counts);
-            console.log('방법 2 - Count 키워드에서 최대값:', pageCount);
+            console.log('방법 1 - Count에서 최대값:', pageCount, '(전체 Count 값들:', counts, ')');
           }
         }
         
-        // 방법 3: /Type /Page (단일 페이지) 객체 개수 세기
+        // 방법 2: ASCII 변환된 내용에서 검색
         if (pageCount === 0) {
-          const pageObjectMatches = pdfContent.match(/\/Type\s*\/Page\s/gi);
-          if (pageObjectMatches) {
-            pageCount = pageObjectMatches.length;
+          let pdfContent = '';
+          for (let i = 0; i < Math.min(uint8Array.length, 500000); i++) { // 메모리 절약을 위해 앞 500KB만 처리
+            const byte = uint8Array[i];
+            if (byte >= 32 && byte <= 126) {
+              pdfContent += String.fromCharCode(byte);
+            } else {
+              pdfContent += ' ';
+            }
+          }
+          
+          const cleanCountMatches = pdfContent.match(/\/Count\s+(\d+)/gi);
+          if (cleanCountMatches && cleanCountMatches.length > 0) {
+            const counts = cleanCountMatches.map(m => {
+              const num = m.match(/\d+/);
+              return num ? parseInt(num[0], 10) : 0;
+            }).filter(n => n > 0);
+            
+            if (counts.length > 0) {
+              pageCount = Math.max(...counts);
+              console.log('방법 2 - ASCII 변환 후 Count 최대값:', pageCount, '(Count 값들:', counts, ')');
+            }
+          }
+        }
+        
+        // 방법 3: /Type /Page 개별 페이지 객체 카운트
+        if (pageCount === 0) {
+          const pageObjectPattern = /\/Type\s*\/Page(?!\s*s)/gi;
+          const pageMatches = [...uint8String.matchAll(pageObjectPattern)];
+          if (pageMatches.length > 0) {
+            pageCount = pageMatches.length;
             console.log('방법 3 - Page 객체 개수:', pageCount);
           }
         }
         
-        // 방법 4: /Kids 배열 분석
+        // 방법 4: xref 테이블에서 페이지 객체 추정
         if (pageCount === 0) {
-          const kidsMatches = pdfContent.match(/\/Kids\s*\[[^\]]*\]/gi);
-          if (kidsMatches) {
-            let totalRefs = 0;
-            kidsMatches.forEach(kids => {
-              const refs = kids.match(/\d+\s+\d+\s+R/g);
-              if (refs) totalRefs += refs.length;
-            });
-            if (totalRefs > 0) {
-              pageCount = totalRefs;
-              console.log('방법 4 - Kids 배열 분석:', pageCount);
+          const xrefPattern = /xref\s+\d+\s+(\d+)/gi;
+          const xrefMatches = [...uint8String.matchAll(xrefPattern)];
+          if (xrefMatches.length > 0) {
+            const objectCounts = xrefMatches.map(match => parseInt(match[1], 10));
+            const estimatedPages = Math.max(...objectCounts);
+            // xref의 객체 수에서 페이지 수를 추정 (보통 객체 수의 1/3 ~ 1/5 정도가 페이지)
+            if (estimatedPages > 10) {
+              pageCount = Math.max(1, Math.floor(estimatedPages / 4));
+              console.log('방법 4 - xref 기반 추정:', pageCount, '(총 객체 수:', estimatedPages, ')');
             }
           }
         }
+        
+
         
         console.log('최종 페이지 수:', pageCount);
         
