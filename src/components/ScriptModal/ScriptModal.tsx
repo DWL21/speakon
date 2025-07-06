@@ -17,10 +17,6 @@ export interface ScriptModalProps {
   onClose: () => void;
   /** PDF 파일 (필수) */
   pdfFile: File;
-  /** 페이지 제목 */
-  title?: string;
-  /** 페이지 설명 */
-  description?: string;
   /** 슬라이드 입력 데이터 */
   slides?: SlideInput[];
   /** 슬라이드 내용 변경 시 호출되는 콜백 */
@@ -35,8 +31,6 @@ export const ScriptModal: React.FC<ScriptModalProps> = ({
   isOpen,
   onClose,
   pdfFile,
-  title = "발표 대본",
-  description = "설명을 입력하세요",
   slides = [],
   onSlideChange,
   onSave,
@@ -46,6 +40,10 @@ export const ScriptModal: React.FC<ScriptModalProps> = ({
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [isLoadingPageCount, setIsLoadingPageCount] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+
+  // 고정된 제목과 설명
+  const title = "발표 대본";
+  const description = "슬라이드에 맞춘 대본을 미리 작성할 수 있어요.";
 
   // PDF 파일의 페이지 수를 가져와서 슬라이드 생성
   useEffect(() => {
