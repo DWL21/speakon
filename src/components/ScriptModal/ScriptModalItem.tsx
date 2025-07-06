@@ -1,12 +1,12 @@
 import React from 'react';
 
-interface ScriptInputModalItemProps {
+interface ScriptModalItemProps {
   slideNumber: number;
   value: string;
   onChange: (value: string) => void;
 }
 
-export const ScriptInputModalItem: React.FC<ScriptInputModalItemProps> = ({
+export const ScriptModalItem: React.FC<ScriptModalItemProps> = ({
   slideNumber,
   value,
   onChange

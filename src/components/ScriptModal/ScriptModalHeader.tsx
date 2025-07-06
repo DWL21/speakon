@@ -1,12 +1,12 @@
 import React from 'react';
 import { Typography } from '../ui/Typography';
 
-interface ScriptInputModalHeaderProps {
+interface ScriptModalHeaderProps {
   title: string;
   description: string;
 }
 
-export const ScriptInputModalHeader: React.FC<ScriptInputModalHeaderProps> = ({
+export const ScriptModalHeader: React.FC<ScriptModalHeaderProps> = ({
   title,
   description
 }) => {

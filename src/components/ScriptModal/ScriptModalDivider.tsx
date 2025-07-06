@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const ScriptInputModalDivider: React.FC = () => {
+export const ScriptModalDivider: React.FC = () => {
   return <div style={dividerStyle} />;
 };
 

@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
-import { ScriptInputModalOverlay } from './ScriptInputModalOverlay';
-import { ScriptInputModalContainer } from './ScriptInputModalContainer';
-import { ScriptInputModalContent } from './ScriptInputModalContent';
-import { ScriptInputModalPreview } from './ScriptInputModalPreview';
-import { ScriptInputModalDivider } from './ScriptInputModalDivider';
-import { ScriptInputModalForm } from './ScriptInputModalForm';
-import { ScriptInputModalFooter } from './ScriptInputModalFooter';
-import { SlideInput } from './ScriptInputModalForm';
+import { ScriptModalOverlay } from './ScriptModalOverlay';
+import { ScriptModalContainer } from './ScriptModalContainer';
+import { ScriptModalContent } from './ScriptModalContent';
+import { ScriptModalPreview } from './ScriptModalPreview';
+import { ScriptModalDivider } from './ScriptModalDivider';
+import { ScriptModalForm } from './ScriptModalForm';
+import { ScriptModalFooter } from './ScriptModalFooter';
+import { SlideInput } from './ScriptModalForm';
 
-export interface ScriptInputModalProps {
+export interface ScriptModalProps {
   /** 모달 열림 상태 */
   isOpen: boolean;
   /** 모달 닫기 콜백 */
@@ -29,7 +29,7 @@ export interface ScriptInputModalProps {
   renderPreviewContent?: () => React.ReactNode;
 }
 
-export const ScriptInputModal: React.FC<ScriptInputModalProps> = ({
+export const ScriptModal: React.FC<ScriptModalProps> = ({
   isOpen,
   onClose,
   title = "발표 대본",
@@ -58,27 +58,27 @@ export const ScriptInputModal: React.FC<ScriptInputModalProps> = ({
   };
 
   return (
-    <ScriptInputModalOverlay isOpen={isOpen} onClose={onClose}>
-      <ScriptInputModalContainer>
-        <ScriptInputModalContent>
-          <ScriptInputModalPreview
+    <ScriptModalOverlay isOpen={isOpen} onClose={onClose}>
+      <ScriptModalContainer>
+        <ScriptModalContent>
+          <ScriptModalPreview
             title={title}
             description={description}
             renderPreviewContent={renderPreviewContent}
           />
-          <ScriptInputModalDivider />
-          <ScriptInputModalForm
+          <ScriptModalDivider />
+          <ScriptModalForm
             slideCount={slideCount}
             slides={slideInputs}
             onSlideChange={handleSlideChange}
           />
-        </ScriptInputModalContent>
-        <ScriptInputModalFooter
+        </ScriptModalContent>
+        <ScriptModalFooter
           onClose={onClose}
           onSave={handleSave}
         />
-      </ScriptInputModalContainer>
-    </ScriptInputModalOverlay>
+      </ScriptModalContainer>
+    </ScriptModalOverlay>
   );
 };
 

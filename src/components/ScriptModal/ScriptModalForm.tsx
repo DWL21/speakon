@@ -1,5 +1,5 @@
 import React from 'react';
-import { ScriptInputModalItem } from './ScriptInputModalItem';
+import { ScriptModalItem } from './ScriptModalItem';
 
 export interface SlideInput {
   slideNumber: number;
@@ -7,13 +7,13 @@ export interface SlideInput {
   content: string;
 }
 
-interface ScriptInputModalFormProps {
+interface ScriptModalFormProps {
   slideCount: number;
   slides: SlideInput[];
   onSlideChange: (slideNumber: number, content: string) => void;
 }
 
-export const ScriptInputModalForm: React.FC<ScriptInputModalFormProps> = ({
+export const ScriptModalForm: React.FC<ScriptModalFormProps> = ({
   slideCount,
   slides,
   onSlideChange
@@ -30,11 +30,11 @@ export const ScriptInputModalForm: React.FC<ScriptInputModalFormProps> = ({
           };
           
           return (
-            <ScriptInputModalItem
+            <ScriptModalItem
               key={slideNumber}
               slideNumber={slideNumber}
               value={currentSlide.content}
-              onChange={(content) => onSlideChange(slideNumber, content)}
+              onChange={(content: string) => onSlideChange(slideNumber, content)}
             />
           );
         })}

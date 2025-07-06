@@ -1,20 +1,20 @@
 import React from 'react';
-import { ScriptInputModalHeader } from './ScriptInputModalHeader';
+import { ScriptModalHeader } from './ScriptModalHeader';
 
-interface ScriptInputModalPreviewProps {
+interface ScriptModalPreviewProps {
   title: string;
   description: string;
   renderPreviewContent?: () => React.ReactNode;
 }
 
-export const ScriptInputModalPreview: React.FC<ScriptInputModalPreviewProps> = ({
+export const ScriptModalPreview: React.FC<ScriptModalPreviewProps> = ({
   title,
   description,
   renderPreviewContent
 }) => {
   return (
     <div style={previewSectionStyle}>
-      <ScriptInputModalHeader title={title} description={description} />
+      <ScriptModalHeader title={title} description={description} />
       <div style={previewContentStyle}>
         {renderPreviewContent ? renderPreviewContent() : (
           <div style={previewPlaceholderStyle}>

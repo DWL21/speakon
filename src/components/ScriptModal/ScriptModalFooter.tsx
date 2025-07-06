@@ -1,12 +1,12 @@
 import React from 'react';
 import { Button } from '../ui/Button';
 
-interface ScriptInputModalFooterProps {
+interface ScriptModalFooterProps {
   onClose: () => void;
   onSave: () => void;
 }
 
-export const ScriptInputModalFooter: React.FC<ScriptInputModalFooterProps> = ({
+export const ScriptModalFooter: React.FC<ScriptModalFooterProps> = ({
   onClose,
   onSave
 }) => {

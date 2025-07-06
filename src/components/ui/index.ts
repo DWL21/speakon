@@ -9,5 +9,4 @@ export { Progress } from './Progress';
 export { TextSection } from './TextSection';
 export { TopNavBar } from './TopNavBar';
 export { Typography } from './Typography';
-export { ErrorMessage } from './ErrorMessage';
-export * from './ScriptInput'; 
+export { ErrorMessage } from './ErrorMessage'; 

@@ -1,10 +1,10 @@
 import React from 'react';
 
-interface ScriptInputModalContentProps {
+interface ScriptModalContentProps {
   children: React.ReactNode;
 }
 
-export const ScriptInputModalContent: React.FC<ScriptInputModalContentProps> = ({
+export const ScriptModalContent: React.FC<ScriptModalContentProps> = ({
   children
 }) => {
   return (

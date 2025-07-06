@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { ScriptInputForm } from '../components/ui/ScriptInput';
-import { ScriptInputModal, SlideInput } from '../components/ScriptInputModal';
+import { ScriptModal, SlideInput } from '../components/ScriptModal';
 import { colors } from '../theme/colors';
 
 export function ModalPageInputExample() {
@@ -108,7 +107,7 @@ export function ModalPageInputExample() {
         {renderFormData()}
 
         {/* 새로운 ScriptInputModal */}
-        <ScriptInputModal
+        <ScriptModal
           isOpen={isScriptModalOpen}
           onClose={() => setIsScriptModalOpen(false)}
           title="발표 대본"
@@ -135,7 +134,10 @@ export function ModalPageInputExample() {
               </div>
               
               <div style={modalContentStyle}>
-                <ScriptInputForm onSubmit={handleSubmit} />
+                <div style={{ padding: '24px', textAlign: 'center' }}>
+                  <p>기존 ScriptInputForm이 제거되었습니다.</p>
+                  <p>새로운 ScriptModal을 사용해 주세요.</p>
+                </div>
               </div>
             </div>
           </div>
@@ -144,26 +146,35 @@ export function ModalPageInputExample() {
         <div style={codeExampleStyle}>
           <h3 style={codeHeadingStyle}>사용 예시 코드:</h3>
           <pre style={codeStyle}>
-{`import { ScriptInputForm } from '../components/ui/ScriptInput';
+{`import { ScriptModal, SlideInput } from '../components/ScriptModal';
 
-const handleSubmit = (data) => {
-  console.log('저장된 스크립트 데이터:', data);
-  // 데이터 처리 로직
+const [isScriptModalOpen, setIsScriptModalOpen] = useState(false);
+const [slides, setSlides] = useState<SlideInput[]>([
+  { slideNumber: 1, pageNumber: 1, content: '' },
+  // ... more slides
+]);
+
+const handleSlideChange = (slideNumber: number, content: string) => {
+  setSlides(prev => 
+    prev.map(slide => 
+      slide.slideNumber === slideNumber 
+        ? { ...slide, content }
+        : slide
+    )
+  );
 };
 
-<ScriptInputForm onSubmit={handleSubmit} />
-
-// 데이터 구조:
-// {
-//   title1: string,
-//   title2: string,
-//   title3: string,
-//   subtitle: string,
-//   overallScript: string,
-//   pageScript: string,
-//   overview: string,
-//   point: string
-// }`}
+<ScriptModal
+  isOpen={isScriptModalOpen}
+  onClose={() => setIsScriptModalOpen(false)}
+  title="발표 대본"
+  description="피그마 디자인 기반 모달"
+  slideCount={5}
+  slides={slides}
+  onSlideChange={handleSlideChange}
+  onSave={handleSlidesSave}
+  renderPreviewContent={renderPreviewContent}
+/>`}
           </pre>
         </div>
       </div>

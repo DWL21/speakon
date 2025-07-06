@@ -1,12 +1,12 @@
 import React from 'react';
 
-interface ScriptInputModalOverlayProps {
+interface ScriptModalOverlayProps {
   isOpen: boolean;
   onClose: () => void;
   children: React.ReactNode;
 }
 
-export const ScriptInputModalOverlay: React.FC<ScriptInputModalOverlayProps> = ({
+export const ScriptModalOverlay: React.FC<ScriptModalOverlayProps> = ({
   isOpen,
   onClose,
   children

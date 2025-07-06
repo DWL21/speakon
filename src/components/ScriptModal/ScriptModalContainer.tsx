@@ -1,10 +1,10 @@
 import React from 'react';
 
-interface ScriptInputContainerProps {
+interface ScriptModalContainerProps {
   children: React.ReactNode;
 }
 
-export const ScriptInputContainer: React.FC<ScriptInputContainerProps> = ({
+export const ScriptModalContainer: React.FC<ScriptModalContainerProps> = ({
   children
 }) => {
   return (
@@ -15,12 +15,13 @@ export const ScriptInputContainer: React.FC<ScriptInputContainerProps> = ({
 };
 
 const containerStyle: React.CSSProperties = {
-  position: 'relative',
+  backgroundColor: '#ffffff',
+  borderRadius: '32px',
+  width: '1050px',
+  maxWidth: '90vw',
+  maxHeight: '90vh',
   display: 'flex',
   flexDirection: 'column',
-  width: '1050px',
-  height: '650px',
-  background: '#FFFFFF',
-  borderRadius: '32px',
   overflow: 'hidden',
+  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2)',
 }; 
