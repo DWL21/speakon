@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 interface ScriptModalItemProps {
   slideNumber: number;
@@ -14,6 +14,14 @@ export const ScriptModalItem: React.FC<ScriptModalItemProps> = ({
   onFocus
 }) => {
   const [isFocused, setIsFocused] = useState(false);
+  const [localValue, setLocalValue] = useState(value);
+
+  // props.value가 변경되면 로컬 값 동기화
+  useEffect(() => {
+    setLocalValue(value);
+  }, [value]);
+
+
 
   const handleFocus = () => {
     setIsFocused(true);
@@ -22,6 +30,16 @@ export const ScriptModalItem: React.FC<ScriptModalItemProps> = ({
 
   const handleBlur = () => {
     setIsFocused(false);
+    // blur 시에만 실제 변경사항을 부모에게 알림
+    if (localValue !== value) {
+      console.log('📝 blur → 내용 저장', slideNumber, localValue);
+      onChange(localValue);
+    }
+  };
+
+  const handleChange = (newValue: string) => {
+    // 입력 중에는 로컬 상태만 업데이트
+    setLocalValue(newValue);
   };
 
   return (
@@ -42,8 +60,8 @@ export const ScriptModalItem: React.FC<ScriptModalItemProps> = ({
         transition: 'border-color 0.2s ease, background-color 0.2s ease'
       }}>
         <textarea
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
+          value={localValue}
+          onChange={(e) => handleChange(e.target.value)}
           onFocus={handleFocus}
           onBlur={handleBlur}
           placeholder="내용을 입력하세요."

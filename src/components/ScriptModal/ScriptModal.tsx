@@ -88,6 +88,14 @@ export const ScriptModal: React.FC<ScriptModalProps> = ({
   }, [pdfFile, slides]);
 
   const handleSlideChange = (slideNumber: number, content: string) => {
+    // 현재 슬라이드의 내용과 같다면 아무 작업도 하지 않음
+    const currentSlide = slideInputs.find(slide => slide.slideNumber === slideNumber);
+    if (currentSlide && currentSlide.content === content) {
+      console.log('📝 내용 변경 → 이미 같은 내용', slideNumber, '(상태 업데이트 없음)');
+      return;
+    }
+
+    console.log('📝 내용 변경 → 상태 업데이트', slideNumber);
     setSlideInputs(prev => 
       prev.map(slide => 
         slide.slideNumber === slideNumber
@@ -99,7 +107,13 @@ export const ScriptModal: React.FC<ScriptModalProps> = ({
   };
 
   const handleFocus = (slideNumber: number) => {
-    console.log('🎯 포커스 → 페이지', slideNumber);
+    // 현재 페이지와 같다면 아무 작업도 하지 않음
+    if (currentPage === slideNumber) {
+      console.log('🎯 포커스 → 이미 같은 페이지', slideNumber, '(변경 없음)');
+      return;
+    }
+    
+    console.log('🎯 포커스 → 페이지 변경', currentPage, '→', slideNumber);
     setCurrentPage(slideNumber);
   };
 
