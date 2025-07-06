@@ -34,15 +34,8 @@ export const ScriptInputPreview: React.FC<ScriptInputPreviewProps> = ({
 
 const previewSectionStyle: React.CSSProperties = {
   display: 'flex',
-  flexDirection: 'row',
+  flex: 1,
+  minWidth: 0,
   justifyContent: 'center',
   alignItems: 'center',
-  padding: '0px',
-  gap: '10px',
-  width: '350px',
-  maxWidth: '350px',
-  height: '503px',
-  flex: 'none',
-  order: 0,
-  flexGrow: 1,
 }; 

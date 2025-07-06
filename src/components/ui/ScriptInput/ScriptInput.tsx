@@ -84,7 +84,7 @@ export const ScriptInput: React.FC<ScriptInputProps> = ({
             onSlideChange={handleSlideChange}
           />
         </ScriptInputContent>
-        <ScriptInputFooter onSave={handleSave} />
+        <ScriptInputFooter onSave={handleSave} onClose={onClose} />
       </ScriptInputContainer>
     </ScriptInputOverlay>
   );

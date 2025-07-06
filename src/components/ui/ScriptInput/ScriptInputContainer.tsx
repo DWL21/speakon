@@ -17,10 +17,9 @@ export const ScriptInputContainer: React.FC<ScriptInputContainerProps> = ({
 const containerStyle: React.CSSProperties = {
   display: 'flex',
   flexDirection: 'column',
-  alignItems: 'center',
-  padding: '0px',
   width: '1050px',
   height: '650px',
   background: '#FFFFFF',
   borderRadius: '32px',
+  overflow: 'hidden',
 }; 

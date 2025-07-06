@@ -5,14 +5,8 @@ export const ScriptInputDivider: React.FC = () => {
 };
 
 const verticalDividerStyle: React.CSSProperties = {
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'center',
-  padding: '0px',
   width: '1px',
   height: '100%',
   background: '#EEEEEE',
   flex: 'none',
-  flexShrink: 0,
 }; 

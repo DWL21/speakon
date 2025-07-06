@@ -47,37 +47,23 @@ export const ScriptInputForm: React.FC<ScriptInputFormProps> = ({
 
 const inputSectionStyle: React.CSSProperties = {
   display: 'flex',
-  flexDirection: 'row',
+  flex: 1,
+  minWidth: 0,
   justifyContent: 'center',
   alignItems: 'flex-start',
-  padding: '0px',
-  width: '597px',
-  minWidth: '597px',
-  maxWidth: '597px',
-  height: '100%',
-  flex: 'none',
-  order: 2,
-  flexGrow: 1,
 };
 
 const inputWrapperStyle: React.CSSProperties = {
   display: 'flex',
   flexDirection: 'column',
-  justifyContent: 'flex-start',
-  alignItems: 'center',
-  padding: '0px',
-  gap: '0px',
-  width: '597px',
-  minWidth: '597px',
+  width: '100%',
   maxWidth: '597px',
   height: '100%',
-  flex: 'none',
-  order: 0,
-  flexGrow: 1,
+  gap: '20px',
+  padding: '0px',
   overflowY: 'auto',
 };
 
 const slideItemStyle: React.CSSProperties = {
-  marginTop: '20px',
-  marginBottom: '25px',
+  flex: 'none',
 }; 
