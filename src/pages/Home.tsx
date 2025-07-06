@@ -11,7 +11,7 @@ export function Home() {
   const [slides, setSlides] = useState<SlideInput[]>([])
 
   const handleUploadComplete = (file: File) => {
-    console.log('📁 파일 업로드 완료:', file.name, file.size, file.type);
+    console.log('📁 파일 업로드 완료:', file.name);
     setUploadedFile(file)
     // 기본적으로 5개의 슬라이드로 시작
     const initialSlides: SlideInput[] = Array.from({ length: 5 }, (_, index) => ({
@@ -19,19 +19,15 @@ export function Home() {
       pageNumber: index + 1,
       content: ''
     }))
-    console.log('📝 초기 슬라이드 생성:', initialSlides.length);
     setSlides(initialSlides)
-    console.log('🎭 모달 열기');
     setIsModalOpen(true)
   }
 
   const handleModalClose = () => {
-    console.log('🎭 모달 닫기');
     setIsModalOpen(false)
   }
 
   const handleSlideChange = (slideNumber: number, content: string) => {
-    console.log('📝 Home에서 슬라이드 변경:', slideNumber, content.length + '자');
     setSlides(prev => 
       prev.map(slide => 
         slide.slideNumber === slideNumber
@@ -42,7 +38,7 @@ export function Home() {
   }
 
   const handleSave = () => {
-    console.log('💾 Home에서 저장:', slides.length + '개 슬라이드');
+    console.log('💾 스크립트 저장:', slides.length + '개 슬라이드');
     console.log('저장된 스크립트:', slides)
     console.log('업로드된 파일:', uploadedFile?.name)
     // 여기에 저장 로직 추가
