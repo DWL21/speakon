@@ -10,8 +10,8 @@ interface LoginButtonProps {
 }
 
 export const LoginButton: React.FC<LoginButtonProps> = ({
-  width = 64,
-  height = 30,
+  width,
+  height,
   className = '',
   style,
   onClick
@@ -20,12 +20,12 @@ export const LoginButton: React.FC<LoginButtonProps> = ({
     <button
       className={`login-button ${className}`}
       style={{
-        width: `${width}px`,
-        height: `${height}px`,
-        backgroundColor: colors.primary.normal,
-        color: colors.static.white,
+        ...(width && { width: `${width}px` }),
+        ...(height && { height: `${height}px` }),
+        backgroundColor: '#3282FF',
+        color: '#FFFFFF',
         border: 'none',
-        borderRadius: '6px',
+        borderRadius: '8px',
         fontSize: '13px',
         fontWeight: 500,
         fontFamily: 'Pretendard, sans-serif',
@@ -35,23 +35,24 @@ export const LoginButton: React.FC<LoginButtonProps> = ({
         justifyContent: 'center',
         transition: 'background-color 0.2s ease',
         outline: 'none',
+        padding: '7px 15px',
         ...style
       }}
       onClick={onClick}
       onMouseEnter={(e) => {
-        e.currentTarget.style.backgroundColor = colors.primary.strong
+        e.currentTarget.style.backgroundColor = '#2563eb'
       }}
       onMouseLeave={(e) => {
-        e.currentTarget.style.backgroundColor = colors.primary.normal
+        e.currentTarget.style.backgroundColor = '#3282FF'
       }}
       onMouseDown={(e) => {
-        e.currentTarget.style.backgroundColor = colors.primary.strong
+        e.currentTarget.style.backgroundColor = '#2563eb'
       }}
       onMouseUp={(e) => {
-        e.currentTarget.style.backgroundColor = colors.primary.normal
+        e.currentTarget.style.backgroundColor = '#3282FF'
       }}
     >
-      대화
+      로그인
     </button>
   )
 } 
