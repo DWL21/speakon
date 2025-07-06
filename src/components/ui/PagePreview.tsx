@@ -41,7 +41,10 @@ export function PagePreview({
           onClick={() => onPageChange?.(i)}
         >
           <div style={thumbnailContentStyle}>
-            <span style={thumbnailNumberStyle}>{i}</span>
+            <span style={{
+              ...thumbnailNumberStyle,
+              color: isSelected ? colors.static.white : colors.label.normal,
+            }}>{i}</span>
           </div>
         </div>
       );
@@ -152,6 +155,5 @@ const thumbnailContentStyle: React.CSSProperties = {
 
 const thumbnailNumberStyle: React.CSSProperties = {
   ...typography.body.reading,
-  color: colors.label.normal,
   fontWeight: 500,
 }; 

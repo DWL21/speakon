@@ -5,9 +5,10 @@ import { typography } from '../../theme/typography';
 
 interface FileUploadBoxProps {
   className?: string;
+  onUploadComplete?: (file: File) => void;
 }
 
-export const FileUploadBox: React.FC<FileUploadBoxProps> = ({ className = '' }) => {
+export const FileUploadBox: React.FC<FileUploadBoxProps> = ({ className = '', onUploadComplete }) => {
   const [isUploading, setIsUploading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -49,6 +50,16 @@ export const FileUploadBox: React.FC<FileUploadBoxProps> = ({ className = '' }) 
           clearInterval(interval);
           setIsUploading(false);
           console.log('업로드 완료:', file.name);
+          onUploadComplete?.(file);
+          
+          setTimeout(() => {
+            setSelectedFile(null);
+            setProgress(0);
+            if (fileInputRef.current) {
+              fileInputRef.current.value = '';
+            }
+          }, 3000);
+          
           return 100;
         }
         return prev + 10;
@@ -162,13 +173,30 @@ export const FileUploadBox: React.FC<FileUploadBoxProps> = ({ className = '' }) 
   );
 
   const renderCompletedContent = () => (
-    <div className="upload-content">
+    <div 
+      className="upload-content"
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: '16px',
+      }}
+    >
       <div style={{
         ...typography.body.normal,
         color: colors.semantic.success,
-        textAlign: 'center'
+        textAlign: 'center',
+        marginBottom: '8px'
       }}>
-        업로드 완료: {selectedFile?.name}
+        ✅ 업로드 완료: {selectedFile?.name}
+      </div>
+      <div style={{
+        ...typography.label,
+        color: colors.label.neutral,
+        textAlign: 'center',
+        fontSize: '12px'
+      }}>
+        클릭하여 다른 파일 업로드 (3초 후 자동 리셋)
       </div>
     </div>
   );

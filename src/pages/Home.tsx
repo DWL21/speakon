@@ -1,9 +1,81 @@
 import { Link } from 'react-router-dom'
+import { useState } from 'react'
 import { TextSection } from '../components/ui/TextSection'
 import { FileUploadBox } from '../components/upload/FileUploadBox'
+import { ScriptModal, SlideInput } from '../components/ScriptModal/ScriptModal'
 import { colors } from '../theme/colors'
 
 export function Home() {
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [uploadedFile, setUploadedFile] = useState<File | null>(null)
+  const [slides, setSlides] = useState<SlideInput[]>([])
+
+  const handleUploadComplete = (file: File) => {
+    console.log('📁 파일 업로드 완료:', file.name, file.size, file.type);
+    setUploadedFile(file)
+    // 기본적으로 5개의 슬라이드로 시작
+    const initialSlides: SlideInput[] = Array.from({ length: 5 }, (_, index) => ({
+      slideNumber: index + 1,
+      pageNumber: index + 1,
+      content: ''
+    }))
+    console.log('📝 초기 슬라이드 생성:', initialSlides.length);
+    setSlides(initialSlides)
+    console.log('🎭 모달 열기');
+    setIsModalOpen(true)
+  }
+
+  const handleModalClose = () => {
+    console.log('🎭 모달 닫기');
+    setIsModalOpen(false)
+  }
+
+  const handleSlideChange = (slideNumber: number, content: string) => {
+    console.log('📝 Home에서 슬라이드 변경:', slideNumber, content.length + '자');
+    setSlides(prev => 
+      prev.map(slide => 
+        slide.slideNumber === slideNumber
+          ? { ...slide, content }
+          : slide
+      )
+    )
+  }
+
+  const handleSave = () => {
+    console.log('💾 Home에서 저장:', slides.length + '개 슬라이드');
+    console.log('저장된 스크립트:', slides)
+    console.log('업로드된 파일:', uploadedFile?.name)
+    // 여기에 저장 로직 추가
+    setIsModalOpen(false)
+  }
+
+  const renderPreviewContent = () => {
+    if (!uploadedFile) return null
+    
+    return (
+      <div style={{
+        padding: '20px',
+        textAlign: 'center',
+        color: colors.label.normal,
+      }}>
+        <div style={{
+          fontSize: '14px',
+          color: colors.label.neutral,
+          marginBottom: '8px'
+        }}>
+          업로드된 파일
+        </div>
+        <div style={{
+          fontSize: '16px',
+          fontWeight: 500,
+          color: colors.label.normal
+        }}>
+          {uploadedFile.name}
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div 
       style={{
@@ -35,7 +107,7 @@ export function Home() {
         
         {/* 파일 업로드 섹션 */}
         <div style={{ width: '100%' }}>
-          <FileUploadBox />
+          <FileUploadBox onUploadComplete={handleUploadComplete} />
         </div>
         
         {/* 링크 버튼들 */}
@@ -113,6 +185,20 @@ export function Home() {
           홈 페이지가 성공적으로 로드되었습니다! 👋
         </div>
       </div>
+
+      {/* ScriptModal */}
+      <ScriptModal
+        isOpen={isModalOpen}
+        onClose={handleModalClose}
+        pdfFile={uploadedFile}
+        title={uploadedFile ? uploadedFile.name : "발표 대본"}
+        description="업로드된 PDF 파일에 대한 발표 대본을 작성해보세요."
+        slideCount={5}
+        slides={slides}
+        onSlideChange={handleSlideChange}
+        onSave={handleSave}
+        renderPreviewContent={renderPreviewContent}
+      />
     </div>
   )
 } 

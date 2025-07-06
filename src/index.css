@@ -1,4 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
   font-family: 'Pretendard', Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
@@ -79,4 +82,10 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
-*/ 
+*/
+
+/* 스피너 애니메이션 */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+} 

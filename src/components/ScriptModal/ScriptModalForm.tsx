@@ -11,12 +11,14 @@ interface ScriptModalFormProps {
   slideCount: number;
   slides: SlideInput[];
   onSlideChange: (slideNumber: number, content: string) => void;
+  onFocus?: (slideNumber: number) => void;
 }
 
 export const ScriptModalForm: React.FC<ScriptModalFormProps> = ({
   slideCount,
   slides,
-  onSlideChange
+  onSlideChange,
+  onFocus
 }) => {
   return (
     <div style={formSectionStyle}>
@@ -35,6 +37,7 @@ export const ScriptModalForm: React.FC<ScriptModalFormProps> = ({
               slideNumber={slideNumber}
               value={currentSlide.content}
               onChange={(content: string) => onSlideChange(slideNumber, content)}
+              onFocus={onFocus}
             />
           );
         })}

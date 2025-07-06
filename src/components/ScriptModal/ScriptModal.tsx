@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ScriptModalOverlay } from './ScriptModalOverlay';
 import { ScriptModalContainer } from './ScriptModalContainer';
 import { ScriptModalContent } from './ScriptModalContent';
@@ -13,6 +13,8 @@ export interface ScriptModalProps {
   isOpen: boolean;
   /** 모달 닫기 콜백 */
   onClose: () => void;
+  /** PDF 파일 */
+  pdfFile?: File | null;
   /** 페이지 제목 */
   title?: string;
   /** 페이지 설명 */
@@ -32,6 +34,7 @@ export interface ScriptModalProps {
 export const ScriptModal: React.FC<ScriptModalProps> = ({
   isOpen,
   onClose,
+  pdfFile = null,
   title = "발표 대본",
   description = "설명을 입력하세요",
   slideCount = 5,
@@ -40,9 +43,35 @@ export const ScriptModal: React.FC<ScriptModalProps> = ({
   onSave,
   renderPreviewContent,
 }) => {
-  const [slideInputs, setSlideInputs] = useState<SlideInput[]>(slides);
+  const [slideInputs, setSlideInputs] = useState<SlideInput[]>([]);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  
+  console.log('🎛️ ScriptModal props:', { 
+    isOpen, 
+    pdfFile: pdfFile?.name || 'null', 
+    slideCount, 
+    slidesLength: slides.length 
+  });
+
+  // 초기 슬라이드 설정 (props의 slides 사용)
+  useEffect(() => {
+    console.log('🔧 초기 슬라이드 설정:', slides.length);
+    if (slides.length > 0) {
+      setSlideInputs(slides);
+    } else {
+      // props에서 slides가 없으면 기본 slideCount만큼 생성
+      const defaultSlides: SlideInput[] = Array.from({ length: slideCount }, (_, index) => ({
+        slideNumber: index + 1,
+        pageNumber: index + 1,
+        content: ''
+      }));
+      console.log('📝 기본 슬라이드 생성:', defaultSlides.length);
+      setSlideInputs(defaultSlides);
+    }
+  }, [slides, slideCount]);
 
   const handleSlideChange = (slideNumber: number, content: string) => {
+    console.log('📝 슬라이드 변경:', slideNumber, content.length + '자');
     setSlideInputs(prev => 
       prev.map(slide => 
         slide.slideNumber === slideNumber
@@ -53,9 +82,25 @@ export const ScriptModal: React.FC<ScriptModalProps> = ({
     onSlideChange?.(slideNumber, content);
   };
 
+  const handleFocus = (slideNumber: number) => {
+    console.log('🎯 슬라이드 포커스:', slideNumber);
+    setCurrentPage(slideNumber);
+  };
+
   const handleSave = () => {
+    console.log('💾 저장 요청');
     onSave?.();
   };
+
+  // 실제 슬라이드 수 사용
+  const actualSlideCount = slideInputs.length;
+  
+  console.log('🎪 렌더링 정보:', { 
+    actualSlideCount, 
+    currentPage,
+    slideInputsLength: slideInputs.length,
+    pdfFile: pdfFile?.name || 'null'
+  });
 
   return (
     <ScriptModalOverlay isOpen={isOpen} onClose={onClose}>
@@ -64,13 +109,17 @@ export const ScriptModal: React.FC<ScriptModalProps> = ({
           <ScriptModalPreview
             title={title}
             description={description}
+            pdfFile={pdfFile}
+            currentPage={currentPage}
+            totalPages={actualSlideCount}
             renderPreviewContent={renderPreviewContent}
           />
           <ScriptModalDivider />
           <ScriptModalForm
-            slideCount={slideCount}
+            slideCount={actualSlideCount}
             slides={slideInputs}
             onSlideChange={handleSlideChange}
+            onFocus={handleFocus}
           />
         </ScriptModalContent>
         <ScriptModalFooter

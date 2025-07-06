@@ -31,7 +31,7 @@ export const TopNavBar: React.FC = () => {
         <Logo />
       </Link>
       
-      {/* 오른쪽: 텍스트 + 대화 버튼 */}
+      {/* 오른쪽: 텍스트 + 로그인 버튼 */}
       <div style={{ 
         display: 'flex', 
         alignItems: 'center', 

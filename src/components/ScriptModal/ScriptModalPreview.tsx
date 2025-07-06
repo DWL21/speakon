@@ -1,26 +1,57 @@
 import React from 'react';
 import { ScriptModalHeader } from './ScriptModalHeader';
+import { SimplePdfViewer } from '../ui/SimplePdfViewer';
 
 interface ScriptModalPreviewProps {
   title: string;
   description: string;
+  /** PDF 파일 */
+  pdfFile?: File | null;
+  /** 현재 페이지 번호 */
+  currentPage: number;
+  /** 총 페이지 수 */
+  totalPages: number;
+  /** 미리보기 콘텐츠 렌더링 함수 (기존 호환성) */
   renderPreviewContent?: () => React.ReactNode;
 }
 
 export const ScriptModalPreview: React.FC<ScriptModalPreviewProps> = ({
   title,
   description,
-  renderPreviewContent
+  pdfFile,
+  currentPage,
+  totalPages,
+  renderPreviewContent,
 }) => {
+  const renderContent = () => {
+    // PDF 파일이 있으면 SimplePdfViewer 사용
+    if (pdfFile) {
+      return (
+        <SimplePdfViewer
+          file={pdfFile}
+          currentPage={currentPage}
+        />
+      );
+    }
+
+    // 기존 방식의 미리보기 콘텐츠가 있으면 사용
+    if (renderPreviewContent) {
+      return renderPreviewContent();
+    }
+
+    // 기본 플레이스홀더
+    return (
+      <div style={previewPlaceholderStyle}>
+        <div style={previewImageStyle} />
+      </div>
+    );
+  };
+
   return (
     <div style={previewSectionStyle}>
       <ScriptModalHeader title={title} description={description} />
       <div style={previewContentStyle}>
-        {renderPreviewContent ? renderPreviewContent() : (
-          <div style={previewPlaceholderStyle}>
-            <div style={previewImageStyle} />
-          </div>
-        )}
+        {renderContent()}
       </div>
     </div>
   );
@@ -46,6 +77,7 @@ const previewContentStyle: React.CSSProperties = {
   alignItems: 'center',
   justifyContent: 'center',
   padding: '10px',
+  overflow: 'hidden',
 };
 
 const previewPlaceholderStyle: React.CSSProperties = {

@@ -4,17 +4,20 @@ interface ScriptModalItemProps {
   slideNumber: number;
   value: string;
   onChange: (value: string) => void;
+  onFocus?: (slideNumber: number) => void;
 }
 
 export const ScriptModalItem: React.FC<ScriptModalItemProps> = ({
   slideNumber,
   value,
-  onChange
+  onChange,
+  onFocus
 }) => {
   const [isFocused, setIsFocused] = useState(false);
 
   const handleFocus = () => {
     setIsFocused(true);
+    onFocus?.(slideNumber);
   };
 
   const handleBlur = () => {
