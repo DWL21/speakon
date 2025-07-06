@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ScriptInputModal, SlideInput } from './ScriptInputModal';
+import { ScriptModal, SlideInput } from './ScriptModal';
 
 const ScriptInputModalExample: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -97,7 +97,7 @@ const ScriptInputModalExample: React.FC = () => {
         스크립트 입력 모달 열기
       </button>
 
-      <ScriptInputModal
+      <ScriptModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         title="발표 대본"

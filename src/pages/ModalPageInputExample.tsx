@@ -4,11 +4,11 @@ import { colors } from '../theme/colors';
 
 export function ModalPageInputExample() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [formData, setFormData] = useState<any>(null);
+
   
   // 새로운 ScriptInputModal 상태
   const [isScriptModalOpen, setIsScriptModalOpen] = useState(false);
-  const [slideCount, setSlideCount] = useState(5);
+  const slideCount = 5;
   const [slides, setSlides] = useState<SlideInput[]>([
     { slideNumber: 1, pageNumber: 1, content: '' },
     { slideNumber: 2, pageNumber: 1, content: '' },
@@ -17,12 +17,7 @@ export function ModalPageInputExample() {
     { slideNumber: 5, pageNumber: 1, content: '' },
   ]);
 
-  const handleSubmit = (data: any) => {
-    console.log('저장된 스크립트 데이터:', data);
-    setFormData(data);
-    alert('스크립트가 저장되었습니다!');
-    setIsModalOpen(false);
-  };
+
 
   // 새로운 ScriptInputModal 핸들러들
   const handleSlideChange = (slideNumber: number, content: string) => {
@@ -61,23 +56,7 @@ export function ModalPageInputExample() {
     </div>
   );
 
-  const renderFormData = () => {
-    if (!formData) return null;
 
-    return (
-      <div style={dataDisplayStyle}>
-        <h3 style={dataHeadingStyle}>저장된 스크립트 데이터:</h3>
-        <div style={dataContentStyle}>
-          {Object.entries(formData).map(([key, value]) => (
-            <div key={key} style={dataItemStyle}>
-              <span style={dataKeyStyle}>{key}:</span>
-              <span style={dataValueStyle}>{value as string || '(비어있음)'}</span>
-            </div>
-          ))}
-        </div>
-      </div>
-    );
-  };
 
   return (
     <div style={containerStyle}>
@@ -104,7 +83,7 @@ export function ModalPageInputExample() {
           </button>
         </div>
 
-        {renderFormData()}
+
 
         {/* 새로운 ScriptInputModal */}
         <ScriptModal
@@ -295,44 +274,7 @@ const modalContentStyle: React.CSSProperties = {
   overflow: 'auto',
 };
 
-const dataDisplayStyle: React.CSSProperties = {
-  marginBottom: '40px',
-  padding: '24px',
-  backgroundColor: colors.fill.normal,
-  borderRadius: '12px',
-};
 
-const dataHeadingStyle: React.CSSProperties = {
-  fontSize: '20px',
-  fontWeight: 600,
-  color: colors.label.normal,
-  marginBottom: '16px',
-};
-
-const dataContentStyle: React.CSSProperties = {
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '8px',
-};
-
-const dataItemStyle: React.CSSProperties = {
-  display: 'flex',
-  gap: '12px',
-  alignItems: 'flex-start',
-};
-
-const dataKeyStyle: React.CSSProperties = {
-  fontSize: '14px',
-  fontWeight: 600,
-  color: colors.label.normal,
-  minWidth: '120px',
-};
-
-const dataValueStyle: React.CSSProperties = {
-  fontSize: '14px',
-  color: colors.label.alternative,
-  flex: 1,
-};
 
 const codeExampleStyle: React.CSSProperties = {
   backgroundColor: colors.fill.normal,

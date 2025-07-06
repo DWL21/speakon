@@ -9,5 +9,4 @@ export { Progress } from './Progress';
 export { TextSection } from './TextSection';
 export { TopNavBar } from './TopNavBar';
 export { Typography } from './Typography';
-export { ErrorMessage } from './ErrorMessage';
-export { FigmaLoginButton } from './FigmaLoginButton'; 
+export { ErrorMessage } from './ErrorMessage'; 
