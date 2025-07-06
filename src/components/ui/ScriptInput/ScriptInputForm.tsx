@@ -11,17 +11,19 @@ interface ScriptInputFormProps {
   currentPage: number;
   slides: SlideInput[];
   onSlideChange: (pageNumber: number, slideNumber: number, content: string) => void;
+  slideCount?: number;
 }
 
 export const ScriptInputForm: React.FC<ScriptInputFormProps> = ({
   currentPage,
   slides,
-  onSlideChange
+  onSlideChange,
+  slideCount = 5
 }) => {
   return (
     <div style={inputSectionStyle}>
       <div style={inputWrapperStyle}>
-        {Array.from({ length: 5 }, (_, index) => {
+        {Array.from({ length: slideCount }, (_, index) => {
           const slideKey = `${currentPage}-${index}`;
           const slideNumber = index + 1;
           const currentSlide = slides.find(s => s.pageNumber === currentPage && s.slideNumber === slideNumber) || { 

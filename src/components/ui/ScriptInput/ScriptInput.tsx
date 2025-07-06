@@ -28,6 +28,8 @@ export interface ScriptInputProps {
   description?: string;
   /** 슬라이드 입력 데이터 */
   slides: SlideInput[];
+  /** 슬라이드 개수 */
+  slideCount?: number;
   /** 슬라이드 내용 변경 시 호출되는 콜백 */
   onSlideChange?: (slideNumber: number, content: string) => void;
   /** 저장 버튼 클릭 시 호출되는 콜백 */
@@ -44,6 +46,7 @@ export const ScriptInput: React.FC<ScriptInputProps> = ({
   title = "발표 대본",
   description = "설명을 입력하세요",
   slides,
+  slideCount = 5,
   onSlideChange,
   onSave,
   onClose
@@ -82,6 +85,7 @@ export const ScriptInput: React.FC<ScriptInputProps> = ({
             currentPage={currentPage}
             slides={slideInputs}
             onSlideChange={handleSlideChange}
+            slideCount={slideCount}
           />
         </ScriptInputContent>
         <ScriptInputFooter onSave={handleSave} onClose={onClose} />
