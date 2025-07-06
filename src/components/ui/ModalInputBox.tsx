@@ -12,11 +12,20 @@ export const ModalInputBox: React.FC<ModalInputBoxProps> = ({
   initialScript = ''
 }) => {
   const [script, setScript] = useState(initialScript);
+  const [isFocused, setIsFocused] = useState(false);
 
   const handleScriptChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newScript = e.target.value;
     setScript(newScript);
     onScriptChange(slideNumber, newScript);
+  };
+
+  const handleFocus = () => {
+    setIsFocused(true);
+  };
+
+  const handleBlur = () => {
+    setIsFocused(false);
   };
 
   return (
@@ -68,13 +77,17 @@ export const ModalInputBox: React.FC<ModalInputBoxProps> = ({
         gap: '10px',
         width: '597px',
         height: '120px',
-        background: '#F1F2F5',
+        background: isFocused ? '#FFF' : '#F1F2F5',
         borderRadius: '10px',
-        boxSizing: 'border-box'
+        boxSizing: 'border-box',
+        border: isFocused ? '2px solid #3282ff' : '2px solid transparent',
+        transition: 'border-color 0.2s ease, background-color 0.2s ease'
       }}>
         <textarea
           value={script}
           onChange={handleScriptChange}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
           placeholder="내용을 입력하세요."
           style={{
             width: '543px',

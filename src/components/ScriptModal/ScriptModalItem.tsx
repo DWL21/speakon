@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 interface ScriptModalItemProps {
   slideNumber: number;
@@ -11,6 +11,16 @@ export const ScriptModalItem: React.FC<ScriptModalItemProps> = ({
   value,
   onChange
 }) => {
+  const [isFocused, setIsFocused] = useState(false);
+
+  const handleFocus = () => {
+    setIsFocused(true);
+  };
+
+  const handleBlur = () => {
+    setIsFocused(false);
+  };
+
   return (
     <div style={itemStyle}>
       <div style={headerStyle}>
@@ -18,10 +28,17 @@ export const ScriptModalItem: React.FC<ScriptModalItemProps> = ({
           <span>슬라이드{slideNumber}</span>
         </div>
       </div>
-      <div style={textareaWrapperStyle}>
+      <div style={{
+        ...textareaWrapperStyle,
+        background: isFocused ? '#FFF' : '#f1f2f5',
+        border: isFocused ? '2px solid #3282ff' : '2px solid transparent',
+        transition: 'border-color 0.2s ease, background-color 0.2s ease'
+      }}>
         <textarea
           value={value}
           onChange={(e) => onChange(e.target.value)}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
           placeholder="내용을 입력하세요."
           style={textareaStyle}
         />
@@ -62,6 +79,7 @@ const textareaWrapperStyle: React.CSSProperties = {
   borderRadius: '10px',
   height: '120px',
   width: '100%',
+  boxSizing: 'border-box',
 };
 
 const textareaStyle: React.CSSProperties = {
