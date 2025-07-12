@@ -14,13 +14,8 @@ export function Home() {
   const handleUploadComplete = (file: File) => {
     console.log('📁 파일 업로드 완료:', file.name);
     setUploadedFile(file)
-    // 기본적으로 5개의 슬라이드로 시작
-    const initialSlides: SlideInput[] = Array.from({ length: 5 }, (_, index) => ({
-      slideNumber: index + 1,
-      pageNumber: index + 1,
-      content: ''
-    }))
-    setSlides(initialSlides)
+    // ScriptModal에서 PDF 페이지 수에 맞게 슬라이드를 생성하도록 빈 배열로 초기화
+    setSlides([])
     setIsModalOpen(true)
   }
 
@@ -38,17 +33,20 @@ export function Home() {
     )
   }
 
-  const handleSave = () => {
-    console.log('💾 스크립트 저장:', slides.length + '개 슬라이드');
-    console.log('저장된 스크립트:', slides)
+  const handleSave = (savedSlides: SlideInput[]) => {
+    console.log('💾 스크립트 저장:', savedSlides.length + '개 슬라이드');
+    console.log('저장된 스크립트:', savedSlides)
     console.log('업로드된 파일:', uploadedFile?.name)
     
+    // 슬라이드 데이터 업데이트
+    setSlides(savedSlides)
+    
     // 연습 페이지로 이동하면서 데이터 전달
-    if (uploadedFile && slides.length > 0) {
+    if (uploadedFile && savedSlides.length > 0) {
       navigate('/practice', {
         state: {
           pdfFile: uploadedFile,
-          slides: slides
+          slides: savedSlides
         }
       });
     }

@@ -22,7 +22,7 @@ export interface ScriptModalProps {
   /** 슬라이드 내용 변경 시 호출되는 콜백 */
   onSlideChange?: (slideNumber: number, content: string) => void;
   /** 저장 버튼 클릭 시 호출되는 콜백 */
-  onSave?: () => void;
+  onSave?: (slides: SlideInput[]) => void;
   /** 미리보기 콘텐츠 렌더링 함수 */
   renderPreviewContent?: () => React.ReactNode;
 }
@@ -117,7 +117,7 @@ export const ScriptModal: React.FC<ScriptModalProps> = ({
 
   const handleSave = () => {
     console.log('💾 저장 요청');
-    onSave?.();
+    onSave?.(slideInputs);
   };
 
   // 에러 상태 렌더링
