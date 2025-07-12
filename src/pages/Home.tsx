@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { TextSection } from '../components/ui/TextSection'
 import { FileUploadBox } from '../components/upload/FileUploadBox'
@@ -6,6 +6,7 @@ import { ScriptModal, SlideInput } from '../components/ScriptModal/ScriptModal'
 import { colors } from '../theme/colors'
 
 export function Home() {
+  const navigate = useNavigate()
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [uploadedFile, setUploadedFile] = useState<File | null>(null)
   const [slides, setSlides] = useState<SlideInput[]>([])
@@ -41,7 +42,16 @@ export function Home() {
     console.log('💾 스크립트 저장:', slides.length + '개 슬라이드');
     console.log('저장된 스크립트:', slides)
     console.log('업로드된 파일:', uploadedFile?.name)
-    // 여기에 저장 로직 추가
+    
+    // 연습 페이지로 이동하면서 데이터 전달
+    if (uploadedFile && slides.length > 0) {
+      navigate('/practice', {
+        state: {
+          pdfFile: uploadedFile,
+          slides: slides
+        }
+      });
+    }
     setIsModalOpen(false)
   }
 
@@ -183,18 +193,17 @@ export function Home() {
       </div>
 
       {/* ScriptModal */}
-      <ScriptModal
-        isOpen={isModalOpen}
-        onClose={handleModalClose}
-        pdfFile={uploadedFile}
-        title={uploadedFile ? uploadedFile.name : "발표 대본"}
-        description="업로드된 PDF 파일에 대한 발표 대본을 작성해보세요."
-        slideCount={5}
-        slides={slides}
-        onSlideChange={handleSlideChange}
-        onSave={handleSave}
-        renderPreviewContent={renderPreviewContent}
-      />
+      {uploadedFile && (
+        <ScriptModal
+          isOpen={isModalOpen}
+          onClose={handleModalClose}
+          pdfFile={uploadedFile}
+          slides={slides}
+          onSlideChange={handleSlideChange}
+          onSave={handleSave}
+          renderPreviewContent={renderPreviewContent}
+        />
+      )}
     </div>
   )
 } 

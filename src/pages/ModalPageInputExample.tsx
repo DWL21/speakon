@@ -8,7 +8,6 @@ export function ModalPageInputExample() {
   
   // 새로운 ScriptInputModal 상태
   const [isScriptModalOpen, setIsScriptModalOpen] = useState(false);
-  const slideCount = 5;
   const [slides, setSlides] = useState<SlideInput[]>([
     { slideNumber: 1, pageNumber: 1, content: '' },
     { slideNumber: 2, pageNumber: 1, content: '' },
@@ -86,17 +85,25 @@ export function ModalPageInputExample() {
 
 
         {/* 새로운 ScriptInputModal */}
-        <ScriptModal
-          isOpen={isScriptModalOpen}
-          onClose={() => setIsScriptModalOpen(false)}
-          title="발표 대본"
-          description="피그마 디자인 기반 모달"
-          slideCount={slideCount}
-          slides={slides}
-          onSlideChange={handleSlideChange}
-          onSave={handleSlidesSave}
-          renderPreviewContent={renderPreviewContent}
-        />
+        {/* 임시 PDF 파일 생성 */}
+        {isScriptModalOpen && (() => {
+          const createDummyPdfFile = () => {
+            const blob = new Blob(['%PDF-1.4 dummy content'], { type: 'application/pdf' });
+            return new File([blob], 'example.pdf', { type: 'application/pdf' });
+          };
+          
+          return (
+            <ScriptModal
+              isOpen={isScriptModalOpen}
+              onClose={() => setIsScriptModalOpen(false)}
+              pdfFile={createDummyPdfFile()}
+              slides={slides}
+              onSlideChange={handleSlideChange}
+              onSave={handleSlidesSave}
+              renderPreviewContent={renderPreviewContent}
+            />
+          );
+        })()}
 
         {/* 기존 모달 */}
         {isModalOpen && (

@@ -20,7 +20,6 @@ export const ScriptModalPreview: React.FC<ScriptModalPreviewProps> = ({
   description,
   pdfFile,
   currentPage,
-  totalPages,
   renderPreviewContent,
 }) => {
   const renderContent = () => {

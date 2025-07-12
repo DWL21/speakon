@@ -4,6 +4,7 @@ import { Home } from './pages/Home'
 import { NotFound } from './pages/NotFound'
 import { PagePreviewExample } from './pages/PagePreviewExample'
 import { ModalPageInputExample } from './pages/ModalPageInputExample'
+import { Practice } from './pages/Practice'
 import { colors } from './theme/colors'
 import './App.css'
 
@@ -22,22 +23,32 @@ function App() {
           fontFamily: 'Pretendard, sans-serif',
         }}
       >
-        <TopNavBar />
-        <main style={{ 
-          maxWidth: '1200px', 
-          margin: '0 auto', 
-          padding: '0 20px',
-          width: '100%',
-          boxSizing: 'border-box',
-          minHeight: 'calc(100vh - 80px)', // TopNavBar 높이 고려
-        }}>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/page-preview" element={<PagePreviewExample />} />
-            <Route path="/modal-page-input" element={<ModalPageInputExample />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </main>
+        <Routes>
+          {/* Practice 페이지는 독립적 레이아웃 */}
+          <Route path="/practice" element={<Practice />} />
+          
+          {/* 다른 페이지들은 기본 레이아웃 */}
+          <Route path="/*" element={
+            <>
+              <TopNavBar />
+              <main style={{ 
+                maxWidth: '1200px', 
+                margin: '0 auto', 
+                padding: '0 20px',
+                width: '100%',
+                boxSizing: 'border-box',
+                minHeight: 'calc(100vh - 80px)', // TopNavBar 높이 고려
+              }}>
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/page-preview" element={<PagePreviewExample />} />
+                  <Route path="/modal-page-input" element={<ModalPageInputExample />} />
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </main>
+            </>
+          } />
+        </Routes>
       </div>
     </BrowserRouter>
   )
