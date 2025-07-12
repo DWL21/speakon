@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { ScriptModalHeader } from './ScriptModalHeader';
 import { SimplePdfViewer } from '../ui/SimplePdfViewer';
 
@@ -7,21 +7,52 @@ interface ScriptModalPreviewProps {
   description: string;
   /** PDF 파일 */
   pdfFile?: File | null;
-  /** 현재 페이지 번호 */
-  currentPage: number;
+  /** 초기 페이지 번호 */
+  initialPage?: number;
   /** 총 페이지 수 */
   totalPages: number;
   /** 미리보기 콘텐츠 렌더링 함수 (기존 호환성) */
   renderPreviewContent?: () => React.ReactNode;
+  /** 포커스 변경 시 호출되는 콜백 */
+  onFocusChange?: (slideNumber: number) => void;
+  /** 포커스 핸들러 등록 콜백 */
+  onRegisterFocusHandler?: (handler: (slideNumber: number) => void) => void;
 }
 
 export const ScriptModalPreview: React.FC<ScriptModalPreviewProps> = ({
   title,
   description,
   pdfFile,
-  currentPage,
+  initialPage = 1,
+  totalPages,
   renderPreviewContent,
+  onFocusChange,
+  onRegisterFocusHandler,
 }) => {
+  const [currentPage, setCurrentPage] = useState<number>(initialPage);
+
+  // 초기 페이지 변경 시 동기화
+  useEffect(() => {
+    setCurrentPage(initialPage);
+  }, [initialPage]);
+
+  const handleFocusChange = useCallback((slideNumber: number) => {
+    // 현재 페이지와 같다면 아무 작업도 하지 않음
+    if (currentPage === slideNumber) {
+      console.log('🎯 포커스 → 이미 같은 페이지', slideNumber, '(변경 없음)');
+      return;
+    }
+    
+    console.log('🎯 포커스 → 페이지 변경', currentPage, '→', slideNumber);
+    setCurrentPage(slideNumber);
+    onFocusChange?.(slideNumber);
+  }, [currentPage, onFocusChange]);
+
+  // 포커스 핸들러 등록
+  useEffect(() => {
+    onRegisterFocusHandler?.(handleFocusChange);
+  }, [handleFocusChange, onRegisterFocusHandler]);
+
   const renderContent = () => {
     // PDF 파일이 있으면 SimplePdfViewer 사용
     if (pdfFile) {
@@ -55,6 +86,9 @@ export const ScriptModalPreview: React.FC<ScriptModalPreviewProps> = ({
     </div>
   );
 };
+
+// 메모이제이션된 컴포넌트로 export
+export const MemoizedScriptModalPreview = React.memo(ScriptModalPreview);
 
 const previewSectionStyle: React.CSSProperties = {
   flex: 1,

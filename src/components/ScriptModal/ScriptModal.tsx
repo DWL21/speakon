@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { ScriptModalOverlay } from './ScriptModalOverlay';
 import { ScriptModalContainer } from './ScriptModalContainer';
 import { ScriptModalContent } from './ScriptModalContent';
-import { ScriptModalPreview } from './ScriptModalPreview';
+import { MemoizedScriptModalPreview } from './ScriptModalPreview';
 import { ScriptModalDivider } from './ScriptModalDivider';
-import { ScriptModalForm } from './ScriptModalForm';
+import { MemoizedScriptModalForm, ScriptModalFormRef } from './ScriptModalForm';
 import { ScriptModalFooter } from './ScriptModalFooter';
 import { SlideInput } from './ScriptModalForm';
 import { getPdfPageCount } from '../../lib/pdfUtils';
@@ -37,9 +37,14 @@ export const ScriptModal: React.FC<ScriptModalProps> = ({
   renderPreviewContent,
 }) => {
   const [slideInputs, setSlideInputs] = useState<SlideInput[]>([]);
-  const [currentPage, setCurrentPage] = useState<number>(1);
   const [isLoadingPageCount, setIsLoadingPageCount] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  
+  // 포커스 변경 핸들러를 저장할 ref
+  const [previewFocusHandler, setPreviewFocusHandler] = useState<((slideNumber: number) => void) | null>(null);
+  
+  // ScriptModalForm의 ref
+  const formRef = useRef<ScriptModalFormRef>(null);
 
   // 고정된 제목과 설명
   const title = "발표 대본";
@@ -85,40 +90,58 @@ export const ScriptModal: React.FC<ScriptModalProps> = ({
     loadPdfPageCount();
   }, [pdfFile, slides]);
 
-  const handleSlideChange = (slideNumber: number, content: string) => {
-    // 현재 슬라이드의 내용과 같다면 아무 작업도 하지 않음
-    const currentSlide = slideInputs.find(slide => slide.slideNumber === slideNumber);
-    if (currentSlide && currentSlide.content === content) {
-      console.log('📝 내용 변경 → 이미 같은 내용', slideNumber, '(상태 업데이트 없음)');
-      return;
-    }
-
+  const handleSlideChange = useCallback((slideNumber: number, content: string) => {
     console.log('📝 내용 변경 → 상태 업데이트', slideNumber);
-    setSlideInputs(prev => 
-      prev.map(slide => 
+    
+    setSlideInputs(prev => {
+      // 현재 슬라이드의 내용과 같다면 아무 작업도 하지 않음
+      const currentSlide = prev.find(slide => slide.slideNumber === slideNumber);
+      if (currentSlide && currentSlide.content === content) {
+        console.log('📝 내용 변경 → 이미 같은 내용', slideNumber, '(상태 업데이트 없음)');
+        return prev; // 이전 상태 그대로 반환하여 리렌더링 방지
+      }
+      
+      // 실제로 내용이 변경된 경우에만 새로운 상태 반환
+      return prev.map(slide => 
         slide.slideNumber === slideNumber
           ? { ...slide, content }
           : slide
-      )
-    );
-    onSlideChange?.(slideNumber, content);
-  };
-
-  const handleFocus = (slideNumber: number) => {
-    // 현재 페이지와 같다면 아무 작업도 하지 않음
-    if (currentPage === slideNumber) {
-      console.log('🎯 포커스 → 이미 같은 페이지', slideNumber, '(변경 없음)');
-      return;
-    }
+      );
+    });
     
-    console.log('🎯 포커스 → 페이지 변경', currentPage, '→', slideNumber);
-    setCurrentPage(slideNumber);
-  };
+    onSlideChange?.(slideNumber, content);
+  }, [onSlideChange]); // slideInputs 의존성 제거
 
-  const handleSave = () => {
-    console.log('💾 저장 요청');
-    onSave?.(slideInputs);
-  };
+  // 포커스 변경 시 ScriptModalPreview에 직접 전달
+  const handleFocus = useCallback((slideNumber: number) => {
+    console.log('🎯 포커스 → ScriptModalPreview로 전달', slideNumber);
+    previewFocusHandler?.(slideNumber);
+  }, [previewFocusHandler]);
+
+  const handleSave = useCallback(() => {
+    console.log('💾 저장 요청 - 현재 값들 수집 중');
+    
+    // ScriptModalForm에서 모든 현재 값들을 수집
+    const currentValues = formRef.current?.getAllCurrentValues();
+    
+    if (currentValues) {
+      console.log('📊 수집된 현재 값들:', currentValues);
+      
+      // 상태 업데이트
+      setSlideInputs(currentValues);
+      
+      // 부모 컴포넌트에 저장 요청
+      onSave?.(currentValues);
+      
+      // 개별 슬라이드 변경 알림
+      currentValues.forEach(slide => {
+        const existingSlide = slideInputs.find(s => s.slideNumber === slide.slideNumber);
+        if (!existingSlide || existingSlide.content !== slide.content) {
+          onSlideChange?.(slide.slideNumber, slide.content);
+        }
+      });
+    }
+  }, [slideInputs, onSave, onSlideChange]);
 
   // 에러 상태 렌더링
   if (error) {
@@ -153,16 +176,18 @@ export const ScriptModal: React.FC<ScriptModalProps> = ({
     <ScriptModalOverlay isOpen={isOpen} onClose={onClose}>
       <ScriptModalContainer>
         <ScriptModalContent>
-          <ScriptModalPreview
+          <MemoizedScriptModalPreview
             title={title}
             description={description}
             pdfFile={pdfFile}
-            currentPage={currentPage}
+            initialPage={1}
             totalPages={slideInputs.length}
             renderPreviewContent={renderPreviewContent}
+            onRegisterFocusHandler={setPreviewFocusHandler}
           />
           <ScriptModalDivider />
-          <ScriptModalForm
+          <MemoizedScriptModalForm
+            ref={formRef}
             slides={slideInputs}
             onSlideChange={handleSlideChange}
             onFocus={handleFocus}

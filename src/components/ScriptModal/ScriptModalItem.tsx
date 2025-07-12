@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useImperativeHandle, forwardRef } from 'react';
 
 interface ScriptModalItemProps {
   slideNumber: number;
@@ -7,12 +7,17 @@ interface ScriptModalItemProps {
   onFocus?: (slideNumber: number) => void;
 }
 
-export const ScriptModalItem: React.FC<ScriptModalItemProps> = ({
+export interface ScriptModalItemRef {
+  getCurrentValue: () => string;
+  getSlideNumber: () => number;
+}
+
+const ScriptModalItem = forwardRef<ScriptModalItemRef, ScriptModalItemProps>(({
   slideNumber,
   value,
   onChange,
   onFocus
-}) => {
+}, ref) => {
   const [isFocused, setIsFocused] = useState(false);
   const [localValue, setLocalValue] = useState(value);
 
@@ -21,7 +26,11 @@ export const ScriptModalItem: React.FC<ScriptModalItemProps> = ({
     setLocalValue(value);
   }, [value]);
 
-
+  // 외부에서 현재 로컬 값을 가져올 수 있도록 imperative handle 제공
+  useImperativeHandle(ref, () => ({
+    getCurrentValue: () => localValue,
+    getSlideNumber: () => slideNumber
+  }), [localValue, slideNumber]);
 
   const handleFocus = () => {
     setIsFocused(true);
@@ -30,16 +39,13 @@ export const ScriptModalItem: React.FC<ScriptModalItemProps> = ({
 
   const handleBlur = () => {
     setIsFocused(false);
-    // blur 시에만 실제 변경사항을 부모에게 알림
-    if (localValue !== value) {
-      console.log('📝 blur → 내용 저장', slideNumber, localValue);
-      onChange(localValue);
-    }
+    // 포커스 해제시 아무런 동작도 하지 않음
   };
 
   const handleChange = (newValue: string) => {
     // 입력 중에는 로컬 상태만 업데이트
     setLocalValue(newValue);
+    // 실시간 상태 업데이트 제거
   };
 
   return (
@@ -70,7 +76,15 @@ export const ScriptModalItem: React.FC<ScriptModalItemProps> = ({
       </div>
     </div>
   );
-};
+});
+
+ScriptModalItem.displayName = 'ScriptModalItem';
+
+// 메모이제이션된 컴포넌트로 export
+export const MemoizedScriptModalItem = React.memo(ScriptModalItem);
+
+// 기존 export도 유지 (호환성)
+export { ScriptModalItem };
 
 const itemStyle: React.CSSProperties = {
   display: 'flex',
