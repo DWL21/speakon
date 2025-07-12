@@ -177,9 +177,6 @@ export const SimplePdfViewer: React.FC<SimplePdfViewerProps> = ({
           onLoad={() => console.log(`✅ PDF iframe 로드 완료 - 페이지 ${currentPage}`)}
           onError={(e) => console.error(`❌ PDF iframe 로드 오류:`, e)}
         />
-        <div style={pageInfoStyle}>
-          페이지 {currentPage}
-        </div>
       </div>
     );
   };
@@ -218,18 +215,6 @@ const iframeStyle: React.CSSProperties = {
   height: '100%',
   border: 'none',
   borderRadius: '4px',
-};
-
-const pageInfoStyle: React.CSSProperties = {
-  position: 'absolute',
-  bottom: '8px',
-  right: '8px',
-  backgroundColor: 'rgba(0, 0, 0, 0.7)',
-  color: colors.static.white,
-  padding: '4px 8px',
-  borderRadius: '4px',
-  fontSize: '12px',
-  fontWeight: 500,
 };
 
 const loadingStyle: React.CSSProperties = {

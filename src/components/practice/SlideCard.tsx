@@ -50,7 +50,6 @@ const slideCardStyle: React.CSSProperties = {
   gap: '4px',
   cursor: 'pointer',
   transition: 'background-color 0.2s',
-  borderBottom: `1px solid ${colors.line.normal}`,
   boxSizing: 'border-box',
 };
 
