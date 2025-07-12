@@ -1,16 +1,19 @@
 import React from 'react';
 import { colors } from '../../theme/colors';
+import { SimplePdfViewer } from '../ui/SimplePdfViewer';
 
 interface SlideCardProps {
   slideNumber: number;
   isActive: boolean;
   onClick: () => void;
+  pdfFile?: File | null;
 }
 
 export const SlideCard: React.FC<SlideCardProps> = ({
   slideNumber,
   isActive,
   onClick,
+  pdfFile,
 }) => {
   return (
     <div 
@@ -25,7 +28,16 @@ export const SlideCard: React.FC<SlideCardProps> = ({
         {slideNumber}
       </div>
       <div style={slidePreviewStyle}>
-        {/* 슬라이드 미리보기 썸네일 */}
+        {pdfFile ? (
+          <SimplePdfViewer
+            file={pdfFile}
+            currentPage={slideNumber}
+          />
+        ) : (
+          <div style={placeholderStyle}>
+            <div style={placeholderIconStyle}>📄</div>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -56,8 +68,20 @@ const slidePreviewStyle: React.CSSProperties = {
   backgroundColor: colors.fill.normal,
   borderRadius: '12px',
   border: `1px solid ${colors.line.normal}`,
-  backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1' preserveAspectRatio='none' width='100%25' height='100%25'%3E%3Crect width='1' height='1' fill='%23EEE' /%3E%3C/svg%3E")`,
-  backgroundSize: 'cover',
-  backgroundPosition: 'center',
-  backgroundRepeat: 'no-repeat',
+  overflow: 'hidden',
+  position: 'relative',
+};
+
+const placeholderStyle: React.CSSProperties = {
+  width: '100%',
+  height: '100%',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  backgroundColor: colors.fill.normal,
+};
+
+const placeholderIconStyle: React.CSSProperties = {
+  fontSize: '32px',
+  opacity: 0.5,
 };

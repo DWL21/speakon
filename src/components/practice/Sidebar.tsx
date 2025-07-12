@@ -10,6 +10,7 @@ interface SidebarProps {
   fileName: string;
   timer: { minutes: number; seconds: number };
   isTimerRunning: boolean;
+  pdfFile?: File | null;
   onSlideClick: (slideNumber: number) => void;
   onFileNameChange: (fileName: string) => void;
   onToggleTimer: () => void;
@@ -22,6 +23,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   fileName,
   timer,
   isTimerRunning,
+  pdfFile,
   onSlideClick,
   onFileNameChange,
   onToggleTimer,
@@ -58,6 +60,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             slideNumber={slide.slideNumber}
             isActive={currentSlide === slide.slideNumber}
             onClick={() => onSlideClick(slide.slideNumber)}
+            pdfFile={pdfFile}
           />
         ))}
       </div>

@@ -94,6 +94,7 @@ export function Practice() {
           fileName={fileName}
           timer={timer}
           isTimerRunning={isTimerRunning}
+          pdfFile={pdfFile}
           onSlideClick={handleSlideClick}
           onFileNameChange={setFileName}
           onToggleTimer={toggleTimer}
