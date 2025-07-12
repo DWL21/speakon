@@ -144,7 +144,7 @@ export const FileUploadBox: React.FC<FileUploadBoxProps> = ({ className = '', on
             margin: 0,
           }}
         >
-          최대 20MB 이하
+          최대 100페이지 이하 / 20MB 이하
         </div>
       </div>
     </div>
@@ -246,8 +246,7 @@ export const FileUploadBox: React.FC<FileUploadBoxProps> = ({ className = '', on
           width: '100%',
           minHeight: '300px',
           backgroundColor: colors.fill.normal,
-          borderRadius: '16px',
-          border: `2px dashed ${colors.line.normal}`,
+          borderRadius: '30px',
           transition: 'all 0.2s ease',
           boxSizing: 'border-box',
         }}
