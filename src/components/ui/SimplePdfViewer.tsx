@@ -160,9 +160,6 @@ export const SimplePdfViewer: React.FC<SimplePdfViewerProps> = ({
             alt={`PDF Page ${currentPage}`}
             style={pdfImageStyle}
           />
-          <div style={pageInfoStyle}>
-            페이지 {currentPage}
-          </div>
         </div>
       );
     }
