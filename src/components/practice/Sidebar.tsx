@@ -83,7 +83,6 @@ const slideListStyle: React.CSSProperties = {
 
 const fileNamePanelStyle: React.CSSProperties = {
   backgroundColor: colors.background.normal,
-  borderBottom: `1px solid ${colors.line.normal}`,
   padding: '16px',
 };
 

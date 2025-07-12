@@ -52,7 +52,7 @@ const timerControlStyle: React.CSSProperties = {
   padding: '7px 0px',
   justifyContent: 'center',
   alignItems: 'center',
-  gap: '4px',
+  gap: '12px',
 };
 
 const timerDisplayStyle: React.CSSProperties = {
