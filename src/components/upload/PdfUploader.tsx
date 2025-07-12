@@ -116,6 +116,7 @@ export function PdfUploader({ onFileSelect, onUploadComplete }: PdfUploaderProps
             <UploadProgress 
               progress={progress}
               fileName={selectedFile?.name}
+              totalSize={selectedFile?.size}
             />
           </div>
         )}

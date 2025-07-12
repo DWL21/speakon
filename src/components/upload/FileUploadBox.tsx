@@ -180,6 +180,7 @@ export const FileUploadBox: React.FC<FileUploadBoxProps> = ({ className = '', on
       <UploadProgress 
         progress={progress}
         fileName={selectedFile?.name}
+        totalSize={selectedFile?.size}
       />
     </div>
   );
