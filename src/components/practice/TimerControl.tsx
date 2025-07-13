@@ -70,6 +70,7 @@ export const TimerControl: React.FC<TimerControlProps> = ({
           variant="ghost"
           size="small"
           onClick={onExitClick || onReset}
+          style={{ color: colors.primary.normal }}
         >
           종료
         </Button>
