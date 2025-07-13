@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { SlideCard } from './SlideCard';
 import { TimerControl } from './TimerControl';
 import { colors } from '../../theme/colors';
@@ -35,6 +35,39 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onPracticeToggle,
   onExitClick,
 }) => {
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      // 입력 필드에 포커스가 있을 때는 키보드 이벤트 무시
+      const activeElement = document.activeElement;
+      if (activeElement && (
+        activeElement.tagName === 'INPUT' || 
+        activeElement.tagName === 'TEXTAREA' ||
+        activeElement.hasAttribute('contenteditable')
+      )) {
+        return;
+      }
+
+      switch (event.key) {
+        case 'ArrowUp':
+          if (currentSlide > 1) {
+            onSlideClick(currentSlide - 1);
+          }
+          break;
+        case 'ArrowDown':
+          if (currentSlide < slides.length) {
+            onSlideClick(currentSlide + 1);
+          }
+          break;
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [currentSlide, slides.length, onSlideClick]);
+
   return (
     <div style={sidebarStyle}>
       {/* 상단: 파일명 입력 */}
