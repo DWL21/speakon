@@ -4,11 +4,13 @@ import { colors } from '../../theme/colors';
 interface StatusBarProps {
   currentSlide: number;
   totalSlides: number;
+  onTimeSettingClick?: () => void;
 }
 
 export const StatusBar: React.FC<StatusBarProps> = ({
   currentSlide,
   totalSlides,
+  onTimeSettingClick,
 }) => {
   return (
     <div style={statusBarStyle}>
@@ -24,7 +26,7 @@ export const StatusBar: React.FC<StatusBarProps> = ({
       
       {/* 우측: 액션 버튼들 */}
       <div style={actionButtonsStyle}>
-        <div style={actionButtonStyle}>
+        <div style={clickableActionButtonStyle} onClick={onTimeSettingClick}>
           🕐 시간 설정
         </div>
         <div style={actionButtonStyle}>
@@ -68,4 +70,9 @@ const actionButtonStyle: React.CSSProperties = {
   fontSize: '12px',
   color: colors.label.neutral,
   fontFamily: 'Pretendard, sans-serif',
+};
+
+const clickableActionButtonStyle: React.CSSProperties = {
+  ...actionButtonStyle,
+  cursor: 'pointer',
 };

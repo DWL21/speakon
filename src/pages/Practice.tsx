@@ -25,6 +25,7 @@ export function Practice() {
   const [showGoalTimeModal, setShowGoalTimeModal] = useState(true);
   const [goalTime, setGoalTime] = useState({ minutes: 0, seconds: 0 });
   const [showStopwatch, setShowStopwatch] = useState(true);
+  const [isGoalTimeSet, setIsGoalTimeSet] = useState(false);
 
   useEffect(() => {
     const state = location.state as PracticePageState;
@@ -102,6 +103,11 @@ export function Practice() {
     setGoalTime({ minutes: goalMinutes, seconds: goalSeconds });
     setShowStopwatch(showStopwatchSetting);
     setShowGoalTimeModal(false);
+    setIsGoalTimeSet(true);
+  };
+
+  const handleTimeSettingClick = () => {
+    setShowGoalTimeModal(true);
   };
 
 
@@ -132,6 +138,7 @@ export function Practice() {
           <StatusBar
             currentSlide={currentSlide}
             totalSlides={totalSlides}
+            onTimeSettingClick={handleTimeSettingClick}
           />
 
           {/* 콘텐츠 영역 */}
@@ -151,6 +158,8 @@ export function Practice() {
                     onClose={() => setShowGoalTimeModal(false)}
                     onComplete={handleGoalTimeComplete}
                     embedded={true}
+                    initialMinutes={isGoalTimeSet ? goalTime.minutes : 10}
+                    initialSeconds={isGoalTimeSet ? goalTime.seconds : 30}
                   />
                 </div>
               )}

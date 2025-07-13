@@ -279,7 +279,6 @@ const embeddedModalStyle: React.CSSProperties = {
   gap: '18px',
   alignItems: 'center',
   justifyContent: 'center',
-  boxShadow: '1px 1px 12px 0px rgba(0,0,0,0.15)',
 };
 
 const titleStyle: React.CSSProperties = {
@@ -323,16 +322,18 @@ const timeDisplayContainerStyle: React.CSSProperties = {
   backgroundColor: 'transparent',
   borderRadius: '5px',
   border: '1px solid #c5c5c7',
-  padding: '10px 20px',
+  padding: '10px 71px',
   fontSize: '16px',
   fontWeight: 500,
   color: colors.static.white,
-  minWidth: '120px',
+  width: '194px',
+  height: '39px',
   display: 'flex',
   alignItems: 'center',
-  gap: '4px',
+  gap: '3px',
   justifyContent: 'center',
   whiteSpace: 'nowrap',
+  boxSizing: 'border-box',
 };
 
 const timePartStyle: React.CSSProperties = {
