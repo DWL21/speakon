@@ -47,7 +47,7 @@ export const TopNavBar: React.FC = () => {
       <div style={{ 
         display: 'flex', 
         alignItems: 'center', 
-        gap: '16px'
+        gap: '17px'
       }}>
         <Link to="/" style={{ textDecoration: 'none' }}>
           <Typography variant="label" color="black" style={{ cursor: 'pointer' }}>
