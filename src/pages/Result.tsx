@@ -95,7 +95,6 @@ export function Result() {
                   );
                 })}
               </div>
-              <div style={scrollbarStyle} />
             </div>
           </div>
         </div>
@@ -223,16 +222,6 @@ const slideCardsContainerStyle: React.CSSProperties = {
   paddingRight: '13px',
 };
 
-const scrollbarStyle: React.CSSProperties = {
-  width: '4.602px',
-  backgroundColor: '#d9d9d9',
-  borderRadius: '3px',
-  height: '142px',
-  position: 'absolute',
-  right: '3px',
-  top: '50%',
-  transform: 'translateY(-50%)',
-};
 
 const footerStyle: React.CSSProperties = {
   padding: '0 60px',
