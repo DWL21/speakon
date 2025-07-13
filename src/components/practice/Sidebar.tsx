@@ -15,6 +15,8 @@ interface SidebarProps {
   onFileNameChange: (fileName: string) => void;
   onToggleTimer: () => void;
   onResetTimer: () => void;
+  isPracticing?: boolean;
+  onPracticeToggle?: () => void;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
@@ -28,6 +30,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onFileNameChange,
   onToggleTimer,
   onResetTimer,
+  isPracticing = false,
+  onPracticeToggle,
 }) => {
   return (
     <div style={sidebarStyle}>
@@ -49,6 +53,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
           isRunning={isTimerRunning}
           onToggle={onToggleTimer}
           onReset={onResetTimer}
+          isPracticing={isPracticing}
+          onPracticeToggle={onPracticeToggle}
         />
       </div>
 

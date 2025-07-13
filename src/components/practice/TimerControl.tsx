@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { colors } from '../../theme/colors';
 import { Button } from '../ui/Button';
 
@@ -8,6 +8,8 @@ interface TimerControlProps {
   isRunning: boolean;
   onToggle: () => void;
   onReset: () => void;
+  isPracticing?: boolean;
+  onPracticeToggle?: () => void;
 }
 
 export const TimerControl: React.FC<TimerControlProps> = ({
@@ -16,13 +18,42 @@ export const TimerControl: React.FC<TimerControlProps> = ({
   isRunning,
   onToggle,
   onReset,
+  isPracticing = false,
+  onPracticeToggle,
 }) => {
+  const [isHovered, setIsHovered] = useState(false);
   const formatTime = (value: number) => value.toString().padStart(2, '0');
+
+  const handleTimerDisplayClick = () => {
+    if (onPracticeToggle) {
+      onPracticeToggle();
+    }
+  };
+
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+  };
 
   return (
     <div style={timerControlStyle}>
-      <div style={timerDisplayStyle}>
-        {formatTime(minutes)} : {formatTime(seconds)}
+      <div 
+        style={{
+          ...timerDisplayStyle,
+          backgroundColor: isPracticing ? '#F1F2F5' : colors.fill.normal,
+          cursor: onPracticeToggle ? 'pointer' : 'default',
+          fontWeight: isHovered ? 600 : 500,
+          transform: isHovered ? 'scale(1.02)' : 'scale(1)',
+          transition: 'all 0.2s ease',
+        }}
+        onClick={handleTimerDisplayClick}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
+        {isPracticing ? '연습 중' : `${formatTime(minutes)} : ${formatTime(seconds)}`}
       </div>
       
       <div style={timerButtonsStyle}>

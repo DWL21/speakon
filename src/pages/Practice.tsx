@@ -28,6 +28,7 @@ export function Practice() {
   const [showStopwatch, setShowStopwatch] = useState(true);
   const [isGoalTimeSet, setIsGoalTimeSet] = useState(false);
   const [showScriptModal, setShowScriptModal] = useState(false);
+  const [isPracticing, setIsPracticing] = useState(false);
 
   useEffect(() => {
     const state = location.state as PracticePageState;
@@ -141,6 +142,10 @@ export function Practice() {
     }
   };
 
+  const handlePracticeToggle = () => {
+    setIsPracticing(!isPracticing);
+  };
+
 
   return (
     <div style={containerStyle}>
@@ -161,6 +166,8 @@ export function Practice() {
           onFileNameChange={setFileName}
           onToggleTimer={toggleTimer}
           onResetTimer={resetTimer}
+          isPracticing={isPracticing}
+          onPracticeToggle={handlePracticeToggle}
         />
 
         {/* 메인 영역 */}
