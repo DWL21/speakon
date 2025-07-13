@@ -7,11 +7,6 @@ import { Sidebar, StatusBar } from '../components/practice';
 import { colors } from '../theme/colors';
 import { SlideInput } from '../components/ScriptModal/ScriptModalForm';
 
-// 기본 목표 시간 상수
-const DEFAULT_GOAL_TIME = {
-  minutes: 10,
-  seconds: 30
-};
 
 interface PracticePageState {
   pdfFile: File;
@@ -28,7 +23,7 @@ export function Practice() {
   const [timer, setTimer] = useState({ minutes: 0, seconds: 0 });
   const [scriptContent, setScriptContent] = useState('');
   const [showGoalTimeModal, setShowGoalTimeModal] = useState(true);
-  const [goalTime, setGoalTime] = useState(DEFAULT_GOAL_TIME);
+  const [goalTime, setGoalTime] = useState({ minutes: 0, seconds: 0 });
   const [showStopwatch, setShowStopwatch] = useState(true);
 
   useEffect(() => {
@@ -156,8 +151,6 @@ export function Practice() {
                     onClose={() => setShowGoalTimeModal(false)}
                     onComplete={handleGoalTimeComplete}
                     embedded={true}
-                    initialMinutes={DEFAULT_GOAL_TIME.minutes}
-                    initialSeconds={DEFAULT_GOAL_TIME.seconds}
                   />
                 </div>
               )}

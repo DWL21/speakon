@@ -21,7 +21,8 @@ export const GoalTimeModal: React.FC<GoalTimeModalProps> = ({
   const [goalMinutes, setGoalMinutes] = useState(initialMinutes);
   const [goalSeconds, setGoalSeconds] = useState(initialSeconds);
   const [showStopwatch, setShowStopwatch] = useState(true);
-  const [showDetailedInput, setShowDetailedInput] = useState(false);
+  const [isEditingMinutes, setIsEditingMinutes] = useState(false);
+  const [isEditingSeconds, setIsEditingSeconds] = useState(false);
   const [inputMinutes, setInputMinutes] = useState(initialMinutes.toString());
   const [inputSeconds, setInputSeconds] = useState(initialSeconds.toString());
 
@@ -45,24 +46,42 @@ export const GoalTimeModal: React.FC<GoalTimeModalProps> = ({
     setGoalSeconds(newSeconds);
   };
 
-  const handleTimeClick = () => {
+  const handleMinutesClick = () => {
+    setIsEditingMinutes(true);
     setInputMinutes(goalMinutes.toString());
-    setInputSeconds(goalSeconds.toString());
-    setShowDetailedInput(true);
   };
 
-  const handleDetailedInputSave = () => {
+  const handleSecondsClick = () => {
+    setIsEditingSeconds(true);
+    setInputSeconds(goalSeconds.toString());
+  };
+
+  const handleMinutesBlur = () => {
     const minutes = parseInt(inputMinutes) || 0;
-    const seconds = parseInt(inputSeconds) || 0;
-    if (minutes >= 0 && seconds >= 0 && seconds < 60) {
+    if (minutes >= 0) {
       setGoalMinutes(minutes);
+    }
+    setIsEditingMinutes(false);
+  };
+
+  const handleSecondsBlur = () => {
+    const seconds = parseInt(inputSeconds) || 0;
+    if (seconds >= 0 && seconds < 60) {
       setGoalSeconds(seconds);
-      setShowDetailedInput(false);
+    }
+    setIsEditingSeconds(false);
+  };
+
+  const handleMinutesKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      handleMinutesBlur();
     }
   };
 
-  const handleDetailedInputCancel = () => {
-    setShowDetailedInput(false);
+  const handleSecondsKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      handleSecondsBlur();
+    }
   };
 
   const handleComplete = () => {
@@ -85,41 +104,43 @@ export const GoalTimeModal: React.FC<GoalTimeModalProps> = ({
             -
           </button>
           
-          {showDetailedInput ? (
-            <div style={detailedInputContainerStyle}>
+          <div style={timeDisplayContainerStyle}>
+            {isEditingMinutes ? (
               <input
                 type="number"
                 value={inputMinutes}
                 onChange={(e) => setInputMinutes(e.target.value)}
-                style={inputStyle}
-                placeholder="분"
+                onBlur={handleMinutesBlur}
+                onKeyDown={handleMinutesKeyDown}
+                style={timeInputStyle}
                 min="0"
+                autoFocus
               />
-              <span style={separatorStyle}>분</span>
+            ) : (
+              <span style={timePartStyle} onClick={handleMinutesClick}>
+                {goalMinutes}
+              </span>
+            )}
+            <span style={separatorStyle}>분</span>
+            {isEditingSeconds ? (
               <input
                 type="number"
                 value={inputSeconds}
                 onChange={(e) => setInputSeconds(e.target.value)}
-                style={inputStyle}
-                placeholder="초"
+                onBlur={handleSecondsBlur}
+                onKeyDown={handleSecondsKeyDown}
+                style={timeInputStyle}
                 min="0"
                 max="59"
+                autoFocus
               />
-              <span style={separatorStyle}>초</span>
-              <div style={inputButtonsStyle}>
-                <button style={inputButtonStyle} onClick={handleDetailedInputSave}>
-                  확인
-                </button>
-                <button style={inputButtonStyle} onClick={handleDetailedInputCancel}>
-                  취소
-                </button>
-              </div>
-            </div>
-          ) : (
-            <div style={timeDisplayStyle} onClick={handleTimeClick}>
-              {formatTime()}
-            </div>
-          )}
+            ) : (
+              <span style={timePartStyle} onClick={handleSecondsClick}>
+                {goalSeconds}
+              </span>
+            )}
+            <span style={separatorStyle}>초</span>
+          </div>
           
           <button style={buttonStyle} onClick={handleIncrease}>
             +
@@ -158,41 +179,43 @@ export const GoalTimeModal: React.FC<GoalTimeModalProps> = ({
             -
           </button>
           
-          {showDetailedInput ? (
-            <div style={detailedInputContainerStyle}>
+          <div style={timeDisplayContainerStyle}>
+            {isEditingMinutes ? (
               <input
                 type="number"
                 value={inputMinutes}
                 onChange={(e) => setInputMinutes(e.target.value)}
-                style={inputStyle}
-                placeholder="분"
+                onBlur={handleMinutesBlur}
+                onKeyDown={handleMinutesKeyDown}
+                style={timeInputStyle}
                 min="0"
+                autoFocus
               />
-              <span style={separatorStyle}>분</span>
+            ) : (
+              <span style={timePartStyle} onClick={handleMinutesClick}>
+                {goalMinutes}
+              </span>
+            )}
+            <span style={separatorStyle}>분</span>
+            {isEditingSeconds ? (
               <input
                 type="number"
                 value={inputSeconds}
                 onChange={(e) => setInputSeconds(e.target.value)}
-                style={inputStyle}
-                placeholder="초"
+                onBlur={handleSecondsBlur}
+                onKeyDown={handleSecondsKeyDown}
+                style={timeInputStyle}
                 min="0"
                 max="59"
+                autoFocus
               />
-              <span style={separatorStyle}>초</span>
-              <div style={inputButtonsStyle}>
-                <button style={inputButtonStyle} onClick={handleDetailedInputSave}>
-                  확인
-                </button>
-                <button style={inputButtonStyle} onClick={handleDetailedInputCancel}>
-                  취소
-                </button>
-              </div>
-            </div>
-          ) : (
-            <div style={timeDisplayStyle} onClick={handleTimeClick}>
-              {formatTime()}
-            </div>
-          )}
+            ) : (
+              <span style={timePartStyle} onClick={handleSecondsClick}>
+                {goalSeconds}
+              </span>
+            )}
+            <span style={separatorStyle}>초</span>
+          </div>
           
           <button style={buttonStyle} onClick={handleIncrease}>
             +
@@ -279,54 +302,45 @@ const buttonStyle: React.CSSProperties = {
   justifyContent: 'center',
 };
 
-const timeDisplayStyle: React.CSSProperties = {
+const timeDisplayContainerStyle: React.CSSProperties = {
   backgroundColor: colors.fill.normal,
   borderRadius: '12px',
   padding: '12px 24px',
   fontSize: '18px',
   fontWeight: 500,
   color: colors.label.normal,
-  cursor: 'pointer',
   minWidth: '120px',
-};
-
-const detailedInputContainerStyle: React.CSSProperties = {
   display: 'flex',
   alignItems: 'center',
-  gap: '8px',
-  flexDirection: 'column',
+  gap: '4px',
+  justifyContent: 'center',
 };
 
-const inputStyle: React.CSSProperties = {
-  width: '60px',
-  padding: '8px',
-  borderRadius: '6px',
-  border: `1px solid ${colors.line.normal}`,
+const timePartStyle: React.CSSProperties = {
+  cursor: 'pointer',
+  padding: '2px 4px',
+  borderRadius: '4px',
+  transition: 'background-color 0.2s ease',
+};
+
+const timeInputStyle: React.CSSProperties = {
+  width: '40px',
+  padding: '2px 4px',
+  border: 'none',
+  background: 'transparent',
+  fontSize: '18px',
+  fontWeight: 500,
+  color: colors.label.normal,
   textAlign: 'center',
-  fontSize: '16px',
+  outline: 'none',
   fontFamily: 'Pretendard, sans-serif',
 };
 
 const separatorStyle: React.CSSProperties = {
-  fontSize: '16px',
+  fontSize: '18px',
   color: colors.label.normal,
   fontWeight: 500,
-};
-
-const inputButtonsStyle: React.CSSProperties = {
-  display: 'flex',
-  gap: '8px',
-  marginTop: '8px',
-};
-
-const inputButtonStyle: React.CSSProperties = {
-  padding: '6px 12px',
-  borderRadius: '6px',
-  border: `1px solid ${colors.line.normal}`,
-  backgroundColor: colors.static.white,
-  color: colors.label.normal,
-  fontSize: '14px',
-  cursor: 'pointer',
+  margin: '0 2px',
 };
 
 const checkboxContainerStyle: React.CSSProperties = {
