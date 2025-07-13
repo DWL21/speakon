@@ -1,4 +1,5 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 
 interface LoginButtonProps {
   width?: number
@@ -15,6 +16,15 @@ export const LoginButton: React.FC<LoginButtonProps> = ({
   style,
   onClick
 }) => {
+  const navigate = useNavigate()
+
+  const handleClick = () => {
+    if (onClick) {
+      onClick()
+    } else {
+      navigate('/login')
+    }
+  }
   return (
     <button
       className={`login-button ${className}`}
@@ -37,7 +47,7 @@ export const LoginButton: React.FC<LoginButtonProps> = ({
         padding: '7px 15px',
         ...style
       }}
-      onClick={onClick}
+      onClick={handleClick}
       onMouseEnter={(e) => {
         e.currentTarget.style.backgroundColor = '#2563eb'
       }}
