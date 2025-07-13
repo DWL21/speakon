@@ -88,6 +88,7 @@ export function Result() {
                       content={slide.content}
                       timeText={`${formatTime(pageTime)} 소요`}
                       percentageText={`전체 소요 시간의 ${percentage}%`}
+                      percentage={percentage}
                       onSlideClick={() => setCurrentPage(slide.slideNumber)}
                     />
                   );

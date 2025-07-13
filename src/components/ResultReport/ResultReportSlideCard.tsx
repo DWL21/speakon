@@ -7,6 +7,7 @@ export interface ResultReportSlideCardProps {
   content: string;
   timeText: string;
   percentageText: string;
+  percentage: number;
   onSlideClick?: () => void;
 }
 
@@ -15,6 +16,7 @@ export const ResultReportSlideCard: React.FC<ResultReportSlideCardProps> = ({
   content,
   timeText,
   percentageText,
+  percentage,
   onSlideClick,
 }) => {
   const [showScript, setShowScript] = useState(false);
@@ -46,6 +48,14 @@ export const ResultReportSlideCard: React.FC<ResultReportSlideCardProps> = ({
               </div>
               <div style={timeSubStyle}>
                 {percentageText}
+              </div>
+              <div style={progressBarContainerStyle}>
+                <div 
+                  style={{
+                    ...progressBarFillStyle,
+                    width: `${percentage}%`
+                  }}
+                />
               </div>
             </div>
           </div>
@@ -153,4 +163,20 @@ const scriptContentStyle: React.CSSProperties = {
   overflow: 'hidden',
   textOverflow: 'ellipsis',
   whiteSpace: 'pre-wrap',
+};
+
+const progressBarContainerStyle: React.CSSProperties = {
+  width: '100%',
+  height: '6px',
+  backgroundColor: '#e0e0e0',
+  borderRadius: '3px',
+  marginTop: '8px',
+  overflow: 'hidden',
+};
+
+const progressBarFillStyle: React.CSSProperties = {
+  height: '100%',
+  backgroundColor: colors.primary.normal,
+  borderRadius: '3px',
+  transition: 'width 0.3s ease',
 };
