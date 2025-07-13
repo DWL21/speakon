@@ -5,7 +5,7 @@ export { ScriptModalHeader } from './ScriptModalHeader';
 export { ScriptModalContent } from './ScriptModalContent';
 export { ScriptModalPreview } from './ScriptModalPreview';
 export { ScriptModalDivider } from './ScriptModalDivider';
-export { ScriptModalForm } from './ScriptModalForm';
+export { MemoizedScriptModalForm as ScriptModalForm } from './ScriptModalForm';
 export { ScriptModalItem } from './ScriptModalItem';
 export { ScriptModalFooter } from './ScriptModalFooter';
 export type { ScriptModalProps, SlideInput } from './ScriptModal'; 

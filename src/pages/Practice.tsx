@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { SimplePdfViewer } from '../components/ui/SimplePdfViewer';
 import { TopNavBar } from '../components/ui/TopNavBar';
 import { GoalTimeModal } from '../components/ui/GoalTimeModal';
+import { ScriptModal } from '../components/ScriptModal';
 import { Sidebar, StatusBar } from '../components/practice';
 import { colors } from '../theme/colors';
 import { SlideInput } from '../components/ScriptModal/ScriptModalForm';
@@ -26,6 +27,7 @@ export function Practice() {
   const [goalTime, setGoalTime] = useState({ minutes: 0, seconds: 0 });
   const [showStopwatch, setShowStopwatch] = useState(true);
   const [isGoalTimeSet, setIsGoalTimeSet] = useState(false);
+  const [showScriptModal, setShowScriptModal] = useState(false);
 
   useEffect(() => {
     const state = location.state as PracticePageState;
@@ -59,6 +61,7 @@ export function Practice() {
     }
     return () => clearInterval(interval);
   }, [isTimerRunning]);
+
 
   if (!practiceData) {
     return (
@@ -110,6 +113,34 @@ export function Practice() {
     setShowGoalTimeModal(true);
   };
 
+  const handleScriptWritingClick = () => {
+    setShowScriptModal(true);
+  };
+
+  const handleScriptModalSave = (slides: SlideInput[]) => {
+    if (practiceData) {
+      setPracticeData({
+        ...practiceData,
+        slides: slides
+      });
+    }
+    setShowScriptModal(false);
+  };
+
+  const handleScriptSlideChange = (slideNumber: number, content: string) => {
+    if (practiceData) {
+      const updatedSlides = practiceData.slides.map(slide =>
+        slide.slideNumber === slideNumber
+          ? { ...slide, content }
+          : slide
+      );
+      setPracticeData({
+        ...practiceData,
+        slides: updatedSlides
+      });
+    }
+  };
+
 
   return (
     <div style={containerStyle}>
@@ -139,6 +170,7 @@ export function Practice() {
             currentSlide={currentSlide}
             totalSlides={totalSlides}
             onTimeSettingClick={handleTimeSettingClick}
+            onScriptWritingClick={handleScriptWritingClick}
           />
 
           {/* 콘텐츠 영역 */}
@@ -178,6 +210,18 @@ export function Practice() {
           </div>
         </div>
       </div>
+
+      {/* 대본 작성 모달 */}
+      {showScriptModal && practiceData && (
+        <ScriptModal
+          isOpen={showScriptModal}
+          onClose={() => setShowScriptModal(false)}
+          pdfFile={practiceData.pdfFile}
+          slides={practiceData.slides}
+          onSave={handleScriptModalSave}
+          onSlideChange={handleScriptSlideChange}
+        />
+      )}
     </div>
   );
 }
