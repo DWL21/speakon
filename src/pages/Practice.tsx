@@ -2,9 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { SimplePdfViewer } from '../components/ui/SimplePdfViewer';
 import { TopNavBar } from '../components/ui/TopNavBar';
+import { GoalTimeModal } from '../components/ui/GoalTimeModal';
 import { Sidebar, StatusBar } from '../components/practice';
 import { colors } from '../theme/colors';
 import { SlideInput } from '../components/ScriptModal/ScriptModalForm';
+
+// 기본 목표 시간 상수
+const DEFAULT_GOAL_TIME = {
+  minutes: 10,
+  seconds: 30
+};
 
 interface PracticePageState {
   pdfFile: File;
@@ -20,6 +27,9 @@ export function Practice() {
   const [isTimerRunning, setIsTimerRunning] = useState(false);
   const [timer, setTimer] = useState({ minutes: 0, seconds: 0 });
   const [scriptContent, setScriptContent] = useState('');
+  const [showGoalTimeModal, setShowGoalTimeModal] = useState(true);
+  const [goalTime, setGoalTime] = useState(DEFAULT_GOAL_TIME);
+  const [showStopwatch, setShowStopwatch] = useState(true);
 
   useEffect(() => {
     const state = location.state as PracticePageState;
@@ -93,6 +103,12 @@ export function Practice() {
     }
   };
 
+  const handleGoalTimeComplete = (goalMinutes: number, goalSeconds: number, showStopwatchSetting: boolean) => {
+    setGoalTime({ minutes: goalMinutes, seconds: goalSeconds });
+    setShowStopwatch(showStopwatchSetting);
+    setShowGoalTimeModal(false);
+  };
+
 
   return (
     <div style={containerStyle}>
@@ -131,6 +147,20 @@ export function Practice() {
                 file={pdfFile} 
                 currentPage={currentSlide}
               />
+              
+              {/* 목표 시간 설정 모달 - PDF 뷰어 내부에서 오버레이 */}
+              {showGoalTimeModal && (
+                <div style={pdfOverlayStyle}>
+                  <GoalTimeModal
+                    isOpen={showGoalTimeModal}
+                    onClose={() => setShowGoalTimeModal(false)}
+                    onComplete={handleGoalTimeComplete}
+                    embedded={true}
+                    initialMinutes={DEFAULT_GOAL_TIME.minutes}
+                    initialSeconds={DEFAULT_GOAL_TIME.seconds}
+                  />
+                </div>
+              )}
             </div>
 
             {/* 대본 입력 영역 */}
@@ -215,6 +245,22 @@ const pdfViewerContainerStyle: React.CSSProperties = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
+  position: 'relative',
+};
+
+// PDF 뷰어 내부 오버레이
+const pdfOverlayStyle: React.CSSProperties = {
+  position: 'absolute',
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+  backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  zIndex: 10,
+  borderRadius: '12px',
 };
 
 // 대본 입력 컨테이너
