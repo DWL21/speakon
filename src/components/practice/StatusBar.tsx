@@ -5,7 +5,6 @@ interface StatusBarProps {
   currentSlide: number;
   totalSlides: number;
   currentPageTime?: { minutes: number; seconds: number };
-  isTimerRunning?: boolean;
   onTimeSettingClick?: () => void;
   onScriptWritingClick?: () => void;
 }
@@ -14,7 +13,6 @@ export const StatusBar: React.FC<StatusBarProps> = ({
   currentSlide,
   totalSlides,
   currentPageTime,
-  isTimerRunning,
   onTimeSettingClick,
   onScriptWritingClick,
 }) => {
@@ -24,7 +22,7 @@ export const StatusBar: React.FC<StatusBarProps> = ({
       {/* 왼쪽: 현재 페이지 시간 */}
       <div style={pageTimeStyle}>
         <span>
-          {currentPageTime && isTimerRunning ? 
+          {currentPageTime ? 
             `${formatTime(currentPageTime.minutes)}:${formatTime(currentPageTime.seconds)}` : 
             '00:00'
           }

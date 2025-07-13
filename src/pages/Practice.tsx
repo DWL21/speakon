@@ -79,12 +79,10 @@ export function Practice() {
 
   // 페이지 변경 시 또는 타이머 시작 시 시간 추적
   useEffect(() => {
-    if (isTimerRunning) {
-      // 현재 페이지의 기존 시간을 가져오거나 초기화
-      const existingTime = pageTimes[currentSlide];
-      setCurrentPageTime(existingTime || { minutes: 0, seconds: 0 });
-    }
-  }, [currentSlide, isTimerRunning, pageTimes]);
+    // 현재 페이지의 기존 시간을 가져오거나 초기화 (타이머 상태와 무관하게)
+    const existingTime = pageTimes[currentSlide];
+    setCurrentPageTime(existingTime || { minutes: 0, seconds: 0 });
+  }, [currentSlide, pageTimes]);
 
 
 
@@ -246,7 +244,6 @@ export function Practice() {
             currentSlide={currentSlide}
             totalSlides={totalSlides}
             currentPageTime={currentPageTime}
-            isTimerRunning={isTimerRunning}
             onTimeSettingClick={handleTimeSettingClick}
             onScriptWritingClick={handleScriptWritingClick}
           />
