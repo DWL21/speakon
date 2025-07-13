@@ -12,6 +12,7 @@ import { typography } from '../theme/typography';
 export function Result() {
   const location = useLocation();
   const navigate = useNavigate();
+  const [currentPage, setCurrentPage] = React.useState<number>(1);
 
   const practiceResult = location.state as PracticeResult;
 
@@ -70,7 +71,7 @@ export function Result() {
           <div style={pdfViewerStyle}>
             <SimplePdfViewer 
               file={practiceResult.pdfFile} 
-              currentPage={1}
+              currentPage={currentPage}
             />
           </div>
           <div style={slideListStyle}>
@@ -87,6 +88,7 @@ export function Result() {
                       content={slide.content}
                       timeText={`${formatTime(pageTime)} 소요`}
                       percentageText={`전체 소요 시간의 ${percentage}%`}
+                      onSlideClick={() => setCurrentPage(slide.slideNumber)}
                     />
                   );
                 })}

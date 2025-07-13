@@ -7,6 +7,7 @@ export interface ResultReportSlideCardProps {
   content: string;
   timeText: string;
   percentageText: string;
+  onSlideClick?: () => void;
 }
 
 export const ResultReportSlideCard: React.FC<ResultReportSlideCardProps> = ({
@@ -14,11 +15,13 @@ export const ResultReportSlideCard: React.FC<ResultReportSlideCardProps> = ({
   content,
   timeText,
   percentageText,
+  onSlideClick,
 }) => {
   const [showScript, setShowScript] = useState(false);
 
   const handleCardClick = () => {
     setShowScript(!showScript);
+    onSlideClick?.();
   };
 
   return (
@@ -93,7 +96,7 @@ const flipCardStyle: React.CSSProperties = {
   position: 'relative',
   width: '100%',
   height: '100%',
-  transition: 'transform 0.3s',
+  transition: 'transform 0.5s',
   transformStyle: 'preserve-3d',
 };
 
