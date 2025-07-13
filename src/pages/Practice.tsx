@@ -79,6 +79,20 @@ export function Practice() {
     setTimer({ minutes: 0, seconds: 0 });
   };
 
+  const handleScriptBlur = () => {
+    if (practiceData) {
+      const updatedSlides = practiceData.slides.map(slide =>
+        slide.slideNumber === currentSlide
+          ? { ...slide, content: scriptContent }
+          : slide
+      );
+      setPracticeData({
+        ...practiceData,
+        slides: updatedSlides
+      });
+    }
+  };
+
 
   return (
     <div style={containerStyle}>
@@ -124,6 +138,7 @@ export function Practice() {
               <textarea 
                 value={scriptContent}
                 onChange={(e) => setScriptContent(e.target.value)}
+                onBlur={handleScriptBlur}
                 placeholder="해당 슬라이드의 대본을 입력하세요."
                 style={textareaStyle}
               />
