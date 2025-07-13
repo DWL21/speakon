@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { TopNavBar } from '../components/ui/TopNavBar';
 import { colors } from '../theme/colors';
 import { typography } from '../theme/typography';
@@ -108,12 +109,14 @@ const LoginButton: React.FC<LoginButtonProps> = ({ icon, text, onClick }) => (
 );
 
 export const LoginPage: React.FC = () => {
+  const navigate = useNavigate();
+
   const handleGoogleLogin = () => {
-    console.log('Google login clicked');
+    navigate(-1);
   };
 
   const handleNaverLogin = () => {
-    console.log('Naver login clicked');
+    navigate(-1);
   };
 
   return (
