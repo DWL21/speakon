@@ -22,8 +22,6 @@ export const LogoutButton: React.FC<LogoutButtonProps> = ({ onClick }) => {
     <button
       onClick={handleLogout}
       style={{
-        width: '64px',
-        height: '30px',
         display: 'flex',
         padding: '7px 15px',
         justifyContent: 'center',

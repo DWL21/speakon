@@ -50,14 +50,14 @@ export const TopNavBar: React.FC = () => {
         gap: '16px'
       }}>
         <Link to="/" style={{ textDecoration: 'none' }}>
-          <Typography variant="body" color="black" style={{ cursor: 'pointer' }}>
+          <Typography variant="label" color="black" style={{ cursor: 'pointer' }}>
             홈으로
           </Typography>
         </Link>
         {isLoggedIn ? (
           <LogoutButton />
         ) : (
-          <LoginButton width={64} height={30} onClick={handleLoginClick} />
+          <LoginButton onClick={handleLoginClick} />
         )}
       </div>
     </nav>

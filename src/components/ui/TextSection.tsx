@@ -18,7 +18,6 @@ export const TextSection: React.FC<TextSectionProps> = ({ title, subtitle, onTit
         gap: '8px',
         width: '100%',
         padding: '0',
-        marginBottom: '20px',
       }}
     >
       <div 
