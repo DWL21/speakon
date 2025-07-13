@@ -123,7 +123,7 @@ export const LoginPage: React.FC = () => {
       email: 'user@gmail.com',
       provider: 'google'
     });
-    navigate(-1);
+    navigate('/');
   };
 
   const handleNaverLogin = () => {
@@ -134,7 +134,7 @@ export const LoginPage: React.FC = () => {
       email: 'user@naver.com',
       provider: 'naver'
     });
-    navigate(-1);
+    navigate('/');
   };
 
   return (

@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useAtom } from 'jotai'
 import { Logo } from './Logo'
 import { LoginButton } from '../auth/LoginButton'
@@ -8,6 +8,11 @@ import { isLoggedInAtom } from '../../atoms/auth'
 
 export const TopNavBar: React.FC = () => {
   const [isLoggedIn] = useAtom(isLoggedInAtom);
+  const navigate = useNavigate();
+
+  const handleLoginClick = () => {
+    navigate('/login');
+  };
 
   return (
     <nav style={{
@@ -50,7 +55,7 @@ export const TopNavBar: React.FC = () => {
         {isLoggedIn ? (
           <LogoutButton />
         ) : (
-          <LoginButton width={64} height={30} />
+          <LoginButton width={64} height={30} onClick={handleLoginClick} />
         )}
       </div>
     </nav>
