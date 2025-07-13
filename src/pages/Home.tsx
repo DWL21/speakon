@@ -140,7 +140,7 @@ export function Home() {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          gap: '40px',
+          gap: '16px',
         }}
       >
         {/* 타이틀 섹션 */}
