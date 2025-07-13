@@ -89,7 +89,7 @@ export const GoalTimeModal: React.FC<GoalTimeModalProps> = ({
   };
 
   const formatTime = () => {
-    return `${goalMinutes}분 ${goalSeconds}초`;
+    return `${goalMinutes}분${goalSeconds}초`;
   };
 
   // embedded 모드일 때는 오버레이 없이 모달만 렌더링
@@ -324,7 +324,7 @@ const timePartStyle: React.CSSProperties = {
 };
 
 const timeInputStyle: React.CSSProperties = {
-  width: '40px',
+  width: '60px',
   padding: '2px 4px',
   border: 'none',
   background: 'transparent',
