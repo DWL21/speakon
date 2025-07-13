@@ -7,6 +7,8 @@ interface StatusBarProps {
   currentPageTime?: { minutes: number; seconds: number };
   onTimeSettingClick?: () => void;
   onScriptWritingClick?: () => void;
+  onScriptInputToggle?: () => void;
+  isScriptInputVisible?: boolean;
 }
 
 export const StatusBar: React.FC<StatusBarProps> = ({
@@ -15,18 +17,43 @@ export const StatusBar: React.FC<StatusBarProps> = ({
   currentPageTime,
   onTimeSettingClick,
   onScriptWritingClick,
+  onScriptInputToggle,
+  isScriptInputVisible = true,
 }) => {
   const formatTime = (value: number) => value.toString().padStart(2, '0');
   return (
     <div style={statusBarStyle}>
-      {/* 왼쪽: 현재 페이지 시간 */}
-      <div style={pageTimeStyle}>
-        <span>
-          {currentPageTime ? 
-            `${formatTime(currentPageTime.minutes)}:${formatTime(currentPageTime.seconds)}` : 
-            '00:00'
-          }
-        </span>
+      {/* 왼쪽: 대본 입력창 토글 + 현재 페이지 시간 */}
+      <div style={leftSectionStyle}>
+        <button 
+          onClick={onScriptInputToggle}
+          style={scriptToggleButtonStyle}
+          aria-label="대본 입력창 토글"
+          title={isScriptInputVisible ? "대본 입력창 숨기기" : "대본 입력창 보이기"}
+        >
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path 
+              d="M2 3.5C2 3.22386 2.22386 3 2.5 3H13.5C13.7761 3 14 3.22386 14 3.5C14 3.77614 13.7761 4 13.5 4H2.5C2.22386 4 2 3.77614 2 3.5Z" 
+              fill={isScriptInputVisible ? colors.primary.normal : "#7D7E83"}
+            />
+            <path 
+              d="M2 8C2 7.72386 2.22386 7.5 2.5 7.5H13.5C13.7761 7.5 14 7.72386 14 8C14 8.27614 13.7761 8.5 13.5 8.5H2.5C2.22386 8.5 2 8.27614 2 8Z" 
+              fill={isScriptInputVisible ? colors.primary.normal : "#7D7E83"}
+            />
+            <path 
+              d="M2.5 12C2.22386 12 2 12.2239 2 12.5C2 12.7761 2.22386 13 2.5 13H9.5C9.77614 13 10 12.7761 10 12.5C10 12.2239 9.77614 12 9.5 12H2.5Z" 
+              fill={isScriptInputVisible ? colors.primary.normal : "#7D7E83"}
+            />
+          </svg>
+        </button>
+        <div style={pageTimeStyle}>
+          <span>
+            {currentPageTime ? 
+              `${formatTime(currentPageTime.minutes)}:${formatTime(currentPageTime.seconds)}` : 
+              '00:00'
+            }
+          </span>
+        </div>
       </div>
       
       {/* 중앙: 페이지 번호 */}
@@ -65,6 +92,27 @@ const statusBarStyle: React.CSSProperties = {
   alignItems: 'center',
   padding: '0 41px',
   height: '60px',
+};
+
+const leftSectionStyle: React.CSSProperties = {
+  display: 'flex',
+  alignItems: 'center',
+  gap: '12px',
+};
+
+const scriptToggleButtonStyle: React.CSSProperties = {
+  background: 'none',
+  border: 'none',
+  cursor: 'pointer',
+  padding: '6px',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  borderRadius: '4px',
+  transition: 'background-color 0.2s ease',
+  ':hover': {
+    backgroundColor: colors.fill.normal,
+  },
 };
 
 const pageTimeStyle: React.CSSProperties = {

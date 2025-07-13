@@ -38,6 +38,7 @@ export function Practice() {
   
   // 대본 입력 영역 포커스 상태
   const [isScriptFocused, setIsScriptFocused] = useState(false);
+  const [isScriptInputVisible, setIsScriptInputVisible] = useState(true);
 
   useEffect(() => {
     const state = location.state as PracticePageState;
@@ -254,6 +255,10 @@ export function Practice() {
     setShowPracticeGuide(false);
   };
 
+  const handleScriptInputToggle = () => {
+    setIsScriptInputVisible(!isScriptInputVisible);
+  };
+
 
   return (
     <div style={containerStyle}>
@@ -294,12 +299,17 @@ export function Practice() {
             currentPageTime={currentPageTime}
             onTimeSettingClick={handleTimeSettingClick}
             onScriptWritingClick={handleScriptWritingClick}
+            onScriptInputToggle={handleScriptInputToggle}
+            isScriptInputVisible={isScriptInputVisible}
           />
 
           {/* 콘텐츠 영역 */}
           <div style={contentAreaStyle}>
             {/* PDF 뷰어 */}
-            <div style={pdfViewerContainerStyle}>
+            <div style={{
+              ...pdfViewerContainerStyle,
+              height: isScriptInputVisible ? '614px' : 'calc(100vh - 180px)', // TopNavBar(60px) + StatusBar(60px) + margins(60px)
+            }}>
               <SimplePdfViewer 
                 file={pdfFile} 
                 currentPage={currentSlide}
@@ -323,21 +333,23 @@ export function Practice() {
             </div>
 
             {/* 대본 입력 영역 */}
-            <div style={scriptInputContainerStyle}>
-              <textarea 
-                value={scriptContent}
-                onChange={(e) => setScriptContent(e.target.value)}
-                onFocus={handleScriptFocus}
-                onBlur={handleScriptBlur}
-                placeholder="해당 슬라이드의 대본을 입력하세요."
-                style={{
-                  ...textareaStyle,
-                  backgroundColor: isScriptFocused ? colors.static.white : colors.fill.normal,
-                  border: isScriptFocused ? `2px solid ${colors.primary.normal}` : '2px solid transparent',
-                  transition: 'background-color 0.2s ease, border-color 0.2s ease'
-                }}
-              />
-            </div>
+            {isScriptInputVisible && (
+              <div style={scriptInputContainerStyle}>
+                <textarea 
+                  value={scriptContent}
+                  onChange={(e) => setScriptContent(e.target.value)}
+                  onFocus={handleScriptFocus}
+                  onBlur={handleScriptBlur}
+                  placeholder="해당 슬라이드의 대본을 입력하세요."
+                  style={{
+                    ...textareaStyle,
+                    backgroundColor: isScriptFocused ? colors.static.white : colors.fill.normal,
+                    border: isScriptFocused ? `2px solid ${colors.primary.normal}` : '2px solid transparent',
+                    transition: 'background-color 0.2s ease, border-color 0.2s ease'
+                  }}
+                />
+              </div>
+            )}
           </div>
         </div>
       </div>
