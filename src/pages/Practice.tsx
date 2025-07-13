@@ -34,6 +34,9 @@ export function Practice() {
   // 페이지별 시간 추적
   const [currentPageTime, setCurrentPageTime] = useState({ minutes: 0, seconds: 0 });
   const [pageTimes, setPageTimes] = useState<Record<number, { minutes: number; seconds: number }>>({});
+  
+  // 대본 입력 영역 포커스 상태
+  const [isScriptFocused, setIsScriptFocused] = useState(false);
 
   useEffect(() => {
     const state = location.state as PracticePageState;
@@ -134,7 +137,12 @@ export function Practice() {
     setPageTimes({});
   };
 
+  const handleScriptFocus = () => {
+    setIsScriptFocused(true);
+  };
+
   const handleScriptBlur = () => {
+    setIsScriptFocused(false);
     if (practiceData) {
       const updatedSlides = practiceData.slides.map(slide =>
         slide.slideNumber === currentSlide
@@ -278,9 +286,15 @@ export function Practice() {
               <textarea 
                 value={scriptContent}
                 onChange={(e) => setScriptContent(e.target.value)}
+                onFocus={handleScriptFocus}
                 onBlur={handleScriptBlur}
                 placeholder="해당 슬라이드의 대본을 입력하세요."
-                style={textareaStyle}
+                style={{
+                  ...textareaStyle,
+                  backgroundColor: isScriptFocused ? colors.static.white : colors.fill.normal,
+                  border: isScriptFocused ? `2px solid ${colors.primary.normal}` : '2px solid transparent',
+                  transition: 'background-color 0.2s ease, border-color 0.2s ease'
+                }}
               />
             </div>
           </div>
@@ -404,8 +418,6 @@ const textareaStyle: React.CSSProperties = {
   height: '185px',
   maxHeight: '185px',
   minHeight: '110px',
-  backgroundColor: colors.fill.normal,
-  border: 'none',
   borderRadius: '15px',
   padding: '35px 40px',
   fontSize: '16px',
