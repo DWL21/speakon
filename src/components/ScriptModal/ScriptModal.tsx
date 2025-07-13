@@ -40,8 +40,8 @@ export const ScriptModal: React.FC<ScriptModalProps> = ({
   const [isLoadingPageCount, setIsLoadingPageCount] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   
-  // 포커스 변경 핸들러를 저장할 ref
-  const [previewFocusHandler, setPreviewFocusHandler] = useState<((slideNumber: number) => void) | null>(null);
+  // 현재 미리보기 페이지 상태
+  const [currentPreviewPage, setCurrentPreviewPage] = useState<number>(1);
   
   // ScriptModalForm의 ref
   const formRef = useRef<ScriptModalFormRef>(null);
@@ -112,11 +112,11 @@ export const ScriptModal: React.FC<ScriptModalProps> = ({
     onSlideChange?.(slideNumber, content);
   }, [onSlideChange]); // slideInputs 의존성 제거
 
-  // 포커스 변경 시 ScriptModalPreview에 직접 전달
+  // 포커스 변경 시 미리보기 페이지 업데이트
   const handleFocus = useCallback((slideNumber: number) => {
-    console.log('🎯 포커스 → ScriptModalPreview로 전달', slideNumber);
-    previewFocusHandler?.(slideNumber);
-  }, [previewFocusHandler]);
+    console.log('🎯 포커스 → 페이지 변경', currentPreviewPage, '→', slideNumber);
+    setCurrentPreviewPage(slideNumber);
+  }, [currentPreviewPage]);
 
   const handleSave = useCallback(() => {
     console.log('💾 저장 요청 - 현재 값들 수집 중');
@@ -180,10 +180,9 @@ export const ScriptModal: React.FC<ScriptModalProps> = ({
             title={title}
             description={description}
             pdfFile={pdfFile}
-            initialPage={1}
+            initialPage={currentPreviewPage}
             totalPages={slideInputs.length}
             renderPreviewContent={renderPreviewContent}
-            onRegisterFocusHandler={setPreviewFocusHandler}
           />
           <ScriptModalDivider />
           <MemoizedScriptModalForm
