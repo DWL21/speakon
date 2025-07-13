@@ -4,6 +4,8 @@ import { colors } from '../../theme/colors';
 interface StatusBarProps {
   currentSlide: number;
   totalSlides: number;
+  currentPageTime?: { minutes: number; seconds: number };
+  isTimerRunning?: boolean;
   onTimeSettingClick?: () => void;
   onScriptWritingClick?: () => void;
 }
@@ -11,13 +13,23 @@ interface StatusBarProps {
 export const StatusBar: React.FC<StatusBarProps> = ({
   currentSlide,
   totalSlides,
+  currentPageTime,
+  isTimerRunning,
   onTimeSettingClick,
   onScriptWritingClick,
 }) => {
+  const formatTime = (value: number) => value.toString().padStart(2, '0');
   return (
     <div style={statusBarStyle}>
-      {/* 왼쪽: 빈 공간 */}
-      <div style={emptySpaceStyle}></div>
+      {/* 왼쪽: 현재 페이지 시간 */}
+      <div style={pageTimeStyle}>
+        <span>
+          {currentPageTime && isTimerRunning ? 
+            `${formatTime(currentPageTime.minutes)}:${formatTime(currentPageTime.seconds)}` : 
+            '00:00'
+          }
+        </span>
+      </div>
       
       {/* 중앙: 페이지 번호 */}
       <div style={pageIndicatorStyle}>
@@ -57,8 +69,14 @@ const statusBarStyle: React.CSSProperties = {
   height: '60px',
 };
 
-const emptySpaceStyle: React.CSSProperties = {
+const pageTimeStyle: React.CSSProperties = {
   width: '125px',
+  display: 'flex',
+  alignItems: 'center',
+  fontSize: '16px',
+  fontWeight: 500,
+  color: colors.label.normal,
+  fontFamily: 'Pretendard, sans-serif',
 };
 
 const pageIndicatorStyle: React.CSSProperties = {

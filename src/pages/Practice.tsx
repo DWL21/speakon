@@ -30,6 +30,10 @@ export function Practice() {
   const [showScriptModal, setShowScriptModal] = useState(false);
   const [isPracticing, setIsPracticing] = useState(false);
   const [showExitModal, setShowExitModal] = useState(false);
+  
+  // 페이지별 시간 추적
+  const [currentPageTime, setCurrentPageTime] = useState({ minutes: 0, seconds: 0 });
+  const [pageTimes, setPageTimes] = useState<Record<number, { minutes: number; seconds: number }>>({});
 
   useEffect(() => {
     const state = location.state as PracticePageState;
@@ -59,10 +63,29 @@ export function Practice() {
           }
           return { ...prev, seconds: newSeconds };
         });
+
+        // 현재 페이지 시간도 업데이트
+        setCurrentPageTime(prev => {
+          const newSeconds = prev.seconds + 1;
+          if (newSeconds >= 60) {
+            return { minutes: prev.minutes + 1, seconds: 0 };
+          }
+          return { ...prev, seconds: newSeconds };
+        });
       }, 1000);
     }
     return () => clearInterval(interval);
   }, [isTimerRunning]);
+
+  // 페이지 변경 시 또는 타이머 시작 시 시간 추적
+  useEffect(() => {
+    if (isTimerRunning) {
+      // 현재 페이지의 기존 시간을 가져오거나 초기화
+      const existingTime = pageTimes[currentSlide];
+      setCurrentPageTime(existingTime || { minutes: 0, seconds: 0 });
+    }
+  }, [currentSlide, isTimerRunning, pageTimes]);
+
 
 
   if (!practiceData) {
@@ -77,17 +100,40 @@ export function Practice() {
   const totalSlides = slides.length;
 
   const handleSlideClick = (slideNumber: number) => {
+    // 현재 페이지 시간을 저장하고 새 페이지로 이동
+    if (isTimerRunning) {
+      setPageTimes(prev => ({
+        ...prev,
+        [currentSlide]: currentPageTime
+      }));
+    }
     setCurrentSlide(slideNumber);
   };
 
 
   const toggleTimer = () => {
+    if (isTimerRunning) {
+      // 타이머 중지 시 현재 페이지 시간을 저장
+      setPageTimes(prev => ({
+        ...prev,
+        [currentSlide]: currentPageTime
+      }));
+    }
     setIsTimerRunning(!isTimerRunning);
   };
 
   const resetTimer = () => {
+    // 현재 페이지 시간을 저장
+    if (isTimerRunning) {
+      setPageTimes(prev => ({
+        ...prev,
+        [currentSlide]: currentPageTime
+      }));
+    }
     setIsTimerRunning(false);
     setTimer({ minutes: 0, seconds: 0 });
+    setCurrentPageTime({ minutes: 0, seconds: 0 });
+    setPageTimes({});
   };
 
   const handleScriptBlur = () => {
@@ -199,6 +245,8 @@ export function Practice() {
           <StatusBar
             currentSlide={currentSlide}
             totalSlides={totalSlides}
+            currentPageTime={currentPageTime}
+            isTimerRunning={isTimerRunning}
             onTimeSettingClick={handleTimeSettingClick}
             onScriptWritingClick={handleScriptWritingClick}
           />
