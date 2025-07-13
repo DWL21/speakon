@@ -20,7 +20,7 @@ export const ScriptModalPreview: React.FC<ScriptModalPreviewProps> = ({
   description,
   pdfFile,
   initialPage = 1,
-  totalPages,
+  totalPages: _totalPages,
   renderPreviewContent,
 }) => {
   const [currentPage, setCurrentPage] = useState<number>(initialPage);

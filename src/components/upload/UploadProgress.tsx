@@ -10,7 +10,7 @@ interface UploadProgressProps {
 
 export const UploadProgress: React.FC<UploadProgressProps> = ({ 
   progress, 
-  fileName, 
+  fileName: _fileName, 
   fileSize,
   totalSize,
   style = {} 

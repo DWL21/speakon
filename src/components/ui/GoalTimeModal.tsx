@@ -14,7 +14,7 @@ interface GoalTimeModalProps {
 
 export const GoalTimeModal: React.FC<GoalTimeModalProps> = ({
   isOpen,
-  onClose,
+  onClose: _onClose,
   onComplete,
   onStopwatchToggle,
   embedded = false,

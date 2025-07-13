@@ -15,7 +15,7 @@ export interface ScriptModalItemRef {
 const ScriptModalItem = forwardRef<ScriptModalItemRef, ScriptModalItemProps>(({
   slideNumber,
   value,
-  onChange,
+  onChange: _onChange,
   onFocus
 }, ref) => {
   const [isFocused, setIsFocused] = useState(false);

@@ -52,7 +52,7 @@ export const ExitModal: React.FC<ExitModalProps> = ({ isOpen, onCancel, onConfir
               variant="secondary"
               size="small"
               onClick={onCancel}
-              style={cancelButtonStyle}
+              className="cancel-button"
             >
               계속하기
             </Button>
@@ -60,7 +60,7 @@ export const ExitModal: React.FC<ExitModalProps> = ({ isOpen, onCancel, onConfir
               variant="primary"
               size="small"
               onClick={onConfirm}
-              style={confirmButtonStyle}
+              className="confirm-button"
             >
               종료하기
             </Button>
@@ -151,18 +151,3 @@ const buttonContainerStyle: React.CSSProperties = {
   justifyContent: 'center',
 };
 
-const cancelButtonStyle: React.CSSProperties = {
-  width: '110px',
-  backgroundColor: colors.fill.normal,
-  color: colors.label.neutral,
-  fontSize: '13px',
-  fontWeight: 500,
-};
-
-const confirmButtonStyle: React.CSSProperties = {
-  width: '110px',
-  backgroundColor: colors.primary.normal,
-  color: colors.static.white,
-  fontSize: '13px',
-  fontWeight: 500,
-};

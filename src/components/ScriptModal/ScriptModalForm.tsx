@@ -9,7 +9,7 @@ export interface SlideInput {
 
 interface ScriptModalFormProps {
   slides: SlideInput[];
-  onSlideChange: (slideNumber: number, content: string) => void;
+  onSlideChange?: (slideNumber: number, content: string) => void;
   onFocus?: (slideNumber: number) => void;
 }
 
@@ -19,7 +19,7 @@ export interface ScriptModalFormRef {
 
 const ScriptModalForm = forwardRef<ScriptModalFormRef, ScriptModalFormProps>(({
   slides,
-  onSlideChange,
+  onSlideChange: _onSlideChange,
   onFocus
 }, ref) => {
   const itemRefs = useRef<Record<number, ScriptModalItemRef | null>>({});
@@ -31,7 +31,7 @@ const ScriptModalForm = forwardRef<ScriptModalFormRef, ScriptModalFormProps>(({
   // 각 슬라이드에 대한 개별 콜백들을 메모이제이션 (현재는 사용하지 않음)
   const slideCallbacks = useMemo(() => {
     return slides.reduce((acc, slide) => {
-      acc[slide.slideNumber] = (content: string) => {
+      acc[slide.slideNumber] = (_content: string) => {
         // 실시간 업데이트 제거 - 아무것도 하지 않음
       };
       return acc;
