@@ -68,7 +68,6 @@ const ScriptModalForm = forwardRef<ScriptModalFormRef, ScriptModalFormProps>(({
           />
         ))}
       </div>
-      <div style={scrollbarStyle} />
     </div>
   );
 });
@@ -94,14 +93,4 @@ const inputListStyle: React.CSSProperties = {
   gap: '20px',
   overflowY: 'auto',
   maxHeight: '598px',
-  paddingRight: '10px',
-};
-
-const scrollbarStyle: React.CSSProperties = {
-  width: '6.539px',
-  height: '142px',
-  backgroundColor: '#d9d9d9',
-  borderRadius: '3px',
-  marginLeft: '8px',
-  marginTop: '44px',
 }; 
