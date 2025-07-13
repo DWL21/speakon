@@ -3,6 +3,7 @@ import { TopNavBar } from './components/ui/TopNavBar'
 import { Home } from './pages/Home'
 import { NotFound } from './pages/NotFound'
 import { Practice } from './pages/Practice'
+import { Result } from './pages/Result'
 import { LoginPage } from './pages/LoginPage'
 import { colors } from './theme/colors'
 import './App.css'
@@ -25,6 +26,9 @@ function App() {
         <Routes>
           {/* Practice 페이지는 독립적 레이아웃 */}
           <Route path="/practice" element={<Practice />} />
+          
+          {/* Result 페이지는 독립적 레이아웃 */}
+          <Route path="/result" element={<Result />} />
           
           {/* Login 페이지는 독립적 레이아웃 */}
           <Route path="/login" element={<LoginPage />} />

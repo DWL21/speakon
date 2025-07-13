@@ -13,6 +13,7 @@ export interface ButtonProps {
   children: React.ReactNode
   className?: string
   type?: 'button' | 'submit' | 'reset'
+  style?: React.CSSProperties
 }
 
 export const Button: React.FC<ButtonProps> = ({
@@ -25,6 +26,7 @@ export const Button: React.FC<ButtonProps> = ({
   children,
   className = '',
   type = 'button',
+  style,
 }) => {
   const getButtonStyles = () => {
     const baseStyles: React.CSSProperties = {
@@ -88,6 +90,7 @@ export const Button: React.FC<ButtonProps> = ({
       ...baseStyles,
       ...sizeStyles[size],
       ...variantStyles[variant],
+      ...style,
     }
   }
 

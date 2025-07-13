@@ -223,7 +223,31 @@ export function Practice() {
 
   const handleExitConfirm = () => {
     setShowExitModal(false);
-    navigate('/', { replace: true });
+    
+    // 현재 페이지 시간을 저장
+    if (isTimerRunning) {
+      setPageTimes(prev => ({
+        ...prev,
+        [currentSlide]: currentPageTime
+      }));
+    }
+    
+    // 결과 데이터 구성
+    const resultData = {
+      totalTime: timer,
+      pageTimes: {
+        ...pageTimes,
+        [currentSlide]: currentPageTime
+      },
+      slides: practiceData.slides,
+      pdfFile: practiceData.pdfFile
+    };
+    
+    // 결과 보고서 페이지로 이동
+    navigate('/result', { 
+      state: resultData,
+      replace: true 
+    });
   };
 
   const handleGuideClick = () => {
