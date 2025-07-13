@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useAtom } from 'jotai'
 import { Logo } from './Logo'
 import { LoginButton } from '../auth/LoginButton'
@@ -9,17 +9,19 @@ import { isLoggedInAtom } from '../../atoms/auth'
 export const TopNavBar: React.FC = () => {
   const [isLoggedIn] = useAtom(isLoggedInAtom);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleLoginClick = () => {
     navigate('/login');
   };
+
+  const isPracticePage = location.pathname === '/practice';
 
   return (
     <nav style={{
       width: '100vw',
       height: '60px',
       backgroundColor: 'white',
-      borderBottom: '1px solid #f1f2f5',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
@@ -28,9 +30,9 @@ export const TopNavBar: React.FC = () => {
       top: 0,
       left: 0,
       zIndex: 100,
-      boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
       boxSizing: 'border-box',
-      margin: 0
+      margin: 0,
+      borderBottom: isPracticePage ? '1px solid #E7E7E8' : 'none'
     }}>
       {/* 왼쪽: 로고 */}
       <Link to="/" style={{ 
