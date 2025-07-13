@@ -1,9 +1,14 @@
 import { Link } from 'react-router-dom'
+import { useAtom } from 'jotai'
 import { Logo } from './Logo'
 import { LoginButton } from '../auth/LoginButton'
+import { LogoutButton } from '../auth/LogoutButton'
 import { Typography } from './Typography'
+import { isLoggedInAtom } from '../../atoms/auth'
 
 export const TopNavBar: React.FC = () => {
+  const [isLoggedIn] = useAtom(isLoggedInAtom);
+
   return (
     <nav style={{
       width: '100vw',
@@ -42,7 +47,11 @@ export const TopNavBar: React.FC = () => {
             홈으로
           </Typography>
         </Link>
-        <LoginButton width={64} height={30} />
+        {isLoggedIn ? (
+          <LogoutButton />
+        ) : (
+          <LoginButton width={64} height={30} />
+        )}
       </div>
     </nav>
   )

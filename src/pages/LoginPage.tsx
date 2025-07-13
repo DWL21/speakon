@@ -1,8 +1,10 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAtom } from 'jotai';
 import { TopNavBar } from '../components/ui/TopNavBar';
 import { colors } from '../theme/colors';
 import { typography } from '../theme/typography';
+import { isLoggedInAtom, userAtom } from '../atoms/auth';
 
 const SpeakOnLogo = () => (
   <svg
@@ -110,12 +112,28 @@ const LoginButton: React.FC<LoginButtonProps> = ({ icon, text, onClick }) => (
 
 export const LoginPage: React.FC = () => {
   const navigate = useNavigate();
+  const [, setIsLoggedIn] = useAtom(isLoggedInAtom);
+  const [, setUser] = useAtom(userAtom);
 
   const handleGoogleLogin = () => {
+    setIsLoggedIn(true);
+    setUser({
+      id: 'google-user-id',
+      name: 'Google User',
+      email: 'user@gmail.com',
+      provider: 'google'
+    });
     navigate(-1);
   };
 
   const handleNaverLogin = () => {
+    setIsLoggedIn(true);
+    setUser({
+      id: 'naver-user-id',
+      name: 'Naver User',
+      email: 'user@naver.com',
+      provider: 'naver'
+    });
     navigate(-1);
   };
 
