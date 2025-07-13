@@ -95,9 +95,11 @@ export const GoalTimeModal: React.FC<GoalTimeModalProps> = ({
   // embedded 모드일 때는 오버레이 없이 모달만 렌더링
   if (embedded) {
     return (
-      <div style={modalStyle}>
-        <div style={titleStyle}>목표시간</div>
-        <div style={descriptionStyle}>발표 시간을 설정하세요</div>
+      <div style={embeddedModalStyle}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'center' }}>
+          <div style={titleStyle}>목표시간</div>
+          <div style={descriptionStyle}>발표 시간을 설정하세요</div>
+        </div>
         
         <div style={timePickerContainerStyle}>
           <button style={buttonStyle} onClick={handleDecrease}>
@@ -118,10 +120,9 @@ export const GoalTimeModal: React.FC<GoalTimeModalProps> = ({
               />
             ) : (
               <span style={timePartStyle} onClick={handleMinutesClick}>
-                {goalMinutes}
+                {goalMinutes}분
               </span>
             )}
-            <span style={separatorStyle}>분</span>
             {isEditingSeconds ? (
               <input
                 type="number"
@@ -136,10 +137,9 @@ export const GoalTimeModal: React.FC<GoalTimeModalProps> = ({
               />
             ) : (
               <span style={timePartStyle} onClick={handleSecondsClick}>
-                {goalSeconds}
+                {goalSeconds}초
               </span>
             )}
-            <span style={separatorStyle}>초</span>
           </div>
           
           <button style={buttonStyle} onClick={handleIncrease}>
@@ -147,22 +147,24 @@ export const GoalTimeModal: React.FC<GoalTimeModalProps> = ({
           </button>
         </div>
 
-        <div style={checkboxContainerStyle}>
-          <input
-            type="checkbox"
-            id="showStopwatch"
-            checked={showStopwatch}
-            onChange={(e) => setShowStopwatch(e.target.checked)}
-            style={checkboxStyle}
-          />
-          <label htmlFor="showStopwatch" style={checkboxLabelStyle}>
-            연습 시 스톱워치 보기
-          </label>
-        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', alignItems: 'center' }}>
+          <div style={checkboxContainerStyle}>
+            <input
+              type="checkbox"
+              id="showStopwatch"
+              checked={showStopwatch}
+              onChange={(e) => setShowStopwatch(e.target.checked)}
+              style={checkboxStyle}
+            />
+            <label htmlFor="showStopwatch" style={checkboxLabelStyle}>
+              연습 시 스톱워치 보기
+            </label>
+          </div>
 
-        <button style={completeButtonStyle} onClick={handleComplete}>
-          완료
-        </button>
+          <button style={completeButtonStyle} onClick={handleComplete}>
+            완료
+          </button>
+        </div>
       </div>
     );
   }
@@ -265,36 +267,51 @@ const modalStyle: React.CSSProperties = {
   fontFamily: 'Pretendard, sans-serif',
 };
 
+const embeddedModalStyle: React.CSSProperties = {
+  backgroundColor: 'transparent',
+  borderRadius: '20px',
+  padding: '0',
+  width: '340px',
+  textAlign: 'center',
+  fontFamily: 'Pretendard, sans-serif',
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '18px',
+  alignItems: 'center',
+  justifyContent: 'center',
+  boxShadow: '1px 1px 12px 0px rgba(0,0,0,0.15)',
+};
+
 const titleStyle: React.CSSProperties = {
-  fontSize: '24px',
-  fontWeight: 600,
-  color: colors.label.normal,
-  marginBottom: '8px',
+  fontSize: '18px',
+  fontWeight: 500,
+  color: colors.static.white,
+  marginBottom: '5px',
 };
 
 const descriptionStyle: React.CSSProperties = {
-  fontSize: '16px',
+  fontSize: '13px',
   fontWeight: 400,
-  color: colors.label.alternative,
-  marginBottom: '40px',
+  color: colors.static.white,
+  marginBottom: '0',
 };
 
 const timePickerContainerStyle: React.CSSProperties = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  gap: '16px',
-  marginBottom: '32px',
+  gap: '5px',
+  marginBottom: '0',
 };
 
 const buttonStyle: React.CSSProperties = {
-  width: '40px',
-  height: '40px',
-  borderRadius: '8px',
-  border: `1px solid ${colors.line.normal}`,
-  backgroundColor: colors.static.white,
-  color: colors.label.normal,
-  fontSize: '20px',
+  width: '39px',
+  height: '39px',
+  borderRadius: '5px',
+  border: '1px solid #c5c5c7',
+  backgroundColor: '#eeeeee',
+  color: '#7d7e83',
+  fontSize: '15px',
   fontWeight: 500,
   cursor: 'pointer',
   display: 'flex',
@@ -303,17 +320,19 @@ const buttonStyle: React.CSSProperties = {
 };
 
 const timeDisplayContainerStyle: React.CSSProperties = {
-  backgroundColor: colors.fill.normal,
-  borderRadius: '12px',
-  padding: '12px 24px',
-  fontSize: '18px',
+  backgroundColor: 'transparent',
+  borderRadius: '5px',
+  border: '1px solid #c5c5c7',
+  padding: '10px 20px',
+  fontSize: '16px',
   fontWeight: 500,
-  color: colors.label.normal,
+  color: colors.static.white,
   minWidth: '120px',
   display: 'flex',
   alignItems: 'center',
   gap: '4px',
   justifyContent: 'center',
+  whiteSpace: 'nowrap',
 };
 
 const timePartStyle: React.CSSProperties = {
@@ -321,6 +340,7 @@ const timePartStyle: React.CSSProperties = {
   padding: '2px 4px',
   borderRadius: '4px',
   transition: 'background-color 0.2s ease',
+  whiteSpace: 'nowrap',
 };
 
 const timeInputStyle: React.CSSProperties = {
@@ -330,7 +350,7 @@ const timeInputStyle: React.CSSProperties = {
   background: 'transparent',
   fontSize: '18px',
   fontWeight: 500,
-  color: colors.label.normal,
+  color: colors.static.white,
   textAlign: 'center',
   outline: 'none',
   fontFamily: 'Pretendard, sans-serif',
@@ -338,7 +358,7 @@ const timeInputStyle: React.CSSProperties = {
 
 const separatorStyle: React.CSSProperties = {
   fontSize: '18px',
-  color: colors.label.normal,
+  color: colors.static.white,
   fontWeight: 500,
   margin: '0 2px',
 };
@@ -347,32 +367,33 @@ const checkboxContainerStyle: React.CSSProperties = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  gap: '8px',
-  marginBottom: '32px',
+  gap: '5px',
+  marginBottom: '12px',
 };
 
 const checkboxStyle: React.CSSProperties = {
-  width: '18px',
-  height: '18px',
-  accentColor: colors.primary.normal,
+  width: '16px',
+  height: '16px',
+  accentColor: '#2563EB',
+  borderRadius: '2px',
 };
 
 const checkboxLabelStyle: React.CSSProperties = {
-  fontSize: '16px',
-  color: colors.label.normal,
-  fontWeight: 500,
+  fontSize: '12px',
+  color: colors.static.white,
+  fontWeight: 400,
   cursor: 'pointer',
 };
 
 const completeButtonStyle: React.CSSProperties = {
-  width: '100%',
+  width: '340px',
   height: '50px',
   backgroundColor: colors.primary.normal,
   color: colors.static.white,
   border: 'none',
-  borderRadius: '12px',
-  fontSize: '18px',
-  fontWeight: 600,
+  borderRadius: '10px',
+  fontSize: '16px',
+  fontWeight: 500,
   cursor: 'pointer',
   fontFamily: 'Pretendard, sans-serif',
 };
