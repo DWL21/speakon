@@ -30,7 +30,6 @@ export function Practice() {
   const [showScriptModal, setShowScriptModal] = useState(false);
   const [isPracticing, setIsPracticing] = useState(false);
   const [showExitModal, setShowExitModal] = useState(false);
-  const [hasStartedTimer, setHasStartedTimer] = useState(false);
   const [showPracticeGuide, setShowPracticeGuide] = useState(false);
   
   // 페이지별 시간 추적
@@ -122,8 +121,7 @@ export function Practice() {
         [currentSlide]: currentPageTime
       }));
     } else {
-      // 타이머 시작 시 첫 시작 표시 및 안내문 숨김
-      setHasStartedTimer(true);
+      // 타이머 시작 시 안내문 숨김
       setShowPracticeGuide(false);
     }
     setIsTimerRunning(!isTimerRunning);
