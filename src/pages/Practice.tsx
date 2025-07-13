@@ -4,7 +4,7 @@ import { SimplePdfViewer } from '../components/ui/SimplePdfViewer';
 import { TopNavBar } from '../components/ui/TopNavBar';
 import { GoalTimeModal } from '../components/ui/GoalTimeModal';
 import { ScriptModal } from '../components/ScriptModal';
-import { Sidebar, StatusBar, ExitModal } from '../components/practice';
+import { Sidebar, StatusBar, ExitModal, PracticeGuide } from '../components/practice';
 import { colors } from '../theme/colors';
 import { SlideInput } from '../components/ScriptModal/ScriptModalForm';
 
@@ -30,6 +30,8 @@ export function Practice() {
   const [showScriptModal, setShowScriptModal] = useState(false);
   const [isPracticing, setIsPracticing] = useState(false);
   const [showExitModal, setShowExitModal] = useState(false);
+  const [hasStartedTimer, setHasStartedTimer] = useState(false);
+  const [showPracticeGuide, setShowPracticeGuide] = useState(false);
   
   // 페이지별 시간 추적
   const [currentPageTime, setCurrentPageTime] = useState({ minutes: 0, seconds: 0 });
@@ -119,6 +121,10 @@ export function Practice() {
         ...prev,
         [currentSlide]: currentPageTime
       }));
+    } else {
+      // 타이머 시작 시 첫 시작 표시 및 안내문 숨김
+      setHasStartedTimer(true);
+      setShowPracticeGuide(false);
     }
     setIsTimerRunning(!isTimerRunning);
   };
@@ -162,6 +168,8 @@ export function Practice() {
     setIsPracticing(!showStopwatchSetting);
     setShowGoalTimeModal(false);
     setIsGoalTimeSet(true);
+    // 목표시간 설정 완료 후 안내문 표시
+    setShowPracticeGuide(true);
   };
 
   const handleTimeSettingClick = () => {
@@ -220,6 +228,10 @@ export function Practice() {
     navigate('/', { replace: true });
   };
 
+  const handleGuideClick = () => {
+    setShowPracticeGuide(false);
+  };
+
 
   return (
     <div style={containerStyle}>
@@ -228,6 +240,12 @@ export function Practice() {
       
       {/* 메인 콘텐츠 */}
       <div style={mainContentStyle}>
+        {/* 연습 안내문 - 절대 위치 */}
+        <PracticeGuide 
+          isVisible={showPracticeGuide} 
+          onDismiss={handleGuideClick}
+        />
+        
         {/* 왼쪽 사이드바 */}
         <Sidebar
           slides={slides}
@@ -279,6 +297,7 @@ export function Practice() {
                   />
                 </div>
               )}
+
             </div>
 
             {/* 대본 입력 영역 */}
@@ -356,6 +375,7 @@ const mainContentStyle: React.CSSProperties = {
   display: 'flex',
   height: 'calc(100vh - 60px)', // TopNavBar 높이 제외
   overflow: 'hidden',
+  position: 'relative',
 };
 
 // 메인 영역 스타일
