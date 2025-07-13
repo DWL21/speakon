@@ -144,7 +144,6 @@ const pageContentStyle: React.CSSProperties = {
 const headerStyle: React.CSSProperties = {
   width: '100%',
   padding: '35px 50px 35px 50px',
-  borderBottom: `1px solid ${colors.line?.normal || '#E7E7E8'}`,
 };
 
 const headerContentStyle: React.CSSProperties = {
@@ -236,7 +235,6 @@ const scrollbarStyle: React.CSSProperties = {
 };
 
 const footerStyle: React.CSSProperties = {
-  borderTop: `1px solid ${colors.line?.normal || '#E7E7E8'}`,
   padding: '0 60px',
   height: '95px',
   display: 'flex',
