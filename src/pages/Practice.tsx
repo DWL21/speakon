@@ -106,6 +106,7 @@ export function Practice() {
   const handleGoalTimeComplete = (goalMinutes: number, goalSeconds: number, showStopwatchSetting: boolean) => {
     setGoalTime({ minutes: goalMinutes, seconds: goalSeconds });
     setShowStopwatch(showStopwatchSetting);
+    setIsPracticing(!showStopwatchSetting);
     setShowGoalTimeModal(false);
     setIsGoalTimeSet(true);
   };
@@ -144,6 +145,13 @@ export function Practice() {
 
   const handlePracticeToggle = () => {
     setIsPracticing(!isPracticing);
+  };
+
+  const handleStopwatchToggle = (showStopwatch: boolean) => {
+    // 스톱워치 보기 옵션과 연동
+    // showStopwatch가 false면 스톱워치를 숨기고 "연습 중" 표시
+    setShowStopwatch(showStopwatch);
+    setIsPracticing(!showStopwatch);
   };
 
 
@@ -194,11 +202,12 @@ export function Practice() {
                 <div style={pdfOverlayStyle}>
                   <GoalTimeModal
                     isOpen={showGoalTimeModal}
-                    onClose={() => setShowGoalTimeModal(false)}
                     onComplete={handleGoalTimeComplete}
+                    onStopwatchToggle={handleStopwatchToggle}
                     embedded={true}
                     initialMinutes={isGoalTimeSet ? goalTime.minutes : 10}
                     initialSeconds={isGoalTimeSet ? goalTime.seconds : 30}
+                    initialStopwatchSetting={showStopwatch}
                   />
                 </div>
               )}

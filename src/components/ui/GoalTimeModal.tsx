@@ -3,24 +3,28 @@ import { colors } from '../../theme/colors';
 
 interface GoalTimeModalProps {
   isOpen: boolean;
-  onClose: () => void;
+  onClose?: () => void; // embedded 모드에서는 선택적
   onComplete: (goalMinutes: number, goalSeconds: number, showStopwatch: boolean) => void;
+  onStopwatchToggle?: (showStopwatch: boolean) => void; // 체크박스 변경 시 즉시 호출
   embedded?: boolean; // PDF 뷰어 내부에서 사용할 때
   initialMinutes?: number;
   initialSeconds?: number;
+  initialStopwatchSetting?: boolean; // 초기 스톱워치 설정값
 }
 
 export const GoalTimeModal: React.FC<GoalTimeModalProps> = ({
   isOpen,
   onClose,
   onComplete,
+  onStopwatchToggle,
   embedded = false,
   initialMinutes = 10,
   initialSeconds = 30,
+  initialStopwatchSetting = true,
 }) => {
   const [goalMinutes, setGoalMinutes] = useState(initialMinutes);
   const [goalSeconds, setGoalSeconds] = useState(initialSeconds);
-  const [showStopwatch, setShowStopwatch] = useState(true);
+  const [showStopwatch, setShowStopwatch] = useState(initialStopwatchSetting);
   const [isEditingMinutes, setIsEditingMinutes] = useState(false);
   const [isEditingSeconds, setIsEditingSeconds] = useState(false);
   const [inputMinutes, setInputMinutes] = useState(initialMinutes.toString());
@@ -88,9 +92,14 @@ export const GoalTimeModal: React.FC<GoalTimeModalProps> = ({
     onComplete(goalMinutes, goalSeconds, showStopwatch);
   };
 
-  const formatTime = () => {
-    return `${goalMinutes}분${goalSeconds}초`;
+  const handleStopwatchChange = (checked: boolean) => {
+    setShowStopwatch(checked);
+    // 체크박스 변경 시 즉시 연습 상태 변경
+    if (onStopwatchToggle) {
+      onStopwatchToggle(checked);
+    }
   };
+
 
   // embedded 모드일 때는 오버레이 없이 모달만 렌더링
   if (embedded) {
@@ -153,7 +162,7 @@ export const GoalTimeModal: React.FC<GoalTimeModalProps> = ({
               type="checkbox"
               id="showStopwatch"
               checked={showStopwatch}
-              onChange={(e) => setShowStopwatch(e.target.checked)}
+              onChange={(e) => handleStopwatchChange(e.target.checked)}
               style={checkboxStyle}
             />
             <label htmlFor="showStopwatch" style={checkboxLabelStyle}>
@@ -229,7 +238,7 @@ export const GoalTimeModal: React.FC<GoalTimeModalProps> = ({
             type="checkbox"
             id="showStopwatch"
             checked={showStopwatch}
-            onChange={(e) => setShowStopwatch(e.target.checked)}
+            onChange={(e) => handleStopwatchChange(e.target.checked)}
             style={checkboxStyle}
           />
           <label htmlFor="showStopwatch" style={checkboxLabelStyle}>
