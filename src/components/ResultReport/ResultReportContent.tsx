@@ -52,11 +52,11 @@ export const ResultReportContent: React.FC<ResultReportContentProps> = ({
                     content={slide.content}
                     timeText={`${formatTime(pageTime)} 소요`}
                     percentageText={`전체 소요 시간의 ${percentage}%`}
+                    percentage={percentage}
                   />
                 );
               })}
             </div>
-            <div style={scrollbarStyle} />
           </div>
         </div>
       </div>
@@ -116,13 +116,3 @@ const slideCardsContainerStyle: React.CSSProperties = {
   paddingRight: '13px',
 };
 
-const scrollbarStyle: React.CSSProperties = {
-  width: '4.602px',
-  backgroundColor: '#d9d9d9',
-  borderRadius: '3px',
-  height: '142px',
-  position: 'absolute',
-  right: '3px',
-  top: '50%',
-  transform: 'translateY(-50%)',
-};

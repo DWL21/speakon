@@ -152,23 +152,11 @@ const headerContentStyle: React.CSSProperties = {
   paddingLeft: '15px',
 };
 
-const titleSectionStyle: React.CSSProperties = {
-  display: 'flex',
-  alignItems: 'center',
-  paddingLeft: '15px',
-};
-
 const titleStyle: React.CSSProperties = {
   ...typography.title[2],
   color: colors.label.normal,
   fontWeight: 600,
   fontSize: '20px',
-};
-
-const timeSectionStyle: React.CSSProperties = {
-  flex: 1,
-  textAlign: 'left',
-  paddingLeft: '15px',
 };
 
 const timeStyle: React.CSSProperties = {
