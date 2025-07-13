@@ -4,7 +4,7 @@ import { SimplePdfViewer } from '../components/ui/SimplePdfViewer';
 import { TopNavBar } from '../components/ui/TopNavBar';
 import { GoalTimeModal } from '../components/ui/GoalTimeModal';
 import { ScriptModal } from '../components/ScriptModal';
-import { Sidebar, StatusBar } from '../components/practice';
+import { Sidebar, StatusBar, ExitModal } from '../components/practice';
 import { colors } from '../theme/colors';
 import { SlideInput } from '../components/ScriptModal/ScriptModalForm';
 
@@ -29,6 +29,7 @@ export function Practice() {
   const [isGoalTimeSet, setIsGoalTimeSet] = useState(false);
   const [showScriptModal, setShowScriptModal] = useState(false);
   const [isPracticing, setIsPracticing] = useState(false);
+  const [showExitModal, setShowExitModal] = useState(false);
 
   useEffect(() => {
     const state = location.state as PracticePageState;
@@ -154,6 +155,19 @@ export function Practice() {
     setIsPracticing(!showStopwatch);
   };
 
+  const handleExitClick = () => {
+    setShowExitModal(true);
+  };
+
+  const handleExitCancel = () => {
+    setShowExitModal(false);
+  };
+
+  const handleExitConfirm = () => {
+    setShowExitModal(false);
+    navigate('/', { replace: true });
+  };
+
 
   return (
     <div style={containerStyle}>
@@ -176,6 +190,7 @@ export function Practice() {
           onResetTimer={resetTimer}
           isPracticing={isPracticing}
           onPracticeToggle={handlePracticeToggle}
+          onExitClick={handleExitClick}
         />
 
         {/* 메인 영역 */}
@@ -238,6 +253,13 @@ export function Practice() {
           onSlideChange={handleScriptSlideChange}
         />
       )}
+
+      {/* 종료 모달 */}
+      <ExitModal
+        isOpen={showExitModal}
+        onCancel={handleExitCancel}
+        onConfirm={handleExitConfirm}
+      />
     </div>
   );
 }

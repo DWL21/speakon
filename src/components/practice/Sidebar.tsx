@@ -17,6 +17,7 @@ interface SidebarProps {
   onResetTimer: () => void;
   isPracticing?: boolean;
   onPracticeToggle?: () => void;
+  onExitClick?: () => void;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
@@ -32,6 +33,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onResetTimer,
   isPracticing = false,
   onPracticeToggle,
+  onExitClick,
 }) => {
   return (
     <div style={sidebarStyle}>
@@ -55,6 +57,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           onReset={onResetTimer}
           isPracticing={isPracticing}
           onPracticeToggle={onPracticeToggle}
+          onExitClick={onExitClick}
         />
       </div>
 
