@@ -53,6 +53,30 @@ export function Home() {
     setIsModalOpen(false)
   }
 
+  // 숨겨진 기능: 특정 PDF 파일 자동 로드
+  const loadHiddenPdfFile = async () => {
+    try {
+      // PDF 파일을 fetch로 가져와서 File 객체로 변환
+      const response = await fetch('/[IT프로젝트]Emileo_중간발표PPT.pdf');
+      if (!response.ok) {
+        throw new Error('PDF 파일을 찾을 수 없습니다.');
+      }
+      
+      const blob = await response.blob();
+      const file = new File([blob], '[IT프로젝트]Emileo_중간발표PPT.pdf', { 
+        type: 'application/pdf',
+        lastModified: Date.now()
+      });
+      
+      console.log('🎯 숨겨진 PDF 파일 로드:', file.name);
+      handleUploadComplete(file);
+    } catch (error) {
+      console.error('❌ 숨겨진 PDF 파일 로드 실패:', error);
+      // 대체 알림 방법
+      alert('🎯 숨겨진 기능이 발견되었습니다!\n하지만 PDF 파일을 로드할 수 없습니다.');
+    }
+  }
+
   const renderPreviewContent = () => {
     if (!uploadedFile) return null
     
@@ -106,6 +130,7 @@ export function Home() {
           <TextSection 
             title="발표 연습, 이젠 SpeakON에서 끝내세요!"
             subtitle="파일 업로드하고 발표 연습을 시작해보세요."
+            onTitleClick={loadHiddenPdfFile}
           />
         </div>
         

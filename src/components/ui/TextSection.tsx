@@ -5,9 +5,10 @@ import { typography } from '../../theme/typography';
 interface TextSectionProps {
   title: string;
   subtitle: string;
+  onTitleClick?: () => void;
 }
 
-export const TextSection: React.FC<TextSectionProps> = ({ title, subtitle }) => {
+export const TextSection: React.FC<TextSectionProps> = ({ title, subtitle, onTitleClick }) => {
   return (
     <div 
       className="text-section"
@@ -31,11 +32,15 @@ export const TextSection: React.FC<TextSectionProps> = ({ title, subtitle }) => 
       >
         <div 
           className="title-text"
+          onClick={onTitleClick}
           style={{
             ...typography.title[1],
             color: colors.label.normal,
             textAlign: 'center',
             margin: 0,
+            cursor: onTitleClick ? 'pointer' : 'default',
+            userSelect: 'none',
+            transition: 'opacity 0.2s ease',
           }}
         >
           {title}

@@ -110,9 +110,6 @@ const scriptToggleButtonStyle: React.CSSProperties = {
   justifyContent: 'center',
   borderRadius: '4px',
   transition: 'background-color 0.2s ease',
-  ':hover': {
-    backgroundColor: colors.fill.normal,
-  },
 };
 
 const pageTimeStyle: React.CSSProperties = {
