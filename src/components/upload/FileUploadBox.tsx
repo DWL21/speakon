@@ -14,6 +14,7 @@ export const FileUploadBox: React.FC<FileUploadBoxProps> = ({ className = '', on
   const [progress, setProgress] = useState(0);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [error, setError] = useState<{ title: string; message: string } | null>(null);
+  const [isHovered, setIsHovered] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleClick = () => {
@@ -236,7 +237,9 @@ export const FileUploadBox: React.FC<FileUploadBoxProps> = ({ className = '', on
       
       <div 
         className={`upload-container ${className}`}
-        onClick={handleClick} 
+        onClick={handleClick}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
         style={{ 
           cursor: isUploading ? 'default' : 'pointer',
           display: 'flex',
@@ -246,7 +249,7 @@ export const FileUploadBox: React.FC<FileUploadBoxProps> = ({ className = '', on
           padding: '60px 40px',
           width: '100%',
           minHeight: '300px',
-          backgroundColor: colors.fill.normal,
+          backgroundColor: isHovered && !isUploading ? colors.fill.strong : colors.fill.normal,
           borderRadius: '30px',
           transition: 'all 0.2s ease',
           boxSizing: 'border-box',
