@@ -56,24 +56,42 @@ export function Home() {
   // 숨겨진 기능: 특정 PDF 파일 자동 로드
   const loadHiddenPdfFile = async () => {
     try {
-      // PDF 파일을 fetch로 가져와서 File 객체로 변환
-      const response = await fetch('/[IT프로젝트]Emileo_중간발표PPT.pdf');
-      if (!response.ok) {
+      // PDF 파일과 대본 데이터를 동시에 로드
+      const [pdfResponse, scriptsResponse] = await Promise.all([
+        fetch('/[IT프로젝트]Emileo_중간발표PPT.pdf'),
+        fetch('/example-scripts.json')
+      ]);
+      
+      if (!pdfResponse.ok) {
         throw new Error('PDF 파일을 찾을 수 없습니다.');
       }
       
-      const blob = await response.blob();
+      if (!scriptsResponse.ok) {
+        throw new Error('대본 파일을 찾을 수 없습니다.');
+      }
+      
+      // PDF 파일 변환
+      const blob = await pdfResponse.blob();
       const file = new File([blob], '[IT프로젝트]Emileo_중간발표PPT.pdf', { 
         type: 'application/pdf',
         lastModified: Date.now()
       });
       
+      // 대본 데이터 로드
+      const scriptsData = await scriptsResponse.json();
+      const slidesData: SlideInput[] = scriptsData.slides || [];
+      
       console.log('🎯 숨겨진 PDF 파일 로드:', file.name);
-      handleUploadComplete(file);
+      console.log('📜 대본 데이터 로드:', slidesData.length + '개 슬라이드');
+      
+      // 파일과 대본 데이터 설정
+      setUploadedFile(file);
+      setSlides(slidesData);
+      setIsModalOpen(true);
     } catch (error) {
-      console.error('❌ 숨겨진 PDF 파일 로드 실패:', error);
+      console.error('❌ 숨겨진 파일 로드 실패:', error);
       // 대체 알림 방법
-      alert('🎯 숨겨진 기능이 발견되었습니다!\n하지만 PDF 파일을 로드할 수 없습니다.');
+      alert('🎯 숨겨진 기능이 발견되었습니다!\n하지만 파일을 로드할 수 없습니다.');
     }
   }
 
