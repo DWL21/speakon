@@ -61,12 +61,8 @@ export function Result() {
       <div style={pageContentStyle}>
         <div style={headerStyle}>
           <div style={headerContentStyle}>
-            <div style={titleSectionStyle}>
-              <span style={titleStyle}>총 소요시간</span>
-            </div>
-            <div style={timeSectionStyle}>
-              <span style={timeStyle}>{formatTime(practiceResult.totalTime)}</span>
-            </div>
+            <span style={titleStyle}>총 소요시간</span>
+            <span style={timeStyle}>{formatTime(practiceResult.totalTime)}</span>
           </div>
         </div>
         
@@ -147,9 +143,10 @@ const headerStyle: React.CSSProperties = {
 
 const headerContentStyle: React.CSSProperties = {
   display: 'flex',
-  alignItems: 'flex-end',
-  justifyContent: 'space-between',
+  alignItems: 'center',
+  gap: '15px',
   padding: '20px 0',
+  paddingLeft: '15px',
 };
 
 const titleSectionStyle: React.CSSProperties = {
