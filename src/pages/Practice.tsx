@@ -34,7 +34,7 @@ export function Practice() {
   useEffect(() => {
     if (practiceData) {
       const currentSlideData = practiceData.slides.find(slide => slide.slideNumber === currentSlide);
-      setScriptContent(currentSlideData?.content || '해당 슬라이드의 대본을 입력하세요.');
+      setScriptContent(currentSlideData?.content || '');
     }
   }, [currentSlide, practiceData]);
 
