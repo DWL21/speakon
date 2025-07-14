@@ -60,7 +60,7 @@ export const TimerControl: React.FC<TimerControlProps> = ({
       
       <div style={timerButtonsStyle}>
         <Button 
-          variant="primary"
+          variant={isRunning ? "secondary" : "primary"}
           size="small"
           onClick={onToggle}
         >
