@@ -63,6 +63,12 @@ export const TimerControl: React.FC<TimerControlProps> = ({
           variant={isRunning ? "secondary" : "primary"}
           size="small"
           onClick={onToggle}
+          style={{ 
+            width: '53px',
+            height: '30px',
+            padding: '7px 15px',
+            minWidth: 'auto'
+          }}
         >
           {isRunning ? '중지' : '재생'}
         </Button>
@@ -70,7 +76,13 @@ export const TimerControl: React.FC<TimerControlProps> = ({
           variant="ghost"
           size="small"
           onClick={onExitClick || onReset}
-          style={{ color: colors.primary.normal }}
+          style={{ 
+            color: colors.primary.normal,
+            width: '53px',
+            height: '30px',
+            padding: '7px 15px',
+            minWidth: 'auto'
+          }}
         >
           종료
         </Button>
@@ -81,7 +93,7 @@ export const TimerControl: React.FC<TimerControlProps> = ({
 
 const timerControlStyle: React.CSSProperties = {
   display: 'flex',
-  width: '267px',
+  width: '250px',
   height: '57px',
   padding: '7px 0px',
   justifyContent: 'center',
@@ -111,7 +123,7 @@ const timerDisplayStyle: React.CSSProperties = {
 const timerButtonsStyle: React.CSSProperties = {
   display: 'flex',
   flexDirection: 'row',
-  gap: '8px',
+  gap: '0px',
   alignItems: 'center',
   justifyContent: 'flex-start',
 };
