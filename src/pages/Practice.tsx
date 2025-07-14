@@ -344,7 +344,7 @@ export function Practice() {
                   style={{
                     ...textareaStyle,
                     backgroundColor: isScriptFocused ? colors.static.white : colors.fill.normal,
-                    border: isScriptFocused ? `2px solid ${colors.primary.normal}` : '2px solid transparent',
+                    border: isScriptFocused ? `3px solid ${colors.primary.normal}` : '3px solid transparent',
                     transition: 'background-color 0.2s ease, border-color 0.2s ease'
                   }}
                 />
@@ -468,9 +468,9 @@ const scriptInputContainerStyle: React.CSSProperties = {
 // 대본 텍스트에어리어
 const textareaStyle: React.CSSProperties = {
   width: '100%',
-  height: '185px',
-  maxHeight: '185px',
-  minHeight: '110px',
+  height: '191px',
+  maxHeight: '191px',
+  minHeight: '116px',
   borderRadius: '15px',
   padding: '35px 40px',
   fontSize: '16px',
