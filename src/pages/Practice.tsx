@@ -437,7 +437,6 @@ const pdfViewerContainerStyle: React.CSSProperties = {
   backgroundColor: colors.fill.normal,
   borderRadius: '12px',
   height: '614px',
-  marginTop: '20px',
   overflow: 'hidden',
   display: 'flex',
   alignItems: 'center',
