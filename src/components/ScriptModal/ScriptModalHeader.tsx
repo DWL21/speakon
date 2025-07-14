@@ -37,6 +37,7 @@ const headerStyle: React.CSSProperties = {
   justifyContent: 'flex-start',
   width: '100%',
   gap: '15px',
+  paddingLeft: '10px',
 };
 
 const titleStyle: React.CSSProperties = {
