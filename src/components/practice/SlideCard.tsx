@@ -45,9 +45,9 @@ export const SlideCard: React.FC<SlideCardProps> = ({
 
 const slideCardStyle: React.CSSProperties = {
   display: 'flex',
-  alignItems: 'center',
+  alignItems: 'flex-start',
   padding: '12px 20px',
-  gap: '4px',
+  gap: '10px',
   cursor: 'pointer',
   transition: 'background-color 0.2s',
   boxSizing: 'border-box',
