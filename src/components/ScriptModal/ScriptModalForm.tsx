@@ -93,4 +93,5 @@ const inputListStyle: React.CSSProperties = {
   gap: '20px',
   overflowY: 'auto',
   maxHeight: '598px',
+  paddingRight: '10px',
 }; 
