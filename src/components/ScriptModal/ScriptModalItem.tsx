@@ -91,6 +91,7 @@ const itemStyle: React.CSSProperties = {
   flexDirection: 'column',
   gap: '12px',
   width: '100%',
+  marginTop: '20px',
 };
 
 const headerStyle: React.CSSProperties = {
