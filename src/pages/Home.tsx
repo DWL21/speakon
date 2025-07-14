@@ -144,7 +144,7 @@ export function Home() {
         }}
       >
         {/* 타이틀 섹션 */}
-        <div style={{ width: '100%' }}>
+        <div style={{ width: '100%', paddingLeft: '15px' }}>
           <TextSection 
             title="발표 연습, 이젠 SpeakON에서 끝내세요!"
             subtitle="파일 업로드하고 발표 연습을 시작해보세요."
