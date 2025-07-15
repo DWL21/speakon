@@ -121,7 +121,7 @@ const flipCardFaceStyle: React.CSSProperties = {
 };
 
 const flipCardFrontStyle: React.CSSProperties = {
-  backgroundColor: '#d9d9d9',
+  backgroundColor: colors.fill.neutral,
 };
 
 const flipCardBackStyle: React.CSSProperties = {
