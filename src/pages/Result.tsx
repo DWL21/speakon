@@ -244,6 +244,11 @@ const homeButtonTextStyle: React.CSSProperties = {
 
 const retryButtonStyle: React.CSSProperties = {
   width: '110px',
+  color: '#FFF',
+  fontFamily: 'Pretendard',
+  fontSize: '13px',
+  fontWeight: 500,
+  lineHeight: 'normal',
 };
 
 const errorContainerStyle: React.CSSProperties = {
