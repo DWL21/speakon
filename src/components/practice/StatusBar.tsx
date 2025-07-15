@@ -125,7 +125,7 @@ const pageTimeStyle: React.CSSProperties = {
 const pageIndicatorStyle: React.CSSProperties = {
   display: 'flex',
   gap: '4px',
-  fontSize: '18px',
+  fontSize: '14px',
   fontWeight: 500,
   color: colors.label.neutral,
   fontFamily: 'Pretendard, sans-serif',
