@@ -4,7 +4,7 @@ import { SimplePdfViewer } from '../components/ui/SimplePdfViewer';
 import { TopNavBar } from '../components/ui/TopNavBar';
 import { GoalTimeModal } from '../components/ui/GoalTimeModal';
 import { ScriptModal } from '../components/ScriptModal';
-import { Sidebar, StatusBar, ExitModal, PracticeGuide } from '../components/practice';
+import { Sidebar, StatusBar, ExitModal, PracticeGuide, PracticeToolbar } from '../components/practice';
 import { colors } from '../theme/colors';
 import { SlideInput } from '../components/ScriptModal/ScriptModalForm';
 
@@ -350,6 +350,19 @@ export function Practice() {
                 />
               </div>
             )}
+            
+            {/* 연습 툴바 - 피그마 디자인에 맞춤 */}
+            <PracticeToolbar
+              onViewToggle={handleScriptInputToggle}
+              onTimer={handleTimeSettingClick}
+              onEditScript={handleScriptWritingClick}
+              onStartPractice={() => console.log('연습 시작')}
+              onPracticeToggle={handlePracticeToggle}
+              currentPageTime={currentPageTime}
+              isViewVisible={isScriptInputVisible}
+              isPracticing={isPracticing}
+              disabled={false}
+            />
           </div>
         </div>
       </div>

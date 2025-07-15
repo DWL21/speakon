@@ -4,3 +4,4 @@ export { StatusBar } from './StatusBar';
 export { Sidebar } from './Sidebar';
 export { ExitModal } from './ExitModal';
 export { PracticeGuide } from './PracticeGuide';
+export { PracticeToolbar } from './PracticeToolbar';

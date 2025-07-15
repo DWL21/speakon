@@ -1,0 +1,300 @@
+import React, { useState } from 'react';
+import { colors } from '../../theme/colors';
+
+interface PracticeToolbarProps {
+  onViewToggle?: () => void;
+  onTimer?: () => void;
+  onEditScript?: () => void;
+  onStartPractice?: () => void;
+  onPracticeToggle?: () => void;
+  currentPageTime?: { minutes: number; seconds: number };
+  isViewVisible?: boolean;
+  isPracticing?: boolean;
+  disabled?: boolean;
+}
+
+export const PracticeToolbar: React.FC<PracticeToolbarProps> = ({
+  onViewToggle,
+  onTimer,
+  onEditScript,
+  onStartPractice,
+  onPracticeToggle,
+  currentPageTime = { minutes: 0, seconds: 0 },
+  isViewVisible = true,
+  isPracticing = false,
+  disabled = false,
+}) => {
+  const [isHovered, setIsHovered] = useState(false);
+  const formatTime = (value: number) => value.toString().padStart(2, '0');
+
+  const handleTimerDisplayClick = () => {
+    if (onPracticeToggle) {
+      onPracticeToggle();
+    }
+  };
+
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+  };
+
+  return (
+    <div style={toolbarContainerStyle}>
+      <div style={toolbarStyle}>
+        {/* 좌측 영역: 뷰 토글 + 구분선 */}
+        <div style={leftSectionStyle}>
+          <button
+            onClick={onViewToggle}
+            style={viewToggleButtonStyle}
+            disabled={disabled}
+          >
+            <ViewIcon />
+          </button>
+          <div style={dividerStyle}>
+            <svg width="6" height="33" viewBox="0 0 6 33" fill="none">
+              <path
+                d="M3 5L3 28"
+                stroke={colors.line.alternative}
+                strokeLinecap="round"
+              />
+            </svg>
+          </div>
+        </div>
+
+        {/* 중앙 영역: 현재 페이지 시간 표시 또는 연습 중 상태 */}
+        <div 
+          style={{
+            ...timerDisplayStyle,
+            cursor: onPracticeToggle ? 'pointer' : 'default',
+            fontWeight: isHovered ? 600 : 500,
+            transform: isHovered ? 'scale(1.02)' : 'scale(1)',
+            transition: 'all 0.2s ease',
+          }}
+          onClick={handleTimerDisplayClick}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+        >
+          {isPracticing ? (
+            <span>연습 중</span>
+          ) : (
+            <>
+              <span>{formatTime(currentPageTime.minutes)}</span>
+              <span>:</span>
+              <span>{formatTime(currentPageTime.seconds)}</span>
+            </>
+          )}
+        </div>
+
+        {/* 우측 영역: 액션 버튼들 */}
+        <div style={rightSectionStyle}>
+          <div style={actionButtonsStyle}>
+            <button
+              onClick={onEditScript}
+              style={{
+                ...iconButtonStyle,
+                backgroundColor: colors.fill.neutral,
+              }}
+              disabled={disabled}
+            >
+              <EditIcon />
+            </button>
+            <button
+              onClick={onTimer}
+              style={iconButtonStyle}
+              disabled={disabled}
+            >
+              <TimerIcon />
+            </button>
+          </div>
+          <button
+            onClick={onStartPractice}
+            style={practiceButtonStyle}
+            disabled={disabled}
+          >
+            연습
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// 아이콘 컴포넌트들 - 피그마 디자인에서 추출
+const ViewIcon = () => (
+  <svg width="24" height="25" viewBox="0 0 24 25" fill="none">
+    <path 
+      d="M3.9074 9.02634C7.53762 2.82455 16.4624 2.82455 20.0926 9.02634C21.3025 11.0932 21.3025 13.6568 20.0926 15.7237C16.4624 21.9254 7.53762 21.9254 3.9074 15.7237C2.69753 13.6568 2.69753 11.0932 3.9074 9.02634Z" 
+      stroke="#7D7E83" 
+      strokeWidth="1.5" 
+      strokeLinecap="round" 
+      strokeLinejoin="round"
+    />
+    <path 
+      fillRule="evenodd" 
+      clipRule="evenodd" 
+      d="M15.5567 12.4357C15.5567 14.4311 13.9637 16.0483 11.9994 16.0483C10.0352 16.0483 8.44331 14.4311 8.44331 12.4357C8.44331 10.4391 10.0352 8.82199 11.9994 8.82199C13.9637 8.82199 15.5567 10.4391 15.5567 12.4357Z" 
+      stroke="#7D7E83" 
+      strokeWidth="1.5" 
+      strokeLinecap="round" 
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+const EditIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+    <path
+      d="M19 10V15.4C19 17.38 17.38 19 15.4 19H4.59998C2.61998 19 1 17.38 1 15.4V4.60001C1 2.62001 2.61998 1 4.59998 1H10"
+      stroke="#7D7E83"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="1.5"
+    />
+    <path
+      d="M9.31456 7.14999L5.21459 11.25C5.03459 11.43 4.82457 11.53 4.57457 11.55L2.12456 11.78C1.48456 11.84 0.944565 11.29 1.00456 10.65L1.22454 8.26999C1.24454 8.01999 1.34458 7.79997 1.52458 7.62997L5.66454 3.48999L9.31456 7.14999V7.14999Z"
+      stroke="#7D7E83"
+      strokeLinejoin="round"
+      strokeWidth="1.5"
+    />
+    <path
+      d="M11.5146 4.96L9.31458 7.15001L5.66455 3.49L7.85455 1.3C8.25455 0.9 8.91458 0.9 9.31458 1.3L11.5146 3.49C11.9046 3.89 11.9046 4.56 11.5146 4.96V4.96Z"
+      stroke="#7D7E83"
+      strokeLinejoin="round"
+      strokeWidth="1.5"
+    />
+  </svg>
+);
+
+const TimerIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+    <path
+      d="M19 10V15.4C19 17.38 17.38 19 15.4 19H4.59998C2.61998 19 1 17.38 1 15.4V4.60001C1 2.62001 2.61998 1 4.59998 1H10"
+      stroke="#7D7E83"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="1.5"
+    />
+    <path
+      d="M9.31456 7.14999L5.21459 11.25C5.03459 11.43 4.82457 11.53 4.57457 11.55L2.12456 11.78C1.48456 11.84 0.944565 11.29 1.00456 10.65L1.22454 8.26999C1.24454 8.01999 1.34458 7.79997 1.52458 7.62997L5.66454 3.48999L9.31456 7.14999V7.14999Z"
+      stroke="#7D7E83"
+      strokeLinejoin="round"
+      strokeWidth="1.5"
+    />
+    <path
+      d="M11.5146 4.96L9.31458 7.15001L5.66455 3.49L7.85455 1.3C8.25455 0.9 8.91458 0.9 9.31458 1.3L11.5146 3.49C11.9046 3.89 11.9046 4.56 11.5146 4.96V4.96Z"
+      stroke="#7D7E83"
+      strokeLinejoin="round"
+      strokeWidth="1.5"
+    />
+  </svg>
+);
+
+// 스타일 정의 - 피그마 디자인에 정확히 맞춤
+const toolbarContainerStyle: React.CSSProperties = {
+  width: '100%',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  padding: '4px 0',
+  backgroundColor: colors.background.normal,
+};
+
+const toolbarStyle: React.CSSProperties = {
+  backgroundColor: colors.background.normal,
+  borderRadius: '15px',
+  border: `0.5px solid ${colors.fill.neutral}`,
+  boxShadow: '1px 1px 5px 0px rgba(0,0,0,0.1)',
+  display: 'flex',
+  alignItems: 'center',
+  padding: '4px 16px',
+  gap: '12px',
+  height: '48px',
+  fontFamily: 'Pretendard, sans-serif',
+};
+
+const leftSectionStyle: React.CSSProperties = {
+  display: 'flex',
+  alignItems: 'center',
+  gap: '2px',
+};
+
+const viewToggleButtonStyle: React.CSSProperties = {
+  background: 'none',
+  border: 'none',
+  cursor: 'pointer',
+  padding: '5px',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  borderRadius: '7px',
+  transition: 'background-color 0.2s ease',
+};
+
+const dividerStyle: React.CSSProperties = {
+  height: '33px',
+  width: '6px',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+};
+
+const timerDisplayStyle: React.CSSProperties = {
+  backgroundColor: '#F9F9F9',
+  border: `0.7px solid ${colors.fill.neutral}`,
+  borderRadius: '12px',
+  padding: '6px 10px',
+  display: 'flex',
+  alignItems: 'center',
+  gap: '5px',
+  height: '40px',
+  width: '87px',
+  justifyContent: 'center',
+  fontSize: '16px',
+  fontWeight: 500,
+  color: colors.label.neutral,
+  fontFamily: 'Pretendard, sans-serif',
+};
+
+const rightSectionStyle: React.CSSProperties = {
+  display: 'flex',
+  alignItems: 'center',
+  gap: '10px',
+  padding: '0 4px',
+};
+
+const actionButtonsStyle: React.CSSProperties = {
+  display: 'flex',
+  alignItems: 'center',
+  gap: '8px',
+};
+
+const iconButtonStyle: React.CSSProperties = {
+  background: 'none',
+  border: 'none',
+  cursor: 'pointer',
+  padding: '5px',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  borderRadius: '7px',
+  transition: 'background-color 0.2s ease',
+  width: '34px',
+  height: '34px',
+};
+
+const practiceButtonStyle: React.CSSProperties = {
+  backgroundColor: colors.primary.normal,
+  color: colors.static.white,
+  border: 'none',
+  borderRadius: '8px',
+  padding: '7px 15px',
+  fontSize: '13px',
+  fontWeight: 500,
+  fontFamily: 'Pretendard, sans-serif',
+  cursor: 'pointer',
+  transition: 'background-color 0.2s ease',
+  lineHeight: 1,
+};
