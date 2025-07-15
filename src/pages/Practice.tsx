@@ -324,7 +324,7 @@ export function Practice() {
                     onStopwatchToggle={handleStopwatchToggle}
                     embedded={true}
                     initialMinutes={isGoalTimeSet ? goalTime.minutes : 10}
-                    initialSeconds={isGoalTimeSet ? goalTime.seconds : 30}
+                    initialSeconds={isGoalTimeSet ? goalTime.seconds : 0}
                     initialStopwatchSetting={showStopwatch}
                   />
                 </div>
