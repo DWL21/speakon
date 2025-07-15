@@ -45,7 +45,7 @@ export const TimerControl: React.FC<TimerControlProps> = ({
       <div 
         style={{
           ...timerDisplayStyle,
-          backgroundColor: isPracticing ? '#F1F2F5' : colors.fill.normal,
+          backgroundColor: 'transparent',
           cursor: onPracticeToggle ? 'pointer' : 'default',
           fontWeight: isHovered ? 600 : 500,
           transform: isHovered ? 'scale(1.02)' : 'scale(1)',
@@ -110,7 +110,7 @@ const timerDisplayStyle: React.CSSProperties = {
   alignItems: 'center',
   gap: '8px',
   flexShrink: 0,
-  backgroundColor: colors.fill.normal,
+  backgroundColor: 'transparent',
   borderRadius: '8px',
   fontSize: '18px',
   fontWeight: 500,
