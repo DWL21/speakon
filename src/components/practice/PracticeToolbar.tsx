@@ -23,6 +23,9 @@ export const PracticeToolbar: React.FC<PracticeToolbarProps> = ({
   disabled = false,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const [viewHovered, setViewHovered] = useState(false);
+  const [scriptHovered, setScriptHovered] = useState(false);
+  const [timerHovered, setTimerHovered] = useState(false);
   const formatTime = (value: number) => value.toString().padStart(2, '0');
 
   const handleTimerDisplayClick = () => {
@@ -46,7 +49,12 @@ export const PracticeToolbar: React.FC<PracticeToolbarProps> = ({
         <div style={leftSectionStyle}>
           <button
             onClick={onViewToggle}
-            style={viewToggleButtonStyle}
+            style={{
+              ...viewToggleButtonStyle,
+              backgroundColor: viewHovered ? colors.fill.neutral : 'transparent',
+            }}
+            onMouseEnter={() => setViewHovered(true)}
+            onMouseLeave={() => setViewHovered(false)}
             disabled={disabled}
           >
             <ViewIcon />
@@ -91,14 +99,24 @@ export const PracticeToolbar: React.FC<PracticeToolbarProps> = ({
           <div style={actionButtonsStyle}>
             <button
               onClick={onEditScript}
-              style={iconButtonStyle}
+              style={{
+                ...iconButtonStyle,
+                backgroundColor: scriptHovered ? colors.fill.neutral : 'transparent',
+              }}
+              onMouseEnter={() => setScriptHovered(true)}
+              onMouseLeave={() => setScriptHovered(false)}
               disabled={disabled}
             >
               <ScriptIcon />
             </button>
             <button
               onClick={onTimeSettingClick}
-              style={iconButtonStyle}
+              style={{
+                ...iconButtonStyle,
+                backgroundColor: timerHovered ? colors.fill.neutral : 'transparent',
+              }}
+              onMouseEnter={() => setTimerHovered(true)}
+              onMouseLeave={() => setTimerHovered(false)}
               disabled={disabled}
             >
               <TimerGoalIcon />
