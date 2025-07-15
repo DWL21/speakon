@@ -3,24 +3,22 @@ import { colors } from '../../theme/colors';
 
 interface PracticeToolbarProps {
   onViewToggle?: () => void;
-  onTimer?: () => void;
+  onTimeSettingClick?: () => void;
   onEditScript?: () => void;
-  onStartPractice?: () => void;
   onPracticeToggle?: () => void;
+  onEnd?: () => void;
   currentPageTime?: { minutes: number; seconds: number };
-  isViewVisible?: boolean;
   isPracticing?: boolean;
   disabled?: boolean;
 }
 
 export const PracticeToolbar: React.FC<PracticeToolbarProps> = ({
   onViewToggle,
-  onTimer,
+  onTimeSettingClick,
   onEditScript,
-  onStartPractice,
   onPracticeToggle,
+  onEnd,
   currentPageTime = { minutes: 0, seconds: 0 },
-  isViewVisible = true,
   isPracticing = false,
   disabled = false,
 }) => {
@@ -93,28 +91,25 @@ export const PracticeToolbar: React.FC<PracticeToolbarProps> = ({
           <div style={actionButtonsStyle}>
             <button
               onClick={onEditScript}
-              style={{
-                ...iconButtonStyle,
-                backgroundColor: colors.fill.neutral,
-              }}
-              disabled={disabled}
-            >
-              <EditIcon />
-            </button>
-            <button
-              onClick={onTimer}
               style={iconButtonStyle}
               disabled={disabled}
             >
-              <TimerIcon />
+              <ScriptIcon />
+            </button>
+            <button
+              onClick={onTimeSettingClick}
+              style={iconButtonStyle}
+              disabled={disabled}
+            >
+              <TimerGoalIcon />
             </button>
           </div>
           <button
-            onClick={onStartPractice}
-            style={practiceButtonStyle}
+            onClick={onEnd}
+            style={endButtonStyle}
             disabled={disabled}
           >
-            연습
+            종료
           </button>
         </div>
       </div>
@@ -144,53 +139,54 @@ const ViewIcon = () => (
   </svg>
 );
 
-const EditIcon = () => (
-  <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-    <path
-      d="M19 10V15.4C19 17.38 17.38 19 15.4 19H4.59998C2.61998 19 1 17.38 1 15.4V4.60001C1 2.62001 2.61998 1 4.59998 1H10"
-      stroke="#7D7E83"
+const ScriptIcon = () => (
+  <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <g clipPath="url(#clip0_1009_2446)">
+      <path d="M21 12.375V17.775C21 19.755 19.38 21.375 17.4 21.375H6.59998C4.61998 21.375 3 19.755 3 17.775V6.97501C3 4.99501 4.61998 3.375 6.59998 3.375H12" stroke="#7D7E83" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M18.5001 9.54477L14.4001 13.6447C14.2201 13.8247 14.0101 13.9248 13.7601 13.9448L11.3101 14.1747C10.6701 14.2347 10.1301 13.6848 10.1901 13.0448L10.4101 10.6648C10.4301 10.4148 10.5301 10.1947 10.7101 10.0247L14.8501 5.88477L18.5001 9.54477V9.54477Z" stroke="#7D7E83" strokeWidth="1.5" strokeLinejoin="round"/>
+      <path d="M20.7001 7.35453L18.5001 9.54454L14.8501 5.88453L17.0401 3.69453C17.4401 3.29453 18.1001 3.29453 18.5001 3.69453L20.7001 5.88453C21.0901 6.28453 21.0901 6.95453 20.7001 7.35453V7.35453Z" stroke="#7D7E83" strokeWidth="1.5" strokeLinejoin="round"/>
+    </g>
+    <defs>
+      <clipPath id="clip0_1009_2446">
+        <rect width="24" height="24" fill="white" transform="translate(0 0.375)"/>
+      </clipPath>
+    </defs>
+  </svg>
+);
+
+const TimerGoalIcon = () => (
+  <svg width="18" height="21" viewBox="0 0 18 21" fill="none">
+    <path 
+      d="M8.99988 19.4041C13.0702 19.4041 16.3699 15.9925 16.3699 11.7841C16.3699 7.57565 13.0702 4.16406 8.99988 4.16406C4.92954 4.16406 1.62988 7.57565 1.62988 11.7841C1.62988 15.9925 4.92954 19.4041 8.99988 19.4041Z" 
+      stroke="#7D7E83" 
+      strokeWidth="1.5" 
+      strokeLinecap="round" 
+      strokeLinejoin="round"
+    />
+    <path 
+      d="M1.86987 3.42453L4.66987 1.39453" 
+      stroke="#7D7E83" 
+      strokeWidth="1.5" 
+      strokeMiterlimit="10" 
       strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth="1.5"
     />
-    <path
-      d="M9.31456 7.14999L5.21459 11.25C5.03459 11.43 4.82457 11.53 4.57457 11.55L2.12456 11.78C1.48456 11.84 0.944565 11.29 1.00456 10.65L1.22454 8.26999C1.24454 8.01999 1.34458 7.79997 1.52458 7.62997L5.66454 3.48999L9.31456 7.14999V7.14999Z"
-      stroke="#7D7E83"
-      strokeLinejoin="round"
-      strokeWidth="1.5"
+    <path 
+      d="M16.6298 3.42453L13.8298 1.39453" 
+      stroke="#7D7E83" 
+      strokeWidth="1.5" 
+      strokeMiterlimit="10" 
+      strokeLinecap="round"
     />
-    <path
-      d="M11.5146 4.96L9.31458 7.15001L5.66455 3.49L7.85455 1.3C8.25455 0.9 8.91458 0.9 9.31458 1.3L11.5146 3.49C11.9046 3.89 11.9046 4.56 11.5146 4.96V4.96Z"
-      stroke="#7D7E83"
+    <path 
+      d="M9 8.7041V11.9841L11.26 13.9341" 
+      stroke="#7D7E83" 
+      strokeWidth="1.5" 
+      strokeLinecap="round" 
       strokeLinejoin="round"
-      strokeWidth="1.5"
     />
   </svg>
 );
 
-const TimerIcon = () => (
-  <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-    <path
-      d="M19 10V15.4C19 17.38 17.38 19 15.4 19H4.59998C2.61998 19 1 17.38 1 15.4V4.60001C1 2.62001 2.61998 1 4.59998 1H10"
-      stroke="#7D7E83"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth="1.5"
-    />
-    <path
-      d="M9.31456 7.14999L5.21459 11.25C5.03459 11.43 4.82457 11.53 4.57457 11.55L2.12456 11.78C1.48456 11.84 0.944565 11.29 1.00456 10.65L1.22454 8.26999C1.24454 8.01999 1.34458 7.79997 1.52458 7.62997L5.66454 3.48999L9.31456 7.14999V7.14999Z"
-      stroke="#7D7E83"
-      strokeLinejoin="round"
-      strokeWidth="1.5"
-    />
-    <path
-      d="M11.5146 4.96L9.31458 7.15001L5.66455 3.49L7.85455 1.3C8.25455 0.9 8.91458 0.9 9.31458 1.3L11.5146 3.49C11.9046 3.89 11.9046 4.56 11.5146 4.96V4.96Z"
-      stroke="#7D7E83"
-      strokeLinejoin="round"
-      strokeWidth="1.5"
-    />
-  </svg>
-);
 
 // 스타일 정의 - 피그마 디자인에 정확히 맞춤
 const toolbarContainerStyle: React.CSSProperties = {
@@ -285,7 +281,7 @@ const iconButtonStyle: React.CSSProperties = {
   height: '34px',
 };
 
-const practiceButtonStyle: React.CSSProperties = {
+const endButtonStyle: React.CSSProperties = {
   backgroundColor: colors.primary.normal,
   color: colors.static.white,
   border: 'none',

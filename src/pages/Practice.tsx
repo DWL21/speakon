@@ -354,12 +354,11 @@ export function Practice() {
             {/* 연습 툴바 - 피그마 디자인에 맞춤 */}
             <PracticeToolbar
               onViewToggle={handleScriptInputToggle}
-              onTimer={handleTimeSettingClick}
+              onTimeSettingClick={handleTimeSettingClick}
               onEditScript={handleScriptWritingClick}
-              onStartPractice={() => console.log('연습 시작')}
               onPracticeToggle={handlePracticeToggle}
+              onEnd={handleExitClick}
               currentPageTime={currentPageTime}
-              isViewVisible={isScriptInputVisible}
               isPracticing={isPracticing}
               disabled={false}
             />
