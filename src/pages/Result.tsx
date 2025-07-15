@@ -188,7 +188,8 @@ const pdfViewerStyle: React.CSSProperties = {
 
 const slideListStyle: React.CSSProperties = {
   flex: 1,
-  borderRadius: '20px',
+  borderTopLeftRadius: '20px',
+  borderBottomLeftRadius: '20px',
   overflow: 'hidden',
   position: 'relative',
   minWidth: 0,
