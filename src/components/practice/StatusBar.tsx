@@ -4,7 +4,6 @@ import { colors } from '../../theme/colors';
 interface StatusBarProps {
   currentSlide: number;
   totalSlides: number;
-  currentPageTime?: { minutes: number; seconds: number };
   onTimeSettingClick?: () => void;
   onScriptWritingClick?: () => void;
   onScriptInputToggle?: () => void;
@@ -14,25 +13,15 @@ interface StatusBarProps {
 export const StatusBar: React.FC<StatusBarProps> = ({
   currentSlide,
   totalSlides,
-  currentPageTime,
   onTimeSettingClick,
   onScriptWritingClick,
   onScriptInputToggle,
   isScriptInputVisible = true,
 }) => {
-  const formatTime = (value: number) => value.toString().padStart(2, '0');
   return (
     <div style={statusBarStyle}>
-      {/* 왼쪽: 현재 페이지 시간 */}
+      {/* 왼쪽: 빈 공간 */}
       <div style={leftSectionStyle}>
-        <div style={pageTimeStyle}>
-          <span>
-            {currentPageTime ? 
-              `${formatTime(currentPageTime.minutes)}:${formatTime(currentPageTime.seconds)}` : 
-              '00:00'
-            }
-          </span>
-        </div>
       </div>
       
       {/* 중앙: 페이지 번호 */}
