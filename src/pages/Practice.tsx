@@ -296,11 +296,6 @@ export function Practice() {
           <StatusBar
             currentSlide={currentSlide}
             totalSlides={totalSlides}
-            currentPageTime={currentPageTime}
-            onTimeSettingClick={handleTimeSettingClick}
-            onScriptWritingClick={handleScriptWritingClick}
-            onScriptInputToggle={handleScriptInputToggle}
-            isScriptInputVisible={isScriptInputVisible}
           />
 
           {/* 콘텐츠 영역 */}

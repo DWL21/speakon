@@ -10,6 +10,7 @@ interface TimerControlProps {
   onReset: () => void;
   isPracticing?: boolean;
   onPracticeToggle?: () => void;
+  onExitClick?: () => void;
 }
 
 export const TimerControl: React.FC<TimerControlProps> = ({
@@ -20,6 +21,7 @@ export const TimerControl: React.FC<TimerControlProps> = ({
   onReset,
   isPracticing = false,
   onPracticeToggle,
+  onExitClick: _onExitClick,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   const formatTime = (value: number) => value.toString().padStart(2, '0');
