@@ -1,19 +1,21 @@
+const baseFontFamily = "'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif";
+
 export const typography = {
   title: {
     1: {
-      fontFamily: 'Pretendard',
+      fontFamily: baseFontFamily,
       fontWeight: 600,
       fontSize: '22px',
       lineHeight: '22px',
     },
     2: {
-      fontFamily: 'Pretendard',
+      fontFamily: baseFontFamily,
       fontWeight: 600,
       fontSize: '20px',
       lineHeight: '20px',
     },
     3: {
-      fontFamily: 'Pretendard',
+      fontFamily: baseFontFamily,
       fontWeight: 500,
       fontSize: '18px',
       lineHeight: '18px',
@@ -21,13 +23,13 @@ export const typography = {
   },
   body: {
     normal: {
-      fontFamily: 'Pretendard',
+      fontFamily: baseFontFamily,
       fontWeight: 500,
       fontSize: '16px',
       lineHeight: '16px',
     },
     reading: {
-      fontFamily: 'Pretendard',
+      fontFamily: baseFontFamily,
       fontWeight: 500,
       fontSize: '14px',
       lineHeight: '14px',
@@ -35,33 +37,33 @@ export const typography = {
   },
   button: {
     1: {
-      fontFamily: 'Pretendard',
+      fontFamily: baseFontFamily,
       fontWeight: 500,
       fontSize: '16px',
       lineHeight: '16px',
     },
     2: {
-      fontFamily: 'Pretendard',
+      fontFamily: baseFontFamily,
       fontWeight: 500,
       fontSize: '13px',
       lineHeight: '13px',
     },
   },
   label: {
-    fontFamily: 'Pretendard',
+    fontFamily: baseFontFamily,
     fontWeight: 400,
     fontSize: '13px',
     lineHeight: '13px',
   },
   caption: {
-    fontFamily: 'Pretendard',
+    fontFamily: baseFontFamily,
     fontWeight: 400,
     fontSize: '12px',
     lineHeight: '12px',
   },
   heading: {
     2: {
-      fontFamily: 'Pretendard JP',
+      fontFamily: baseFontFamily,
       fontWeight: 600,
       fontSize: '20px',
       lineHeight: '28px',
@@ -69,7 +71,7 @@ export const typography = {
   },
   headline: {
     2: {
-      fontFamily: 'Pretendard JP',
+      fontFamily: baseFontFamily,
       fontWeight: 600,
       fontSize: '17px',
       lineHeight: '24px',
@@ -77,13 +79,13 @@ export const typography = {
   },
   captionBold: {
     1: {
-      fontFamily: 'Pretendard JP',
+      fontFamily: baseFontFamily,
       fontWeight: 600,
       fontSize: '12px',
       lineHeight: '16px',
     },
     2: {
-      fontFamily: 'Pretendard JP',
+      fontFamily: baseFontFamily,
       fontWeight: 600,
       fontSize: '11px',
       lineHeight: '14px',
