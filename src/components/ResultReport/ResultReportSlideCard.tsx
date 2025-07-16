@@ -8,6 +8,7 @@ export interface ResultReportSlideCardProps {
   timeText: string;
   percentageText: string;
   percentage: number;
+  isLongestSlide?: boolean;
   onSlideClick?: () => void;
 }
 
@@ -17,6 +18,7 @@ export const ResultReportSlideCard: React.FC<ResultReportSlideCardProps> = ({
   timeText,
   percentageText,
   percentage,
+  isLongestSlide = false,
   onSlideClick,
 }) => {
   const [showScript, setShowScript] = useState(false);
@@ -30,6 +32,11 @@ export const ResultReportSlideCard: React.FC<ResultReportSlideCardProps> = ({
     <div style={cardContainerStyle}>
       <div style={slideHeaderStyle}>
         <span style={slideNumberStyle}>슬라이드{slideNumber}</span>
+        {isLongestSlide && (
+          <div style={longestSlideTagStyle}>
+            <span style={longestSlideTagTextStyle}>여기서 제일 오래 머물렀어요!</span>
+          </div>
+        )}
       </div>
       
       <div style={flipContainerStyle} onClick={handleCardClick}>
@@ -86,6 +93,7 @@ const slideHeaderStyle: React.CSSProperties = {
   display: 'flex',
   alignItems: 'center',
   paddingLeft: '12px',
+  gap: '17px',
 };
 
 const slideNumberStyle: React.CSSProperties = {
@@ -179,4 +187,23 @@ const progressBarFillStyle: React.CSSProperties = {
   backgroundColor: colors.primary.normal,
   borderRadius: '3px',
   transition: 'width 0.3s ease',
+};
+
+const longestSlideTagStyle: React.CSSProperties = {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  padding: '10px 15px',
+  backgroundColor: '#d5e1f6',
+  borderRadius: '60px',
+  flexShrink: 0,
+};
+
+const longestSlideTagTextStyle: React.CSSProperties = {
+  color: '#0a64ff',
+  fontSize: '16px',
+  fontWeight: 500,
+  fontFamily: 'Pretendard, sans-serif',
+  lineHeight: 'normal',
+  whiteSpace: 'nowrap',
 };

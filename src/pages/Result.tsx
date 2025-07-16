@@ -77,11 +77,21 @@ export function Result() {
           <div style={slideListStyle}>
             <div style={slideListInnerStyle}>
               <div style={slideCardsContainerStyle}>
-                {practiceResult.slides.map((slide) => {
-                  const pageTime = practiceResult.pageTimes[slide.slideNumber] || { minutes: 0, seconds: 0 };
-                  const percentage = calculatePercentage(pageTime);
+                {(() => {
+                  // 가장 높은 퍼센트를 가진 슬라이드 찾기
+                  const slidesWithPercentage = practiceResult.slides.map((slide) => {
+                    const pageTime = practiceResult.pageTimes[slide.slideNumber] || { minutes: 0, seconds: 0 };
+                    const percentage = calculatePercentage(pageTime);
+                    return { slide, pageTime, percentage };
+                  });
                   
-                  return (
+                  const maxPercentage = Math.max(...slidesWithPercentage.map(item => item.percentage));
+                  
+                  // 같은 퍼센트를 가진 슬라이드 중 가장 작은 번호 찾기
+                  const slidesWithMaxPercentage = slidesWithPercentage.filter(item => item.percentage === maxPercentage);
+                  const minSlideNumber = Math.min(...slidesWithMaxPercentage.map(item => item.slide.slideNumber));
+                  
+                  return slidesWithPercentage.map(({ slide, pageTime, percentage }) => (
                     <ResultReportSlideCard
                       key={slide.slideNumber}
                       slideNumber={slide.slideNumber}
@@ -89,10 +99,11 @@ export function Result() {
                       timeText={`${formatTime(pageTime)} 소요`}
                       percentageText={`전체 소요 시간의 ${percentage}%`}
                       percentage={percentage}
+                      isLongestSlide={percentage === maxPercentage && slide.slideNumber === minSlideNumber}
                       onSlideClick={() => setCurrentPage(slide.slideNumber)}
                     />
-                  );
-                })}
+                  ));
+                })()}
               </div>
             </div>
           </div>
