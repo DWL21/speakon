@@ -10,7 +10,6 @@ interface TimerControlProps {
   onReset: () => void;
   isPracticing?: boolean;
   onPracticeToggle?: () => void;
-  onExitClick?: () => void;
 }
 
 export const TimerControl: React.FC<TimerControlProps> = ({
@@ -21,7 +20,6 @@ export const TimerControl: React.FC<TimerControlProps> = ({
   onReset,
   isPracticing = false,
   onPracticeToggle,
-  onExitClick,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   const formatTime = (value: number) => value.toString().padStart(2, '0');
@@ -67,7 +65,9 @@ export const TimerControl: React.FC<TimerControlProps> = ({
             width: '53px',
             height: '30px',
             padding: '7px 15px',
-            minWidth: 'auto'
+            minWidth: 'auto',
+            flexShrink: 0,
+            whiteSpace: 'nowrap'
           }}
         >
           {isRunning ? '중지' : '재생'}
@@ -75,16 +75,18 @@ export const TimerControl: React.FC<TimerControlProps> = ({
         <Button 
           variant="ghost"
           size="small"
-          onClick={onExitClick || onReset}
+          onClick={onReset}
           style={{ 
             color: colors.primary.normal,
             width: '53px',
             height: '30px',
             padding: '7px 15px',
-            minWidth: 'auto'
+            minWidth: 'auto',
+            flexShrink: 0,
+            whiteSpace: 'nowrap'
           }}
         >
-          종료
+          초기화
         </Button>
       </div>
     </div>
@@ -99,6 +101,7 @@ const timerControlStyle: React.CSSProperties = {
   justifyContent: 'center',
   alignItems: 'center',
   gap: '12px',
+  flexWrap: 'nowrap',
 };
 
 const timerDisplayStyle: React.CSSProperties = {
@@ -123,7 +126,9 @@ const timerDisplayStyle: React.CSSProperties = {
 const timerButtonsStyle: React.CSSProperties = {
   display: 'flex',
   flexDirection: 'row',
-  gap: '0px',
+  gap: '5px',
   alignItems: 'center',
   justifyContent: 'flex-start',
+  flexWrap: 'nowrap',
+  flexShrink: 0,
 };
