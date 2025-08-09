@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { colors } from '../../theme/colors';
 import { typography } from '../../theme/typography';
 
@@ -8,6 +8,17 @@ interface PracticeGuideProps {
 }
 
 export const PracticeGuide: React.FC<PracticeGuideProps> = ({ isVisible, onDismiss }) => {
+  // 5초 후 자동으로 사라지게 하는 효과
+  useEffect(() => {
+    if (isVisible) {
+      const timer = setTimeout(() => {
+        onDismiss();
+      }, 5000); // 5초 후 자동 닫기
+
+      return () => clearTimeout(timer);
+    }
+  }, [isVisible, onDismiss]);
+
   if (!isVisible) return null;
 
   return (
