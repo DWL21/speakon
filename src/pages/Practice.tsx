@@ -89,6 +89,34 @@ export function Practice() {
     setCurrentPageTime(existingTime || { minutes: 0, seconds: 0 });
   }, [currentSlide, pageTimes]);
 
+  // 키보드 이벤트 핸들러 추가 (좌우 화살표로 슬라이드 전환)
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      // 대본 입력 영역에 포커스가 있으면 키보드 이벤트 무시
+      if (isScriptFocused) return;
+      
+      // 모달이 열려있으면 키보드 이벤트 무시
+      if (showGoalTimeModal || showScriptModal || showExitModal) return;
+
+      if (event.key === 'ArrowLeft') {
+        // 왼쪽 화살표: 이전 슬라이드
+        if (currentSlide > 1) {
+          handleSlideClick(currentSlide - 1);
+        }
+      } else if (event.key === 'ArrowRight') {
+        // 오른쪽 화살표: 다음 슬라이드
+        if (practiceData && currentSlide < practiceData.slides.length) {
+          handleSlideClick(currentSlide + 1);
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [currentSlide, practiceData, isScriptFocused, showGoalTimeModal, showScriptModal, showExitModal]);
+
 
 
   if (!practiceData) {
