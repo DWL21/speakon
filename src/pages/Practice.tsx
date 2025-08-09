@@ -356,6 +356,8 @@ export function Practice() {
               currentPageTime={currentPageTime}
               isPracticing={isPracticing}
               disabled={false}
+              currentSlide={currentSlide}
+              totalSlides={practiceData.slides.length}
             />
           </div>
         </div>

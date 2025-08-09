@@ -10,6 +10,8 @@ interface PracticeToolbarProps {
   currentPageTime?: { minutes: number; seconds: number };
   isPracticing?: boolean;
   disabled?: boolean;
+  currentSlide?: number;
+  totalSlides?: number;
 }
 
 export const PracticeToolbar: React.FC<PracticeToolbarProps> = ({
@@ -21,6 +23,8 @@ export const PracticeToolbar: React.FC<PracticeToolbarProps> = ({
   currentPageTime = { minutes: 0, seconds: 0 },
   isPracticing = false,
   disabled = false,
+  currentSlide = 1,
+  totalSlides = 1,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [viewHovered, setViewHovered] = useState(false);
@@ -70,28 +74,38 @@ export const PracticeToolbar: React.FC<PracticeToolbarProps> = ({
           </div>
         </div>
 
-        {/* 중앙 영역: 현재 페이지 시간 표시 또는 연습 중 상태 */}
+        {/* 중앙 영역: 슬라이드 정보와 현재 페이지 시간 표시 또는 연습 중 상태 */}
         <div 
           style={{
             ...timerDisplayStyle,
             cursor: onPracticeToggle ? 'pointer' : 'default',
-            fontWeight: isHovered ? 600 : 500,
             transform: isHovered ? 'scale(1.02)' : 'scale(1)',
             transition: 'all 0.2s ease',
+            flexDirection: 'column',
+            padding: '6px 10px',
+            gap: '0',
           }}
           onClick={handleTimerDisplayClick}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
         >
-          {isPracticing ? (
-            <span>연습 중</span>
-          ) : (
-            <>
-              <span>{formatTime(currentPageTime.minutes)}</span>
-              <span>:</span>
-              <span>{formatTime(currentPageTime.seconds)}</span>
-            </>
-          )}
+          {/* 슬라이드 정보 */}
+          <div style={slideInfoStyle}>
+            <span>슬라이드 {currentSlide}</span>
+          </div>
+          
+          {/* 타이머 */}
+          <div style={timerTextStyle}>
+            {isPracticing ? (
+              <span>연습 중</span>
+            ) : (
+              <>
+                <span>{formatTime(currentPageTime.minutes)}</span>
+                <span>:</span>
+                <span>{formatTime(currentPageTime.seconds)}</span>
+              </>
+            )}
+          </div>
         </div>
 
         {/* 우측 영역: 액션 버튼들 */}
@@ -256,18 +270,17 @@ const dividerStyle: React.CSSProperties = {
 };
 
 const timerDisplayStyle: React.CSSProperties = {
-  backgroundColor: '#F9F9F9',
-  border: `0.7px solid ${colors.fill.neutral}`,
-  borderRadius: '12px',
-  padding: '6px 10px',
+  backgroundColor: '#F7F7F8',
+  borderRadius: '6px',
+  padding: '8px 10px',
   display: 'flex',
   alignItems: 'center',
-  gap: '5px',
-  height: '40px',
-  width: '87px',
+  gap: '4px',
+  height: '33px',
+  width: '76px',
   justifyContent: 'center',
-  fontSize: '16px',
-  fontWeight: 500,
+  fontSize: '13px',
+  fontWeight: 400,
   color: colors.label.neutral,
   fontFamily: 'Pretendard, sans-serif',
 };
@@ -311,4 +324,22 @@ const endButtonStyle: React.CSSProperties = {
   cursor: 'pointer',
   transition: 'background-color 0.2s ease',
   lineHeight: 1,
+};
+
+const slideInfoStyle: React.CSSProperties = {
+  fontSize: '8px',
+  fontWeight: 400,
+  color: colors.label.neutral,
+  fontFamily: 'Pretendard, sans-serif',
+  lineHeight: 1,
+};
+
+const timerTextStyle: React.CSSProperties = {
+  display: 'flex',
+  alignItems: 'center',
+  gap: '4px',
+  fontSize: '13px',
+  fontWeight: 400,
+  color: colors.label.neutral,
+  fontFamily: 'Pretendard, sans-serif',
 };
