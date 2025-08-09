@@ -73,7 +73,7 @@ const previewSectionStyle: React.CSSProperties = {
   flexDirection: 'column',
   alignItems: 'center',
   justifyContent: 'center',
-  maxWidth: '350px',
+  maxWidth: '500px',
   gap: '20px',
 };
 
@@ -81,7 +81,7 @@ const previewContentStyle: React.CSSProperties = {
   backgroundColor: '#f1f2f5',
   height: '459px',
   width: '100%',
-  maxWidth: '340px',
+  maxWidth: '480px',
   borderRadius: '12px',
   display: 'flex',
   alignItems: 'center',
