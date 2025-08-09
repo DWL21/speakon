@@ -1,57 +1,52 @@
 import { useNavigate } from 'react-router-dom'
-import { useState } from 'react'
 import { TextSection } from '../components/ui/TextSection'
 import { FileUploadBox } from '../components/upload/FileUploadBox'
-import { ScriptModal, SlideInput } from '../components/ScriptModal/ScriptModal'
+import { SlideInput } from '../components/ScriptModal/ScriptModal'
 import { colors } from '../theme/colors'
 
 export function Home() {
   const navigate = useNavigate()
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [uploadedFile, setUploadedFile] = useState<File | null>(null)
-  const [slides, setSlides] = useState<SlideInput[]>([])
 
-  const handleUploadComplete = (file: File) => {
+  const handleUploadComplete = async (file: File) => {
     console.log('📁 파일 업로드 완료:', file.name);
-    setUploadedFile(file)
-    // ScriptModal에서 PDF 페이지 수에 맞게 슬라이드를 생성하도록 빈 배열로 초기화
-    setSlides([])
-    setIsModalOpen(true)
-  }
-
-  const handleModalClose = () => {
-    setIsModalOpen(false)
-  }
-
-  const handleSlideChange = (slideNumber: number, content: string) => {
-    setSlides(prev => 
-      prev.map(slide => 
-        slide.slideNumber === slideNumber
-          ? { ...slide, content }
-          : slide
-      )
-    )
-  }
-
-  const handleSave = (savedSlides: SlideInput[]) => {
-    console.log('💾 스크립트 저장:', savedSlides.length + '개 슬라이드');
-    console.log('저장된 스크립트:', savedSlides)
-    console.log('업로드된 파일:', uploadedFile?.name)
     
-    // 슬라이드 데이터 업데이트
-    setSlides(savedSlides)
-    
-    // 연습 페이지로 이동하면서 데이터 전달
-    if (uploadedFile && savedSlides.length > 0) {
+    // PDF 페이지 수 가져오기
+    const { getPdfPageCount } = await import('../lib/pdfUtils');
+    try {
+      const pageCount = await getPdfPageCount(file);
+      
+      // 빈 슬라이드 생성
+      const emptySlides: SlideInput[] = Array.from({ length: pageCount }, (_, index) => ({
+        slideNumber: index + 1,
+        pageNumber: index + 1,
+        content: ''
+      }));
+      
+      // ScriptModal을 건너뛰고 바로 Practice 페이지로 이동
       navigate('/practice', {
         state: {
-          pdfFile: uploadedFile,
-          slides: savedSlides
+          pdfFile: file,
+          slides: emptySlides
+        }
+      });
+    } catch (error) {
+      console.error('PDF 페이지 수 가져오기 실패:', error);
+      // 에러 발생 시 기본값으로 처리
+      const defaultSlides: SlideInput[] = [{
+        slideNumber: 1,
+        pageNumber: 1,
+        content: ''
+      }];
+      
+      navigate('/practice', {
+        state: {
+          pdfFile: file,
+          slides: defaultSlides
         }
       });
     }
-    setIsModalOpen(false)
   }
+
 
   // 숨겨진 기능: 특정 PDF 파일 자동 로드
   const loadHiddenPdfFile = async () => {
@@ -84,10 +79,13 @@ export function Home() {
       console.log('🎯 숨겨진 PDF 파일 로드:', file.name);
       console.log('📜 대본 데이터 로드:', slidesData.length + '개 슬라이드');
       
-      // 파일과 대본 데이터 설정
-      setUploadedFile(file);
-      setSlides(slidesData);
-      setIsModalOpen(true);
+      // ScriptModal을 건너뛰고 바로 Practice 페이지로 이동
+      navigate('/practice', {
+        state: {
+          pdfFile: file,
+          slides: slidesData
+        }
+      });
     } catch (error) {
       console.error('❌ 숨겨진 파일 로드 실패:', error);
       // 대체 알림 방법
@@ -95,32 +93,6 @@ export function Home() {
     }
   }
 
-  const renderPreviewContent = () => {
-    if (!uploadedFile) return null
-    
-    return (
-      <div style={{
-        padding: '20px',
-        textAlign: 'center',
-        color: colors.label.normal,
-      }}>
-        <div style={{
-          fontSize: '14px',
-          color: colors.label.neutral,
-          marginBottom: '8px'
-        }}>
-          업로드된 파일
-        </div>
-        <div style={{
-          fontSize: '16px',
-          fontWeight: 500,
-          color: colors.label.normal
-        }}>
-          {uploadedFile.name}
-        </div>
-      </div>
-    )
-  }
 
   return (
     <div 
@@ -158,18 +130,6 @@ export function Home() {
         </div>
       </div>
 
-      {/* ScriptModal */}
-      {uploadedFile && (
-        <ScriptModal
-          isOpen={isModalOpen}
-          onClose={handleModalClose}
-          pdfFile={uploadedFile}
-          slides={slides}
-          onSlideChange={handleSlideChange}
-          onSave={handleSave}
-          renderPreviewContent={renderPreviewContent}
-        />
-      )}
     </div>
   )
 } 
