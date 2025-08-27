@@ -35,6 +35,12 @@
 
     <!-- local -->
     <springProfile name="local">
+        <!-- 애플리케이션 로그 레벨 -->
+        <logger name="com.speakon" level="DEBUG"/>
+        <logger name="org.springframework.web" level="DEBUG"/>
+        <logger name="org.hibernate.SQL" level="DEBUG"/>
+        <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="TRACE"/>
+        
         <!-- 전체적인 로그는 INFO 레벨 부터 출력 -->
         <root level="INFO">
             <appender-ref ref="CONSOLE"/>
@@ -42,6 +48,11 @@
     </springProfile>
     <!-- prod  -->
     <springProfile name="prod">
+        <!-- 애플리케이션 로그 레벨 -->
+        <logger name="com.speakon" level="INFO"/>
+        <logger name="org.springframework.web" level="WARN"/>
+        <logger name="org.hibernate.SQL" level="WARN"/>
+        
         <root level="INFO">
             <appender-ref ref="FILE"/>
             <appender-ref ref="CONSOLE"/>
@@ -49,6 +60,12 @@
     </springProfile>
     <!-- dev  -->
     <springProfile name="dev">
+        <!-- 애플리케이션 로그 레벨 -->
+        <logger name="com.speakon" level="DEBUG"/>
+        <logger name="org.springframework.web" level="INFO"/>
+        <logger name="org.hibernate.SQL" level="DEBUG"/>
+        <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="TRACE"/>
+        
         <root level="INFO">
             <appender-ref ref="CONSOLE"/>
             <appender-ref ref="FILE"/>
