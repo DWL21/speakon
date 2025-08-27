@@ -24,7 +24,6 @@ export const PracticeToolbar: React.FC<PracticeToolbarProps> = ({
   isPracticing = false,
   disabled = false,
   currentSlide = 1,
-  totalSlides = 1,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [viewHovered, setViewHovered] = useState(false);
