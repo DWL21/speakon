@@ -40,10 +40,6 @@ ehthumbs.db
 logs/
 *.log
 
-# Application properties (for local development)
-application-local.yml
-application-local.properties
-
 # Compiled class files
 *.class
 
