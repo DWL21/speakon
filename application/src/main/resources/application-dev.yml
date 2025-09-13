@@ -1,0 +1,42 @@
+server:
+  port: ${SERVER_PORT}
+
+spring:
+  config:
+    activate:
+      on-profile: dev
+    import: optional:file:.env[.properties]
+  cors:
+    allowed-origin: ${CORS_ALLOWED_ORIGIN}
+  datasource:
+    url: ${DB_URL}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    hikari:
+      max-lifetime: 175000
+  jpa:
+    hibernate:
+      ddl-auto: validate
+
+infra:
+  google:
+    oauth:
+      client-id: ${GOOGLE_OAUTH_CLIENT_ID}
+      client-secret: ${GOOGLE_OAUTH_CLIENT_SECRET}
+      redirect-uri: ${GOOGLE_OAUTH_REDIRECT_URI}
+
+jwt:
+  secret: ${JWT_SECRET}
+  access-token-expiration: ${JWT_ACCESS_TOKEN_EXPIRATION}
+  refresh-token-expiration: ${JWT_REFRESH_TOKEN_EXPIRATION}
+
+springdoc:
+  api-docs:
+    path: ${SPRINGDOC_API_DOCS_PATH:/api-docs}
+  swagger-ui:
+    path: ${SPRINGDOC_SWAGGER_UI_PATH:/swagger-ui.html}
+    tags-sorter: alpha
+    operations-sorter: alpha
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
