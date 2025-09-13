@@ -66,6 +66,7 @@
     "Gradle.Build application.executor": "Run",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
     "Spring Boot.SpeakonApplication.executor": "Run",
     "git-widget-placeholder": "main",
     "junie.onboarding.icon.badge.shown": "true",
@@ -115,6 +116,7 @@
       <updated>1754724311831</updated>
       <workItem from="1754724312891" duration="42000" />
       <workItem from="1754724405244" duration="546000" />
+      <workItem from="1757743289600" duration="6000" />
     </task>
     <task id="LOCAL-00001" summary="chore: .gitignore">
       <option name="closed" value="true" />
