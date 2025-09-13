@@ -1,0 +1,31 @@
+package com.speakon.domain.auth.storage
+
+import com.speakon.domain.common.implement.Uuid
+import com.yourssu.signal.domain.auth.implement.GoogleUser
+import com.speakon.domain.auth.implement.GoogleUserRepository
+import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.stereotype.Component
+
+@Component
+class GoogleUserRepositoryImpl(
+    private val jpaRepository: JpaGoogleUserRepository,
+): GoogleUserRepository {
+    override fun save(googleUser: GoogleUser): GoogleUser {
+        val entity = jpaRepository.save(GoogleUserEntity.from(googleUser))
+        return entity.toDomain()
+    }
+    
+    override fun findUuidByIdentifier(identifier: String): Uuid? {
+        return jpaRepository.findByIdentifier(identifier)
+            ?.let { Uuid(it.uuid) }
+    }
+
+    override fun existsBy(uuid: Uuid): Boolean {
+        return jpaRepository.existsByUuid(uuid.value)
+    }
+}
+
+interface JpaGoogleUserRepository: JpaRepository<GoogleUserEntity, Long> {
+    fun findByIdentifier(identifier: String): GoogleUserEntity?
+    fun existsByUuid(uuid: String): Boolean
+}

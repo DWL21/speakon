@@ -16,14 +16,7 @@ class UserService(
         return userWriter.save(user)
     }
 
-    fun findByUser(uuid: Uuid): User? {
-        return userReader.findByUser(uuid)
-    }
-
-    fun getUserOrCreate(uuid: Uuid): User {
-        return userReader.findByUser(uuid) ?: run {
-            val user = User(uuid = uuid)
-            userWriter.save(user)
-        }
+    fun getUser(uuid: Uuid): User {
+        return userReader.getUser(uuid)
     }
 }

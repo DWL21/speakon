@@ -7,11 +7,7 @@ import org.springframework.stereotype.Component
 class UserReader(
     private val userRepository: UserRepository
 ) {
-    fun findByUser(uuid: Uuid): User? {
-        return userRepository.findByUuid(uuid)
-    }
-
-    fun existsByUuid(uuid: Uuid): Boolean {
-        return userRepository.existsByUuid(uuid)
+    fun getUser(uuid: Uuid): User {
+        return userRepository.getByUuid(uuid)
     }
 }

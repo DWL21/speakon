@@ -27,7 +27,7 @@ class UserController(
     fun getMyInfo(
         @Parameter(hidden = true) @UserUuid uuid: String
     ): ResponseEntity<Response<UserInfoResponse>> {
-        val user = userService.getUserOrCreate(Uuid(uuid))
+        val user = userService.getUser(Uuid(uuid))
         val response = UserInfoResponse(uuid = user.uuid.value)
         return ResponseEntity.ok(Response(result = response))
     }
