@@ -19,8 +19,11 @@ import org.springframework.web.multipart.MultipartFile
 class FileController(
     private val fileService: FileService
 ) {
-    @Operation(summary = "파일 업로드")
-    @PostMapping("/upload", consumes = ["multipart/form-data"]) 
+    @Operation(
+        summary = "파일 업로드",
+        description = "파일을 업로드합니다. 허용되는 파일 형식: PDF, PPTX / 최대 파일 크기: 20MB"
+    )
+    @PostMapping("/upload", consumes = ["multipart/form-data"])
     @RequireAuth
     fun upload(
         @Parameter(hidden = true) @UserUuid uuid: String,
@@ -34,6 +37,8 @@ class FileController(
             contentType = stored.contentType,
             size = stored.size,
             path = stored.path,
+            status = stored.status,
+            errorMessage = stored.errorMessage
         )
         return ResponseEntity.ok(Response(result = body))
     }
@@ -53,6 +58,8 @@ class FileController(
                 contentType = it.contentType,
                 size = it.size,
                 path = it.path,
+                status = it.status,
+                errorMessage = it.errorMessage
             )
         }
         return ResponseEntity.ok(Response(result = body))

@@ -1,6 +1,11 @@
 spring:
   application:
     name: speakon-application
-  
+
   profiles:
     active: local
+
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
