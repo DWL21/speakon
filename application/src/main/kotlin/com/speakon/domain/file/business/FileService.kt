@@ -100,6 +100,14 @@ class FileService(
         return geminiService.uploadPdfToGemini(file, storedFile.originalName)
     }
 
+    fun getGeminiFileInfo(fileName: String): GeminiFileInfo {
+        if (geminiService == null) {
+            throw UnsupportedOperationException("Gemini service is not available. Please enable Gemini configuration.")
+        }
+
+        return geminiService.getGeminiFileInfo(fileName)
+    }
+
 
     private fun validatePptxFile(file: MultipartFile) {
         require(!file.isEmpty) { "File is empty" }

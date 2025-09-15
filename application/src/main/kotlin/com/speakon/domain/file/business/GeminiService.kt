@@ -27,4 +27,8 @@ class GeminiService(
         val uploadSession = initiateUploadPdfToGemini(pdfFile, displayName)
         return uploadPdfAsync(uploadSession)
     }
+
+    fun getGeminiFileInfo(fileName: String): GeminiFileInfo {
+        return geminiClient.getFileInfo(fileName)
+    }
 }

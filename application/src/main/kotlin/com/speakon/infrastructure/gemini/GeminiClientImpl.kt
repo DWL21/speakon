@@ -97,9 +97,28 @@ class GeminiClientImpl(
         }
     }
 
-    private fun parseGeminiFileInfo(responseBody: String): GeminiFileInfo {
+    override fun getFileInfo(fileName: String): GeminiFileInfo {
+        val request = Request.Builder()
+            .url("$baseUrl/files/$fileName")
+            .header("x-goog-api-key", apiKey)
+            .get()
+            .build()
+
+        val response = httpClient.newCall(request).execute()
+        if (!response.isSuccessful) {
+            throw RuntimeException("Failed to get file info: ${response.code} - ${response.body?.string()}")
+        }
+
+        val responseBody = response.body?.string()
+            ?: throw RuntimeException("Empty response body")
+        response.close()
+
+        return parseGeminiFileInfo(responseBody, isFileResponse = true)
+    }
+
+    private fun parseGeminiFileInfo(responseBody: String, isFileResponse: Boolean = false): GeminiFileInfo {
         val jsonNode: JsonNode = objectMapper.readTree(responseBody)
-        val fileNode = jsonNode.get("file")
+        val fileNode = if (isFileResponse) jsonNode else jsonNode.get("file")
             ?: throw RuntimeException("Invalid response format: missing 'file' field")
 
         return GeminiFileInfo(

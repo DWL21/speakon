@@ -6,6 +6,7 @@ import java.util.concurrent.CompletableFuture
 interface GeminiClient {
     fun initiateUpload(file: File, displayName: String): GeminiUploadSession
     fun uploadFileAsync(uploadSession: GeminiUploadSession): CompletableFuture<GeminiFileInfo>
+    fun getFileInfo(fileName: String): GeminiFileInfo
 }
 
 data class GeminiUploadSession(
