@@ -97,7 +97,7 @@ class FileService(
         }
 
         val file = File(storedFile.path)
-        return geminiService.uploadPdfToGemini(file, storedFile.originalName)
+        return geminiService.uploadPdfToGemini(file, storedFile.storedName)
     }
 
     fun getGeminiFileInfo(fileName: String): GeminiFileInfo {
