@@ -1,8 +1,6 @@
 package com.speakon.domain.file.business
 
-import com.speakon.domain.file.implement.GeminiClient
-import com.speakon.domain.file.implement.GeminiFileInfo
-import com.speakon.domain.file.implement.GeminiUploadSession
+import com.speakon.domain.file.implement.*
 import org.springframework.stereotype.Service
 import java.io.File
 import java.util.concurrent.CompletableFuture
@@ -30,5 +28,29 @@ class GeminiService(
 
     fun getGeminiFileInfo(fileName: String): GeminiFileInfo {
         return geminiClient.getFileInfo(fileName)
+    }
+
+    fun generateContentWithFile(prompt: String, fileUri: String, mimeType: String): GeminiGenerateContentResponse {
+        val request = GeminiGenerateContentRequest(
+            contents = listOf(
+                GeminiContent(
+                    parts = listOf(
+                        GeminiPart.TextPart(prompt),
+                        GeminiPart.FileDataPart(
+                            GeminiFileData(
+                                mimeType = mimeType,
+                                fileUri = fileUri
+                            )
+                        )
+                    )
+                )
+            )
+        )
+
+        return geminiClient.generateContent(request)
+    }
+
+    fun generateContent(request: GeminiGenerateContentRequest): GeminiGenerateContentResponse {
+        return geminiClient.generateContent(request)
     }
 }

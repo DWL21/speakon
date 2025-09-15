@@ -108,6 +108,14 @@ class FileService(
         return geminiService.getGeminiFileInfo(fileName)
     }
 
+    fun generateContentWithGeminiFile(fileUri: String, prompt: String): GeminiGenerateContentResponse {
+        if (geminiService == null) {
+            throw UnsupportedOperationException("Gemini service is not available. Please enable Gemini configuration.")
+        }
+
+        return geminiService.generateContentWithFile(prompt, fileUri, "application/pdf")
+    }
+
 
     private fun validatePptxFile(file: MultipartFile) {
         require(!file.isEmpty) { "File is empty" }

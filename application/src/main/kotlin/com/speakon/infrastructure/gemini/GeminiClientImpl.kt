@@ -1,10 +1,9 @@
 package com.speakon.infrastructure.gemini
 
+import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.speakon.domain.file.implement.GeminiClient
-import com.speakon.domain.file.implement.GeminiFileInfo
-import com.speakon.domain.file.implement.GeminiUploadSession
+import com.speakon.domain.file.implement.*
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -114,6 +113,68 @@ class GeminiClientImpl(
         response.close()
 
         return parseGeminiFileInfo(responseBody, isFileResponse = true)
+    }
+
+    override fun generateContent(request: GeminiGenerateContentRequest): GeminiGenerateContentResponse {
+        val requestJson = createGenerateContentRequestJson(request)
+
+        val httpRequest = Request.Builder()
+            .url("$baseUrl/models/gemini-2.5-flash:generateContent")
+            .header("x-goog-api-key", apiKey)
+            .header("Content-Type", "application/json")
+            .post(requestJson.toRequestBody("application/json".toMediaType()))
+            .build()
+
+        val response = httpClient.newCall(httpRequest).execute()
+        if (!response.isSuccessful) {
+            throw RuntimeException("Failed to generate content: ${response.code} - ${response.body?.string()}")
+        }
+
+        val responseBody = response.body?.string()
+            ?: throw RuntimeException("Empty response body")
+        response.close()
+
+        return parseGenerateContentResponse(responseBody)
+    }
+
+    private fun createGenerateContentRequestJson(request: GeminiGenerateContentRequest): String {
+        val contentsJson = request.contents.map { content ->
+            val partsJson = content.parts.map { part ->
+                when (part) {
+                    is GeminiPart.TextPart -> """{"text": "${part.text}"}"""
+                    is GeminiPart.FileDataPart -> """{"file_data": {"mime_type": "${part.fileData.mimeType}", "file_uri": "${part.fileData.fileUri}"}}"""
+                }
+            }.joinToString(", ")
+            """{"parts": [$partsJson]}"""
+        }.joinToString(", ")
+
+        return """{"contents": [$contentsJson]}"""
+    }
+
+    private fun parseGenerateContentResponse(responseBody: String): GeminiGenerateContentResponse {
+        val jsonNode: JsonNode = objectMapper.readTree(responseBody)
+        val candidatesNode = jsonNode.get("candidates")
+            ?: throw RuntimeException("Invalid response format: missing 'candidates' field")
+
+        val candidates = candidatesNode.map { candidateNode ->
+            val contentNode = candidateNode.get("content")
+                ?: throw RuntimeException("Invalid response format: missing 'content' field in candidate")
+
+            val partsNode = contentNode.get("parts")
+                ?: throw RuntimeException("Invalid response format: missing 'parts' field in content")
+
+            val parts = partsNode.map { partNode ->
+                if (partNode.has("text")) {
+                    GeminiPart.TextPart(partNode.get("text").asText())
+                } else {
+                    throw RuntimeException("Unsupported part type in response")
+                }
+            }
+
+            GeminiCandidate(GeminiContent(parts))
+        }
+
+        return GeminiGenerateContentResponse(candidates)
     }
 
     private fun parseGeminiFileInfo(responseBody: String, isFileResponse: Boolean = false): GeminiFileInfo {
