@@ -64,4 +64,28 @@ class FileController(
         }
         return ResponseEntity.ok(Response(result = body))
     }
+
+    @Operation(
+        summary = "파일 업로드 상태 조회",
+        description = "특정 파일의 업로드 상태를 조회합니다."
+    )
+    @GetMapping("/{fileId}/status")
+    @RequireAuth
+    fun getFileStatus(
+        @Parameter(hidden = true) @UserUuid uuid: String,
+        @PathVariable fileId: Long
+    ): ResponseEntity<Response<FileInfoResponse>> {
+        val file = fileService.getFileStatus(Uuid(uuid), fileId)
+        val body = FileInfoResponse(
+            id = file.id ?: 0,
+            originalName = file.originalName,
+            storedName = file.storedName,
+            contentType = file.contentType,
+            size = file.size,
+            path = file.path,
+            status = file.status,
+            errorMessage = file.errorMessage
+        )
+        return ResponseEntity.ok(Response(result = body))
+    }
 }

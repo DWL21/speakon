@@ -9,4 +9,8 @@ class FileReader(
     fun findAllByOwnerId(ownerId: Long): List<StoredFile> {
         return repository.findAllByOwnerId(ownerId)
     }
+
+    fun findById(id: Long): StoredFile? {
+        return repository.findById(id)
+    }
 }

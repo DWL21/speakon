@@ -47,4 +47,16 @@ class FileService(
         val user = userReader.getUser(uuid)
         return fileReader.findAllByOwnerId(user.id!!)
     }
+
+    fun getFileStatus(uuid: Uuid, fileId: Long): StoredFile {
+        val user = userReader.getUser(uuid)
+        val file = fileReader.findById(fileId)
+            ?: throw IllegalArgumentException("File not found with id: $fileId")
+
+        if (file.ownerId != user.id) {
+            throw IllegalArgumentException("File does not belong to user")
+        }
+
+        return file
+    }
 }
