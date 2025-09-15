@@ -3,6 +3,7 @@ package com.speakon.domain.file.business
 import com.speakon.domain.common.implement.Uuid
 import com.speakon.domain.file.implement.*
 import com.speakon.domain.user.implement.UserReader
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
 import java.util.UUID
@@ -15,6 +16,8 @@ class FileService(
     private val asyncFileProcessor: AsyncFileProcessor,
     private val fileDownloader: FileDownloader,
     private val fileValidator: FileValidator,
+    @Autowired(required = false)
+    private val fileConversionService: FileConversionService? = null
 ) {
     fun uploadFile(uuid: Uuid, multipartFile: MultipartFile): StoredFile {
         fileValidator.validateFile(multipartFile)
@@ -58,5 +61,32 @@ class FileService(
         }
 
         return file
+    }
+
+    fun convertPptxToPdf(uuid: Uuid, pptxFile: MultipartFile): ByteArray {
+        val user = userReader.getUser(uuid)
+
+        if (fileConversionService == null) {
+            throw UnsupportedOperationException("File conversion service is not available. Please enable LibreOffice configuration.")
+        }
+
+        validatePptxFile(pptxFile)
+
+        return fileConversionService.convertPptxToPdf(pptxFile)
+    }
+
+    private fun validatePptxFile(file: MultipartFile) {
+        require(!file.isEmpty) { "File is empty" }
+
+        val contentType = file.contentType
+        val fileName = file.originalFilename ?: ""
+
+        val isValidPptx = contentType == "application/vnd.openxmlformats-officedocument.presentationml.presentation" ||
+                fileName.endsWith(".pptx", ignoreCase = true)
+
+        require(isValidPptx) { "File is not a valid PPTX file" }
+
+        val maxSize = 20 * 1024 * 1024
+        require(file.size <= maxSize) { "File size exceeds 20MB limit" }
     }
 }

@@ -9,3 +9,12 @@ spring:
     multipart:
       max-file-size: 20MB
       max-request-size: 20MB
+
+jodconverter:
+  enabled: false
+  office-home: /Applications/LibreOffice.app/Contents
+  port-numbers: 2002
+  max-tasks-per-process: 10
+  process-timeout: 120000
+  task-execution-timeout: 60000
+  task-queue-timeout: 30000
