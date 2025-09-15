@@ -19,3 +19,8 @@ jodconverter:
   task-execution-timeout: 60000
   task-queue-timeout: 30000
 
+gemini:
+  api:
+    key: ${GEMINI_API_KEY:}
+    base-url: https://generativelanguage.googleapis.com/v1beta
+

@@ -6,7 +6,9 @@ import com.speakon.domain.user.implement.UserReader
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
+import java.io.File
 import java.util.UUID
+import java.util.concurrent.CompletableFuture
 
 @Service
 class FileService(
@@ -18,6 +20,8 @@ class FileService(
     private val fileValidator: FileValidator,
     @Autowired(required = false)
     private val fileConversionService: FileConversionService? = null,
+    @Autowired(required = false)
+    private val geminiService: GeminiService? = null,
 ) {
     fun uploadFile(uuid: Uuid, multipartFile: MultipartFile): StoredFile {
         fileValidator.validateFile(multipartFile)
@@ -73,6 +77,27 @@ class FileService(
         validatePptxFile(pptxFile)
 
         return fileConversionService.convertPptxToPdf(pptxFile)
+    }
+
+    fun uploadPdfToGemini(uuid: Uuid, fileId: Long): CompletableFuture<GeminiFileInfo> {
+        val user = userReader.getUser(uuid)
+        val storedFile = fileReader.findById(fileId)
+            ?: throw IllegalArgumentException("File not found with id: $fileId")
+
+        if (storedFile.ownerId != user.id) {
+            throw IllegalArgumentException("File does not belong to user")
+        }
+
+        require(storedFile.contentType == "application/pdf") {
+            "File is not a PDF"
+        }
+
+        if (geminiService == null) {
+            throw UnsupportedOperationException("Gemini service is not available. Please enable Gemini configuration.")
+        }
+
+        val file = File(storedFile.path)
+        return geminiService.uploadPdfToGemini(file, storedFile.originalName)
     }
 
 
