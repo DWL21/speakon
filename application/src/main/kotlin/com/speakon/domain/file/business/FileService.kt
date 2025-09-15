@@ -17,7 +17,7 @@ class FileService(
     private val fileDownloader: FileDownloader,
     private val fileValidator: FileValidator,
     @Autowired(required = false)
-    private val fileConversionService: FileConversionService? = null
+    private val fileConversionService: FileConversionService? = null,
 ) {
     fun uploadFile(uuid: Uuid, multipartFile: MultipartFile): StoredFile {
         fileValidator.validateFile(multipartFile)
@@ -74,6 +74,7 @@ class FileService(
 
         return fileConversionService.convertPptxToPdf(pptxFile)
     }
+
 
     private fun validatePptxFile(file: MultipartFile) {
         require(!file.isEmpty) { "File is empty" }

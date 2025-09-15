@@ -16,5 +16,5 @@ data class StoredFile(
     val path: String,
     val ownerId: Long,
     val status: FileStatus = FileStatus.PENDING,
-    val errorMessage: String? = null
+    val errorMessage: String? = null,
 )

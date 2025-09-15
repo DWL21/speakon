@@ -49,6 +49,7 @@ dependencies {
     implementation("org.jodconverter:jodconverter-local:4.4.6")
     implementation("org.jodconverter:jodconverter-spring-boot-starter:4.4.6")
 
+
     // QueryDSL
     implementation("com.querydsl:querydsl-jpa:5.1.0:jakarta")
     kapt("com.querydsl:querydsl-apt:5.1.0:jakarta")
