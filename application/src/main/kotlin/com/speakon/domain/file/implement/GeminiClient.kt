@@ -8,6 +8,7 @@ interface GeminiClient {
     fun uploadFileAsync(uploadSession: GeminiUploadSession): CompletableFuture<GeminiFileInfo>
     fun getFileInfo(fileName: String): GeminiFileInfo
     fun generateContent(request: GeminiGenerateContentRequest): GeminiGenerateContentResponse
+    fun generateConversation(conversationHistory: List<GeminiContent>): GeminiGenerateContentResponse
 }
 
 data class GeminiUploadSession(
@@ -35,7 +36,8 @@ data class GeminiGenerateContentRequest(
 )
 
 data class GeminiContent(
-    val parts: List<GeminiPart>
+    val parts: List<GeminiPart>,
+    val role: String? = null
 )
 
 sealed class GeminiPart {

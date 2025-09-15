@@ -116,6 +116,30 @@ class FileService(
         return geminiService.generateContentWithFile(prompt, fileUri, "application/pdf")
     }
 
+    fun generateConversation(conversationHistory: List<GeminiContent>): GeminiGenerateContentResponse {
+        if (geminiService == null) {
+            throw UnsupportedOperationException("Gemini service is not available. Please enable Gemini configuration.")
+        }
+
+        return geminiService.generateConversation(conversationHistory)
+    }
+
+    fun createUserMessage(text: String): GeminiContent {
+        if (geminiService == null) {
+            throw UnsupportedOperationException("Gemini service is not available. Please enable Gemini configuration.")
+        }
+
+        return geminiService.createUserMessage(text)
+    }
+
+    fun createModelMessage(text: String): GeminiContent {
+        if (geminiService == null) {
+            throw UnsupportedOperationException("Gemini service is not available. Please enable Gemini configuration.")
+        }
+
+        return geminiService.createModelMessage(text)
+    }
+
 
     private fun validatePptxFile(file: MultipartFile) {
         require(!file.isEmpty) { "File is empty" }

@@ -53,4 +53,18 @@ class GeminiService(
     fun generateContent(request: GeminiGenerateContentRequest): GeminiGenerateContentResponse {
         return geminiClient.generateContent(request)
     }
+
+    fun generateConversation(conversationHistory: List<GeminiContent>): GeminiGenerateContentResponse {
+        return geminiClient.generateConversation(conversationHistory)
+    }
+
+    fun createConversationMessage(role: String, text: String): GeminiContent {
+        return GeminiContent(
+            parts = listOf(GeminiPart.TextPart(text)),
+            role = role
+        )
+    }
+
+    fun createUserMessage(text: String): GeminiContent = createConversationMessage("user", text)
+    fun createModelMessage(text: String): GeminiContent = createConversationMessage("model", text)
 }

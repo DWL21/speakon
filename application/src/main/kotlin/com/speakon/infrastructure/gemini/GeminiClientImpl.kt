@@ -117,7 +117,16 @@ class GeminiClientImpl(
 
     override fun generateContent(request: GeminiGenerateContentRequest): GeminiGenerateContentResponse {
         val requestJson = createGenerateContentRequestJson(request)
+        return executeGenerateContentRequest(requestJson)
+    }
 
+    override fun generateConversation(conversationHistory: List<GeminiContent>): GeminiGenerateContentResponse {
+        val request = GeminiGenerateContentRequest(conversationHistory)
+        val requestJson = createGenerateContentRequestJson(request)
+        return executeGenerateContentRequest(requestJson)
+    }
+
+    private fun executeGenerateContentRequest(requestJson: String): GeminiGenerateContentResponse {
         val httpRequest = Request.Builder()
             .url("$baseUrl/models/gemini-2.5-flash:generateContent")
             .header("x-goog-api-key", apiKey)
@@ -141,14 +150,23 @@ class GeminiClientImpl(
         val contentsJson = request.contents.map { content ->
             val partsJson = content.parts.map { part ->
                 when (part) {
-                    is GeminiPart.TextPart -> """{"text": "${part.text}"}"""
+                    is GeminiPart.TextPart -> """{"text": "${escapeJsonString(part.text)}"}"""
                     is GeminiPart.FileDataPart -> """{"file_data": {"mime_type": "${part.fileData.mimeType}", "file_uri": "${part.fileData.fileUri}"}}"""
                 }
             }.joinToString(", ")
-            """{"parts": [$partsJson]}"""
+
+            val roleJson = if (content.role != null) """"role": "${content.role}", """ else ""
+            """{${roleJson}"parts": [$partsJson]}"""
         }.joinToString(", ")
 
         return """{"contents": [$contentsJson]}"""
+    }
+
+    private fun escapeJsonString(text: String): String {
+        return text.replace("\"", "\\\"")
+            .replace("\n", "\\n")
+            .replace("\r", "\\r")
+            .replace("\t", "\\t")
     }
 
     private fun parseGenerateContentResponse(responseBody: String): GeminiGenerateContentResponse {
