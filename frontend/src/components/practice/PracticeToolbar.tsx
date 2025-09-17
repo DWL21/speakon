@@ -408,16 +408,23 @@ const EyeVisibleIcon = () => (
 );
 
 const ClockIcon = () => (
-  <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="10" cy="10" r="8.5" stroke="#7D7E83"/>
-    <path d="M10 5v5l3 2" stroke="#7D7E83" strokeWidth="1.5" strokeLinecap="round"/>
+  <svg width="18" height="19" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <g clipPath="url(#clip0_1424_5144)">
+      <circle cx="9.00049" cy="9.0625" r="7.125" fill="#78787B"/>
+      <path d="M8.20874 5.89648V9.85482H12.1671" stroke="white" strokeLinecap="round" strokeLinejoin="round"/>
+    </g>
+    <defs>
+      <clipPath id="clip0_1424_5144">
+        <rect width="18" height="18" fill="white" transform="translate(0 0.0625)"/>
+      </clipPath>
+    </defs>
   </svg>
 );
 
 const PencilIcon = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25z" stroke="#7D7E83" fill="none"/>
-    <path d="M14.06 6.19l3.75 3.75L20.5 7.25c.69-.69.69-1.81 0-2.5l-1.25-1.25c-.69-.69-1.81-.69-2.5 0l-2.69 2.69z" stroke="#7D7E83" fill="none"/>
+  <svg width="18" height="19" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M3 15.8125C3 15.3983 3.33579 15.0625 3.75 15.0625H14.25C14.6642 15.0625 15 15.3983 15 15.8125C15 16.2267 14.6642 16.5625 14.25 16.5625H3.75C3.33579 16.5625 3 16.2267 3 15.8125Z" fill="#7D7E83"/>
+    <path d="M13.4633 2.22053C12.5846 1.34186 11.16 1.34185 10.2813 2.22052L4.41412 8.08765C4.277 8.22477 4.17765 8.39501 4.12571 8.58185L3.03268 12.5139C2.86075 13.1324 3.42999 13.7017 4.04849 13.5298L7.98059 12.4367C8.16742 12.3848 8.33766 12.2854 8.47478 12.1483L14.342 6.2812C15.2207 5.40253 15.2207 3.9779 14.342 3.09921L13.4633 2.22053Z" fill="#7D7E83"/>
   </svg>
 );
 
