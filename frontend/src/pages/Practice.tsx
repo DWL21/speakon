@@ -293,7 +293,8 @@ export function Practice() {
         [currentSlide]: currentPageTime
       },
       slides: practiceData.slides,
-      pdfFile: practiceData.pdfFile
+      pdfFile: practiceData.pdfFile,
+      goalTime: goalTime
     };
     
     // 결과 보고서 페이지로 이동
