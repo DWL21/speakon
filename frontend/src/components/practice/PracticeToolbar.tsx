@@ -27,11 +27,8 @@ export const PracticeToolbar: React.FC<PracticeToolbarProps> = ({
   onToggleTimer,
   onEnd,
   currentPageTime = { minutes: 0, seconds: 0 },
-  isPracticing = false,
   disabled = false,
-  currentSlide = 1,
 }) => {
-  const [isHovered, setIsHovered] = useState(false);
   const [viewHovered, setViewHovered] = useState(false);
   const [scriptHovered, setScriptHovered] = useState(false);
   const [timerHovered, setTimerHovered] = useState(false);
@@ -44,13 +41,6 @@ export const PracticeToolbar: React.FC<PracticeToolbarProps> = ({
     if (onPracticeToggle) onPracticeToggle();
   };
 
-  const handleMouseEnter = () => {
-    setIsHovered(true);
-  };
-
-  const handleMouseLeave = () => {
-    setIsHovered(false);
-  };
 
   return (
     <div style={toolbarContainerStyle}>
@@ -153,7 +143,8 @@ export const PracticeToolbar: React.FC<PracticeToolbarProps> = ({
 };
 
 // 아이콘 컴포넌트들 - 피그마 디자인에서 추출
-const ViewIcon = () => (
+/* unused icons removed to satisfy build */
+/* const ViewIcon = () => (
   <svg width="24" height="25" viewBox="0 0 24 25" fill="none">
     <path 
       d="M3.9074 9.02634C7.53762 2.82455 16.4624 2.82455 20.0926 9.02634C21.3025 11.0932 21.3025 13.6568 20.0926 15.7237C16.4624 21.9254 7.53762 21.9254 3.9074 15.7237C2.69753 13.6568 2.69753 11.0932 3.9074 9.02634Z" 
@@ -172,9 +163,9 @@ const ViewIcon = () => (
       strokeLinejoin="round"
     />
   </svg>
-);
+); */
 
-const ScriptIcon = () => (
+/* const ScriptIcon = () => (
   <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
     <g clipPath="url(#clip0_1009_2446)">
       <path d="M21 12.375V17.775C21 19.755 19.38 21.375 17.4 21.375H6.59998C4.61998 21.375 3 19.755 3 17.775V6.97501C3 4.99501 4.61998 3.375 6.59998 3.375H12" stroke="#7D7E83" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
@@ -187,9 +178,9 @@ const ScriptIcon = () => (
       </clipPath>
     </defs>
   </svg>
-);
+); */
 
-const TimerGoalIcon = () => (
+/* const TimerGoalIcon = () => (
   <svg width="18" height="21" viewBox="0 0 18 21" fill="none">
     <path 
       d="M8.99988 19.4041C13.0702 19.4041 16.3699 15.9925 16.3699 11.7841C16.3699 7.57565 13.0702 4.16406 8.99988 4.16406C4.92954 4.16406 1.62988 7.57565 1.62988 11.7841C1.62988 15.9925 4.92954 19.4041 8.99988 19.4041Z" 
@@ -220,7 +211,7 @@ const TimerGoalIcon = () => (
       strokeLinejoin="round"
     />
   </svg>
-);
+); */
 
 
 // 스타일 정의 - 피그마 디자인에 정확히 맞춤
@@ -252,7 +243,7 @@ const leftSectionStyle: React.CSSProperties = {
   gap: '2px',
 };
 
-const viewToggleButtonStyle: React.CSSProperties = {
+/* const viewToggleButtonStyle: React.CSSProperties = {
   background: 'none',
   border: 'none',
   cursor: 'pointer',
@@ -262,7 +253,7 @@ const viewToggleButtonStyle: React.CSSProperties = {
   justifyContent: 'center',
   borderRadius: '7px',
   transition: 'background-color 0.2s ease',
-};
+}; */
 
 const dividerStyle: React.CSSProperties = {
   height: '33px',
@@ -293,13 +284,13 @@ const rightSectionStyle: React.CSSProperties = {
   padding: '0 4px',
 };
 
-const actionButtonsStyle: React.CSSProperties = {
+/* const actionButtonsStyle: React.CSSProperties = {
   display: 'flex',
   alignItems: 'center',
   gap: '8px',
-};
+}; */
 
-const iconButtonStyle: React.CSSProperties = {
+/* const iconButtonStyle: React.CSSProperties = {
   background: 'none',
   border: 'none',
   cursor: 'pointer',
@@ -311,7 +302,7 @@ const iconButtonStyle: React.CSSProperties = {
   transition: 'background-color 0.2s ease',
   width: '34px',
   height: '34px',
-};
+}; */
 
 // 32x32 둥근 회색 버튼
 const roundedIconButtonStyle: React.CSSProperties = {
@@ -327,7 +318,7 @@ const roundedIconButtonStyle: React.CSSProperties = {
   cursor: 'pointer',
 };
 
-const endButtonStyle: React.CSSProperties = {
+/* const endButtonStyle: React.CSSProperties = {
   backgroundColor: colors.primary.normal,
   color: colors.static.white,
   border: 'none',
@@ -339,17 +330,17 @@ const endButtonStyle: React.CSSProperties = {
   cursor: 'pointer',
   transition: 'background-color 0.2s ease',
   lineHeight: 1,
-};
+}; */
 
-const slideInfoStyle: React.CSSProperties = {
+/* const slideInfoStyle: React.CSSProperties = {
   fontSize: '8px',
   fontWeight: 400,
   color: colors.label.neutral,
   fontFamily: 'Pretendard, sans-serif',
   lineHeight: 1,
-};
+}; */
 
-const timerTextStyle: React.CSSProperties = {
+/* const timerTextStyle: React.CSSProperties = {
   display: 'flex',
   alignItems: 'center',
   gap: '4px',
@@ -357,7 +348,7 @@ const timerTextStyle: React.CSSProperties = {
   fontWeight: 400,
   color: colors.label.neutral,
   fontFamily: 'Pretendard, sans-serif',
-};
+}; */
 
 // 피그마 Variant9(마법사) 스타일
 const magicButtonStyle: React.CSSProperties = {
@@ -394,18 +385,12 @@ const EyeHiddenIcon = () => (
   </svg>
 );
 
-const EyeVisibleIcon = () => (
+/* const EyeVisibleIcon = () => (
   <svg width="18" height="19" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path 
-      d="M3.9074 9.02634C7.53762 2.82455 16.4624 2.82455 20.0926 9.02634C21.3025 11.0932 21.3025 13.6568 20.0926 15.7237C16.4624 21.9254 7.53762 21.9254 3.9074 15.7237C2.69753 13.6568 2.69753 11.0932 3.9074 9.02634Z" 
-      stroke="#7D7E83" 
-      strokeWidth="1.5" 
-      strokeLinecap="round" 
-      strokeLinejoin="round"
-    />
+    <path d="M3.9074 9.02634C7.53762 2.82455 16.4624 2.82455 20.0926 9.02634C21.3025 11.0932 21.3025 13.6568 20.0926 15.7237C16.4624 21.9254 7.53762 21.9254 3.9074 15.7237C2.69753 13.6568 2.69753 11.0932 3.9074 9.02634Z" stroke="#7D7E83" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
     <circle cx="12" cy="12.4357" r="3.6" fill="#78787B" />
   </svg>
-);
+); */
 
 const ClockIcon = () => (
   <svg width="18" height="19" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">

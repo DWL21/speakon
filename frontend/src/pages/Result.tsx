@@ -8,7 +8,7 @@ import { colors } from '../theme/colors';
 export function Result() {
   const location = useLocation();
   const navigate = useNavigate();
-  const [currentPage, setCurrentPage] = React.useState<number>(1);
+  // 페이지 이동 상태(현재 미사용)
   const [isScriptCardFlipped, setIsScriptCardFlipped] = React.useState(false);
 
   const practiceResult = location.state as PracticeResult;
@@ -18,7 +18,13 @@ export function Result() {
       <div style={errorContainerStyle}>
         <div style={errorTextStyle}>결과 데이터를 찾을 수 없습니다.</div>
         <button 
-          style={homeButtonStyle}
+          style={{
+            padding: '8px 16px',
+            borderRadius: '8px',
+            border: '1px solid #ddd',
+            background: '#fff',
+            cursor: 'pointer'
+          }}
           onClick={() => navigate('/', { replace: true })}
         >
           홈으로 돌아가기
@@ -27,9 +33,9 @@ export function Result() {
     );
   }
 
-  const handleGoHome = () => {
-    navigate('/', { replace: true });
-  };
+  // const handleGoHome = () => {
+  //   navigate('/', { replace: true });
+  // };
 
   const handleRetry = () => {
     navigate('/practice', { 
@@ -344,11 +350,11 @@ const flipBackStyle: React.CSSProperties = {
   gap: '10px',
 };
 
-const flipBackHeaderStyle: React.CSSProperties = {
-  fontSize: '14px',
-  color: colors.label.normal,
-  fontWeight: 500,
-};
+// const flipBackHeaderStyle: React.CSSProperties = {
+//   fontSize: '14px',
+//   color: colors.label.normal,
+//   fontWeight: 500,
+// };
 
 const scriptBoxStyle: React.CSSProperties = {
   backgroundColor: colors.fill?.normal || '#F4F6F8',
@@ -369,10 +375,10 @@ const scriptTextStyle: React.CSSProperties = {
   lineHeight: 1.5,
 };
 
-const flipHintStyle: React.CSSProperties = {
-  fontSize: '12px',
-  color: colors.label.neutral,
-};
+// const flipHintStyle: React.CSSProperties = {
+//   fontSize: '12px',
+//   color: colors.label.neutral,
+// };
 
 const insightRowStyle: React.CSSProperties = {
   display: 'flex',
@@ -491,88 +497,88 @@ const errorTextStyle: React.CSSProperties = {
 };
 
 // Insights section styles
-const insightSectionStyle: React.CSSProperties = {
-  padding: '0 50px 40px 50px',
-};
+// const insightSectionStyle: React.CSSProperties = {
+//   padding: '0 50px 40px 50px',
+// };
 
-const insightGridStyle: React.CSSProperties = {
-  display: 'grid',
-  gridTemplateColumns: 'repeat(4, minmax(0, 1fr))',
-  gap: '16px',
-};
+// const insightGridStyle: React.CSSProperties = {
+//   display: 'grid',
+//   gridTemplateColumns: 'repeat(4, minmax(0, 1fr))',
+//   gap: '16px',
+// };
 
-const cardStyle: React.CSSProperties = {
-  backgroundColor: colors.background.normal,
-  border: `1px solid ${colors.fill.neutral}`,
-  borderRadius: '12px',
-  padding: '16px',
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '10px',
-};
+// const cardStyle: React.CSSProperties = {
+//   backgroundColor: colors.background.normal,
+//   border: `1px solid ${colors.fill.neutral}`,
+//   borderRadius: '12px',
+//   padding: '16px',
+//   display: 'flex',
+//   flexDirection: 'column',
+//   gap: '10px',
+// };
 
-const cardTitleStyle: React.CSSProperties = {
-  fontSize: '14px',
-  color: colors.label.normal,
-  fontWeight: 600,
-};
+// const cardTitleStyle: React.CSSProperties = {
+//   fontSize: '14px',
+//   color: colors.label.normal,
+//   fontWeight: 600,
+// };
 
-const metricRowStyle: React.CSSProperties = {
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-  fontSize: '13px',
-  color: colors.label.normal,
-};
+// const metricRowStyle: React.CSSProperties = {
+//   display: 'flex',
+//   alignItems: 'center',
+//   justifyContent: 'space-between',
+//   fontSize: '13px',
+//   color: colors.label.normal,
+// };
 
-const metricLabelStyle: React.CSSProperties = {
-  color: colors.label.neutral,
-};
+// const metricLabelStyle: React.CSSProperties = {
+//   color: colors.label.neutral,
+// };
 
-const metricValueStyle: React.CSSProperties = {
-  fontWeight: 600,
-};
+// const metricValueStyle: React.CSSProperties = {
+//   fontWeight: 600,
+// };
 
 const emptyTextStyle: React.CSSProperties = {
   fontSize: '12px',
   color: colors.label.neutral,
 };
 
-const chipRowStyle: React.CSSProperties = {
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-};
+// const chipRowStyle: React.CSSProperties = {
+//   display: 'flex',
+//   alignItems: 'center',
+//   justifyContent: 'space-between',
+// };
 
-const chipStyle: React.CSSProperties = {
-  fontSize: '12px',
-  color: colors.label.normal,
-  backgroundColor: colors.fill.normal,
-  borderRadius: '8px',
-  padding: '4px 8px',
-};
+// const chipStyle: React.CSSProperties = {
+//   fontSize: '12px',
+//   color: colors.label.normal,
+//   backgroundColor: colors.fill.normal,
+//   borderRadius: '8px',
+//   padding: '4px 8px',
+// };
 
-const chipValueStyle: React.CSSProperties = {
-  fontSize: '12px',
-  color: colors.label.normal,
-};
+// const chipValueStyle: React.CSSProperties = {
+//   fontSize: '12px',
+//   color: colors.label.normal,
+// };
 
-const trendContainerStyle: React.CSSProperties = {
-  display: 'flex',
-  alignItems: 'flex-end',
-  gap: '10px',
-  paddingTop: '6px',
-};
+// const trendContainerStyle: React.CSSProperties = {
+//   display: 'flex',
+//   alignItems: 'flex-end',
+//   gap: '10px',
+//   paddingTop: '6px',
+// };
 
-const badgeStyle: React.CSSProperties = {
-  width: '18px',
-  height: '18px',
-  borderRadius: '9px',
-  backgroundColor: colors.primary.normal,
-  color: colors.static.white,
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  fontSize: '11px',
-  fontWeight: 700,
-};
+// const badgeStyle: React.CSSProperties = {
+//   width: '18px',
+//   height: '18px',
+//   borderRadius: '9px',
+//   backgroundColor: colors.primary.normal,
+//   color: colors.static.white,
+//   display: 'flex',
+//   alignItems: 'center',
+//   justifyContent: 'center',
+//   fontSize: '11px',
+//   fontWeight: 700,
+// };

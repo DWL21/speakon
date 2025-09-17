@@ -11,7 +11,6 @@ interface ScriptModalFormProps {
   slides: SlideInput[];
   onSlideChange?: (slideNumber: number, content: string) => void;
   onFocus?: (slideNumber: number) => void;
-  selectedSlides?: number[];
   onGenerateOne?: (slideNumber: number) => void;
 }
 
@@ -23,7 +22,6 @@ const ScriptModalForm = forwardRef<ScriptModalFormRef, ScriptModalFormProps>(({
   slides,
   onSlideChange: _onSlideChange,
   onFocus,
-  selectedSlides = [],
   onGenerateOne
 }, ref) => {
   const itemRefs = useRef<Record<number, ScriptModalItemRef | null>>({});
@@ -92,24 +90,7 @@ const formSectionStyle: React.CSSProperties = {
   height: '100%',
 };
 
-const controlBarStyle: React.CSSProperties = {
-  position: 'absolute',
-  top: 0,
-  right: 60,
-  display: 'flex',
-  alignItems: 'center',
-  gap: '8px',
-  padding: '10px 0',
-};
-
-const checkboxLabelStyle: React.CSSProperties = {
-  fontFamily: 'Pretendard',
-  fontSize: '13px',
-  color: '#171719',
-  display: 'flex',
-  alignItems: 'center',
-  gap: '6px',
-};
+// 선택 컨트롤 제거됨
 
 const inputListStyle: React.CSSProperties = {
   flex: 1,
