@@ -34,12 +34,27 @@ export const FileUploadBox = React.forwardRef<{ open: () => void }, FileUploadBo
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      if (file.type !== 'application/pdf') {
+      // 확장자/크기 검증 (pdf, ppt, pptx 허용. 단, 현재 플로우는 PDF만 지원)
+      const name = file.name || '';
+      const ext = name.includes('.') ? name.split('.').pop()!.toLowerCase() : '';
+      const allowedExts = ['pdf', 'ppt', 'pptx'];
+
+      if (!allowedExts.includes(ext)) {
+        setError({
+          title: "확장자 오류",
+          message: "PDF, PPT, PPTX 파일만 업로드할 수 있어요."
+        });
+        setToast({ visible: true, variant: 'sizeError', title: '파일 확장자 오류', subtitle: 'PDF, PPT, PPTX만 업로드할 수 있어요.' });
+        return;
+      }
+
+      if (ext === 'ppt' || ext === 'pptx') {
+        // 현재 앱은 PDF 기반 미리보기/페이지 수 계산만 지원
         setError({
           title: "업로드 실패",
-          message: "PDF 파일만 업로드 가능합니다."
+          message: "현재 버전은 PDF 형식만 지원합니다. PPT/PPTX는 PDF로 변환 후 업로드해주세요."
         });
-        setToast({ visible: true, variant: 'fail', title: '업로드 실패', subtitle: 'PDF 파일만 업로드할 수 있어요.' });
+        setToast({ visible: true, variant: 'fail', title: '업로드 실패', subtitle: '현재는 PDF만 지원합니다.' });
         return;
       }
       
@@ -50,7 +65,7 @@ export const FileUploadBox = React.forwardRef<{ open: () => void }, FileUploadBo
           title: "파일 크기 초과",
           message: "파일 크기가 20MB를 초과합니다. 20MB 이하의 파일을 업로드해주세요."
         });
-        setToast({ visible: true, variant: 'sizeError' });
+        setToast({ visible: true, variant: 'sizeError', title: '파일 크기 오류', subtitle: '20MB 이하의 파일만 업로드할 수 있어요.' });
         return;
       }
       
@@ -75,8 +90,16 @@ export const FileUploadBox = React.forwardRef<{ open: () => void }, FileUploadBo
           clearInterval(interval);
           setIsUploading(false);
           console.log('업로드 완료:', file.name);
-          onUploadComplete?.(file);
-          setToast({ visible: true, variant: 'success' });
+          // 5% 확률로 400/500 에러 시뮬레이션
+          const isError = Math.random() < 0.05;
+          if (isError) {
+            const status = Math.random() < 0.5 ? 400 : 500;
+            console.error('업로드 실패 (mock):', status);
+            setToast({ visible: true, variant: 'fail', title: '업로드 실패', subtitle: `${status} 에러가 발생했습니다.` });
+          } else {
+            onUploadComplete?.(file);
+            setToast({ visible: true, variant: 'success' });
+          }
           
           setTimeout(() => {
             setSelectedFile(null);
