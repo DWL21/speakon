@@ -164,11 +164,11 @@ export function Home() {
 
         {/* 카드 목록 / 빈 상태 */}
         {files.length === 0 ? (
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '634px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '634px', marginTop: '8px' }}>
             <div style={{ ...typography.body.normal, color: colors.label.assistive }}>등록된 파일이 없습니다.</div>
           </div>
         ) : (
-          <div style={{ height: '634px', overflowY: 'auto', padding: '12px 34px' }}>
+          <div style={{ height: '634px', overflowY: 'auto', padding: '8px 34px 12px' }}>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(1, minmax(0, 1fr))', gap: '12px' }}>
               {files.map(f => (
                 <BoardCard key={f.id} file={f} onDelete={(id: string) => { removeFile(id); setFiles(listFiles()); }} />
