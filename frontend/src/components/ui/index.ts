@@ -12,3 +12,4 @@ export { Typography } from './Typography';
 export { ErrorMessage } from './ErrorMessage';
 export { ErrorModal } from './ErrorModal'; 
 export { BoardCard } from './BoardCard';
+export { StatusToast } from './StatusToast';

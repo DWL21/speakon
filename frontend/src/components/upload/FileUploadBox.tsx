@@ -1,6 +1,8 @@
 import React, { useState, useRef, useImperativeHandle } from 'react';
+import { createPortal } from 'react-dom';
 import { UploadProgress } from './UploadProgress';
 import { ErrorModal } from '../ui/ErrorModal';
+import { StatusToast } from '../ui';
 import { colors } from '../../theme/colors';
 import { typography } from '../../theme/typography';
 
@@ -16,6 +18,7 @@ export const FileUploadBox = React.forwardRef<{ open: () => void }, FileUploadBo
   const [error, setError] = useState<{ title: string; message: string } | null>(null);
   const [isHovered, setIsHovered] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [toast, setToast] = useState<{ visible: boolean; variant: 'loading' | 'success' | 'sizeError' | 'fail'; title?: string; subtitle?: string }>({ visible: false, variant: 'loading' });
 
   const handleClick = () => {
     if (!isUploading) {
@@ -36,6 +39,7 @@ export const FileUploadBox = React.forwardRef<{ open: () => void }, FileUploadBo
           title: "업로드 실패",
           message: "PDF 파일만 업로드 가능합니다."
         });
+        setToast({ visible: true, variant: 'fail', title: '업로드 실패', subtitle: 'PDF 파일만 업로드할 수 있어요.' });
         return;
       }
       
@@ -46,11 +50,13 @@ export const FileUploadBox = React.forwardRef<{ open: () => void }, FileUploadBo
           title: "파일 크기 초과",
           message: "파일 크기가 20MB를 초과합니다. 20MB 이하의 파일을 업로드해주세요."
         });
+        setToast({ visible: true, variant: 'sizeError' });
         return;
       }
       
       setSelectedFile(file);
       setIsUploading(true);
+      setToast({ visible: true, variant: 'loading' });
       
       simulateUpload(file);
     }
@@ -69,6 +75,7 @@ export const FileUploadBox = React.forwardRef<{ open: () => void }, FileUploadBo
           setIsUploading(false);
           console.log('업로드 완료:', file.name);
           onUploadComplete?.(file);
+          setToast({ visible: true, variant: 'success' });
           
           setTimeout(() => {
             setSelectedFile(null);
@@ -76,6 +83,7 @@ export const FileUploadBox = React.forwardRef<{ open: () => void }, FileUploadBo
             if (fileInputRef.current) {
               fileInputRef.current.value = '';
             }
+            setToast({ ...toast, visible: false });
           }, 3000);
           
           return 100;
@@ -260,6 +268,17 @@ export const FileUploadBox = React.forwardRef<{ open: () => void }, FileUploadBo
           boxSizing: 'border-box',
         }}
       >
+        {/* 상태는 토스트로 노출 (업로드 중엔 진행률 포함). 확실한 뷰포트 기준 위치를 위해 포털 사용 */}
+        {createPortal(
+          <StatusToast
+            visible={isUploading || toast.visible}
+            variant={isUploading ? 'loading' : toast.variant}
+            title={toast.title}
+            subtitle={toast.subtitle}
+            progress={isUploading ? progress : undefined}
+          />,
+          document.body
+        )}
         {!isUploading && !selectedFile && renderInitialContent()}
         {isUploading && renderUploadingContent()}
         {!isUploading && selectedFile && progress === 100 && renderCompletedContent()}
