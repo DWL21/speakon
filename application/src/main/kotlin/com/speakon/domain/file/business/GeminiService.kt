@@ -7,7 +7,7 @@ import java.util.concurrent.CompletableFuture
 
 @Service
 class GeminiService(
-    private val geminiClient: GeminiClient
+    private val geminiClient: GeminiOutputPort
 ) {
 
     fun initiateUploadPdfToGemini(pdfFile: File, displayName: String): GeminiUploadSession {

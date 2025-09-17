@@ -4,11 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5ceb51b6-9861-4fdf-9346-3fd7d2cbb8c1" name="Changes" comment="chore: .gitignore" />
+    <list default="true" id="5ceb51b6-9861-4fdf-9346-3fd7d2cbb8c1" name="Changes" comment="chore: .gitignore">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$/application">
+      <ProjectState />
+    </projectState>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -118,6 +125,8 @@
       <workItem from="1754724405244" duration="546000" />
       <workItem from="1757743289600" duration="6000" />
       <workItem from="1757743324188" duration="172000" />
+      <workItem from="1757988376737" duration="3882000" />
+      <workItem from="1758077227287" duration="17000" />
     </task>
     <task id="LOCAL-00001" summary="chore: .gitignore">
       <option name="closed" value="true" />

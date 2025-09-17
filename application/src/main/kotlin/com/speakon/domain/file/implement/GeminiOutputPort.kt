@@ -3,7 +3,7 @@ package com.speakon.domain.file.implement
 import java.io.File
 import java.util.concurrent.CompletableFuture
 
-interface GeminiClient {
+interface GeminiOutputPort {
     fun initiateUpload(file: File, displayName: String): GeminiUploadSession
     fun uploadFileAsync(uploadSession: GeminiUploadSession): CompletableFuture<GeminiFileInfo>
     fun getFileInfo(fileName: String): GeminiFileInfo

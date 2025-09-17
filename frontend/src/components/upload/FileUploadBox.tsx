@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useImperativeHandle } from 'react';
 import { UploadProgress } from './UploadProgress';
 import { ErrorModal } from '../ui/ErrorModal';
 import { colors } from '../../theme/colors';
@@ -9,7 +9,7 @@ interface FileUploadBoxProps {
   onUploadComplete?: (file: File) => void;
 }
 
-export const FileUploadBox: React.FC<FileUploadBoxProps> = ({ className = '', onUploadComplete }) => {
+export const FileUploadBox = React.forwardRef<{ open: () => void }, FileUploadBoxProps>(({ className = '', onUploadComplete }, ref) => {
   const [isUploading, setIsUploading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -22,6 +22,11 @@ export const FileUploadBox: React.FC<FileUploadBoxProps> = ({ className = '', on
       fileInputRef.current?.click();
     }
   };
+
+  // 외부에서 파일 선택창을 열 수 있도록 공개 메서드 제공
+  useImperativeHandle(ref, () => ({
+    open: () => handleClick(),
+  }));
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -261,4 +266,4 @@ export const FileUploadBox: React.FC<FileUploadBoxProps> = ({ className = '', on
       </div>
     </>
   );
-}; 
+});

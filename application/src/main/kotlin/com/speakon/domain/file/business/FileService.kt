@@ -22,6 +22,8 @@ class FileService(
     private val fileConversionService: FileConversionService? = null,
     @Autowired(required = false)
     private val geminiService: GeminiService? = null,
+    @Autowired(required = false)
+    private val fileTranscriptService: FileTranscriptService? = null,
 ) {
     fun uploadFile(uuid: Uuid, multipartFile: MultipartFile): StoredFile {
         fileValidator.validateFile(multipartFile)
@@ -138,6 +140,53 @@ class FileService(
         }
 
         return geminiService.createModelMessage(text)
+    }
+
+    fun createFileTranscript(uuid: Uuid, fileId: Long, pages: List<TranscriptPage>): List<TranscriptPage> {
+        if (fileTranscriptService == null) {
+            throw UnsupportedOperationException("File transcript service is not available.")
+        }
+
+        return fileTranscriptService.createTranscript(uuid, fileId, pages)
+    }
+
+    fun getFileTranscript(uuid: Uuid, fileId: Long): List<TranscriptPage> {
+        if (fileTranscriptService == null) {
+            throw UnsupportedOperationException("File transcript service is not available.")
+        }
+
+        return fileTranscriptService.getTranscript(uuid, fileId)
+    }
+
+    fun getTranscriptPage(uuid: Uuid, fileId: Long, pageNumber: Int): TranscriptPage? {
+        if (fileTranscriptService == null) {
+            throw UnsupportedOperationException("File transcript service is not available.")
+        }
+
+        return fileTranscriptService.getTranscriptPage(uuid, fileId, pageNumber)
+    }
+
+    fun generateTranscriptFromPdf(uuid: Uuid, fileId: Long): CompletableFuture<List<TranscriptPage>> {
+        if (fileTranscriptService == null) {
+            throw UnsupportedOperationException("File transcript service is not available.")
+        }
+
+        // 먼저 PDF를 Gemini에 업로드
+        val uploadFuture = uploadPdfToGemini(uuid, fileId)
+
+        return uploadFuture.thenCompose { geminiFileInfo ->
+            CompletableFuture.supplyAsync {
+                fileTranscriptService.generateTranscriptFromPdf(uuid, fileId, geminiFileInfo.uri)
+            }
+        }
+    }
+
+    fun hasFileTranscript(uuid: Uuid, fileId: Long): Boolean {
+        if (fileTranscriptService == null) {
+            throw UnsupportedOperationException("File transcript service is not available.")
+        }
+
+        return fileTranscriptService.hasTranscript(uuid, fileId)
     }
 
 

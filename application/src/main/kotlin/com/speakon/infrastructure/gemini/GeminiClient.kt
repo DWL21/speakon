@@ -1,6 +1,5 @@
 package com.speakon.infrastructure.gemini
 
-import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.speakon.domain.file.implement.*
@@ -15,10 +14,10 @@ import java.io.File
 import java.util.concurrent.CompletableFuture
 
 @Component
-class GeminiClientImpl(
+class GeminiClient(
     private val httpClient: OkHttpClient,
     private val objectMapper: ObjectMapper
-) : GeminiClient {
+) : GeminiOutputPort {
 
     @Value("\${gemini.api.key}")
     private lateinit var apiKey: String
