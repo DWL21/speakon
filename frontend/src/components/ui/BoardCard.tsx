@@ -98,28 +98,44 @@ export const BoardCard: React.FC<BoardCardProps> = ({ file, onDelete }) => {
               position: 'absolute',
               right: 0,
               marginTop: '6px',
-              background: colors.background.normal,
-              border: `1px solid ${colors.line.alternative}`,
-              borderRadius: '8px',
-              padding: '6px',
-              minWidth: '120px',
+              background: '#FFFFFF',
+              borderRadius: '12px',
+              padding: '0 16px',
+              minWidth: '180px',
+              height: '50px',
+              display: 'flex',
+              alignItems: 'center',
+              boxShadow: '1px 2px 4px rgba(0,0,0,0.15)',
               zIndex: 10,
             }}
           >
             <button
               onClick={() => onDelete?.(file.id)}
               style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
                 width: '100%',
                 textAlign: 'left',
                 background: 'transparent',
                 border: 'none',
-                padding: '8px',
-                borderRadius: '6px',
+                padding: 0,
                 cursor: 'pointer',
-                color: colors.label.strong,
+                color: colors.label.normal,
+                fontFamily: 'Pretendard, sans-serif',
+                fontWeight: 500,
+                fontSize: '16px',
+                lineHeight: '16px',
               }}
             >
-              삭제
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M11.6667 9.16667V14.1667" stroke="#292929" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.25"/>
+                <path d="M8.33333 9.16667V14.1667" stroke="#292929" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.25"/>
+                <path d="M5 5.83333V15.8333C5 16.7538 5.74619 17.5 6.66667 17.5H13.3333C14.2538 17.5 15 16.7538 15 15.8333V5.83333" stroke="#292929" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.25"/>
+                <path d="M3.33333 5.83333H16.6667" stroke="#292929" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.25"/>
+                <path d="M5.83333 5.83333L7.5 2.5H12.5L14.1667 5.83333" stroke="#292929" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.25"/>
+              </svg>
+              파일 삭제
             </button>
           </div>
         </details>

@@ -136,10 +136,12 @@ export function Home() {
             <div style={{ ...typography.body.normal, color: colors.label.assistive }}>등록된 파일이 없습니다.</div>
           </div>
         ) : (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(1, minmax(0, 1fr))', gap: '12px', padding: '12px 34px' }}>
-            {files.map(f => (
-              <BoardCard key={f.id} file={f} onDelete={(id: string) => { removeFile(id); setFiles(listFiles()); }} />
-            ))}
+          <div style={{ height: '634px', overflowY: 'auto', padding: '12px 34px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(1, minmax(0, 1fr))', gap: '12px' }}>
+              {files.map(f => (
+                <BoardCard key={f.id} file={f} onDelete={(id: string) => { removeFile(id); setFiles(listFiles()); }} />
+              ))}
+            </div>
           </div>
         )}
 
