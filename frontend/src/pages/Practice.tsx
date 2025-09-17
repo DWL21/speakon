@@ -50,6 +50,29 @@ export function Practice() {
     setFileName(state.pdfFile.name.replace('.pdf', ''));
   }, [location.state, navigate]);
 
+  // 업로드 이외 경로(보드 카드 진입 등)에서 슬라이드가 비어있으면 PDF 페이지 수로 초기화
+  useEffect(() => {
+    const initSlidesIfEmpty = async () => {
+      if (!practiceData || !practiceData.pdfFile) return;
+      if (practiceData.slides && practiceData.slides.length > 0) return;
+      try {
+        const { getPdfPageCount } = await import('../lib/pdfUtils');
+        const pageCount = await getPdfPageCount(practiceData.pdfFile);
+        const generated: SlideInput[] = Array.from({ length: pageCount }, (_, i) => ({
+          slideNumber: i + 1,
+          pageNumber: i + 1,
+          content: ''
+        }));
+        setPracticeData({ ...practiceData, slides: generated });
+      } catch (e) {
+        // 최소 1페이지 기본 값
+        const fallback: SlideInput[] = [{ slideNumber: 1, pageNumber: 1, content: '' }];
+        setPracticeData({ ...practiceData, slides: fallback });
+      }
+    };
+    initSlidesIfEmpty();
+  }, [practiceData]);
+
   useEffect(() => {
     if (practiceData) {
       const currentSlideData = practiceData.slides.find(slide => slide.slideNumber === currentSlide);

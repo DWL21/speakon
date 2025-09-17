@@ -5,6 +5,7 @@ import { SlideInput } from '../components/ScriptModal/ScriptModal'
 import { colors } from '../theme/colors'
 import { typography } from '../theme/typography'
 import { upsertFile, listFiles, removeFile, StoredFileMeta } from '../lib/boardStorage'
+import { saveFileBlob } from '../lib/fileStore'
 import { BoardCard } from '../components/ui/BoardCard'
 
 export function Home() {
@@ -13,7 +14,37 @@ export function Home() {
   const [files, setFiles] = useState<StoredFileMeta[]>([])
 
   useEffect(() => {
-    setFiles(listFiles())
+    const init = async () => {
+      const current = listFiles()
+      if (current.length > 0) {
+        setFiles(current)
+        return
+      }
+      // Seed default mock file on first load
+      try {
+        const pdfRes = await fetch('/[IT프로젝트]Emileo_중간발표PPT.pdf')
+        if (!pdfRes.ok) {
+          setFiles(current)
+          return
+        }
+        const blob = await pdfRes.blob()
+        const mockFile = new File([blob], '[IT프로젝트]Emileo_중간발표PPT.pdf', {
+          type: 'application/pdf',
+          lastModified: Date.now(),
+        })
+        let pageCount: number | undefined = undefined
+        try {
+          const { getPdfPageCount } = await import('../lib/pdfUtils')
+          pageCount = await getPdfPageCount(mockFile)
+        } catch {}
+        const meta = upsertFile({ name: mockFile.name, size: mockFile.size, pageCount, idHint: 'mock_default' })
+        await saveFileBlob(meta.id, mockFile)
+        setFiles(listFiles())
+      } catch {
+        setFiles(current)
+      }
+    }
+    init()
   }, [])
 
   const handleUploadComplete = async (file: File) => {
@@ -31,8 +62,9 @@ export function Home() {
         content: ''
       }));
       
-      // 보드에 메타 저장 (모킹, 중복 방지)
-      upsertFile({ name: file.name, size: file.size, pageCount })
+      // 보드에 메타 저장 (중복 방지) + 파일 Blob 저장
+      const meta = upsertFile({ name: file.name, size: file.size, pageCount })
+      await saveFileBlob(meta.id, file)
       setFiles(listFiles())
       
       // ScriptModal을 건너뛰고 바로 Practice 페이지로 이동
@@ -51,8 +83,8 @@ export function Home() {
         content: ''
       }];
       
-      // 보드에 메타 저장 (페이지 수 미상, 중복 방지)
-      upsertFile({ name: file.name, size: file.size })
+      const meta = upsertFile({ name: file.name, size: file.size })
+      await saveFileBlob(meta.id, file)
       setFiles(listFiles())
       
       navigate('/practice', {

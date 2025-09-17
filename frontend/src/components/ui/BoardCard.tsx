@@ -1,6 +1,7 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { SlideInput } from '../ScriptModal/ScriptModalForm'
+import { getFileBlob } from '../../lib/fileStore'
 import { colors } from '../../theme/colors'
 import { typography } from '../../theme/typography'
 import { StoredFileMeta } from '../../lib/boardStorage'
@@ -29,6 +30,13 @@ export const BoardCard: React.FC<BoardCardProps> = ({ file, onDelete }) => {
 
   const handleOpen = async () => {
     try {
+      // 우선 IndexedDB에서 실제 업로드 파일을 찾음
+      const fileBlob = await getFileBlob(file.id)
+      if (fileBlob) {
+        navigate('/practice', { state: { pdfFile: fileBlob, slides: [] as SlideInput[] } })
+        return
+      }
+      // 없으면 모킹 리소스로 폴백
       const [pdfResponse, scriptsResponse] = await Promise.all([
         fetch('/[IT프로젝트]Emileo_중간발표PPT.pdf'),
         fetch('/example-scripts.json')
@@ -43,7 +51,7 @@ export const BoardCard: React.FC<BoardCardProps> = ({ file, onDelete }) => {
       }
       navigate('/practice', { state: { pdfFile, slides } })
     } catch (e) {
-      alert('준비된 모킹 파일을 불러오지 못했습니다.')
+      alert('파일을 여는 중 문제가 발생했습니다.')
     }
   }
 

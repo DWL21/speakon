@@ -67,7 +67,7 @@ export function clearAll() {
 }
 
 // 동일 파일명+크기가 이미 존재하면 갱신, 없으면 추가
-export function upsertFile(meta: { name: string; size: number; pageCount?: number }): StoredFileMeta {
+export function upsertFile(meta: { name: string; size: number; pageCount?: number; idHint?: string }): StoredFileMeta {
   const files = readAll();
   const idx = files.findIndex(f => f.name === meta.name && f.size === meta.size);
   if (idx >= 0) {
@@ -81,7 +81,7 @@ export function upsertFile(meta: { name: string; size: number; pageCount?: numbe
     return updated;
   }
   const created: StoredFileMeta = {
-    id: generateId(),
+    id: meta.idHint ?? generateId(),
     name: meta.name,
     size: meta.size,
     pageCount: meta.pageCount,
