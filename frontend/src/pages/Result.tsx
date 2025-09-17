@@ -4,7 +4,6 @@ import { PracticeResult } from '../components/ResultReport';
 import { TopNavBar } from '../components/ui/TopNavBar';
 import { Button } from '../components/ui/Button';
 import { colors } from '../theme/colors';
-import { typography } from '../theme/typography';
 
 export function Result() {
   const location = useLocation();
@@ -41,14 +40,6 @@ export function Result() {
     });
   };
 
-  const calculatePercentage = (pageTime: { minutes: number; seconds: number }) => {
-    const totalSeconds = practiceResult.totalTime.minutes * 60 + practiceResult.totalTime.seconds;
-    const pageSeconds = pageTime.minutes * 60 + pageTime.seconds;
-    
-    if (totalSeconds === 0) return 0;
-    return Math.round((pageSeconds / totalSeconds) * 100);
-  };
-
   const formatTime = (time: { minutes: number; seconds: number }) => {
     return `${time.minutes.toString().padStart(2, '0')}분 ${time.seconds.toString().padStart(2, '0')}초`;
   };
@@ -59,7 +50,7 @@ export function Result() {
     ? (practiceResult as any).goalTime.minutes * 60 + (practiceResult as any).goalTime.seconds
     : undefined;
 
-  // Mock 예상 질문 TOP5
+  // Mock 예상 질문 TOP5 (MCP 뷰 유지)
   const mockQuestions: { question: string; reason: string }[] = [
     { question: 'Q1. 핵심 용어의 정의를 더 자세히 설명해 주세요.', reason: '용어 설명이 간략함' },
     { question: 'Q2. 대안 비교 기준은 무엇인가요?', reason: '비교 근거 부족' },
@@ -69,7 +60,7 @@ export function Result() {
   ];
 
   const diffSec = goalSeconds !== undefined ? totalSec - goalSeconds : undefined;
-  const headline = '휼룽했어요';
+  const headline = '당신은 완벽한 설계자예요. 계획한 시간 안에서 멋지게 발표를 마쳤네요!';
   const isUnderGoal = goalSeconds !== undefined ? totalSec < goalSeconds : false;
 
   return (
@@ -122,7 +113,7 @@ export function Result() {
                     {diffSec === undefined
                       ? '목표 시간이 설정되지 않았어요'
                       : (totalSec < (goalSeconds as number))
-                        ? '시간 조절이 휼륭했어요!'
+                        ? '시간 조절이 휼륭했어요'
                         : diffSec > 0
                           ? '더 초과됐어요'
                           : '목표 시간 안에 끝냈어요'}
@@ -149,8 +140,7 @@ export function Result() {
             </div>
           </div>
         </div>
-
-        {/* 중단 인사이트 (시간 추이 + 질문 TOP5) */}
+        {/* 인사이트 (시간 추이 + 질문 TOP5) - MCP 뷰 유지 */}
         <div style={insightRowStyle}>
           <div style={insightLeftStyle}>
             <div style={insightIntroStyle}>슬라이드마다 시간을 어떻게 썼는지 한눈에 보여드릴게요</div>
@@ -193,90 +183,7 @@ export function Result() {
           </div>
         </div>
 
-        {/* 목표 시간 대비, 많이 쓴 슬라이드, 슬라이드별 발표 시간 추이, 예상 질문 TOP5 */}
-        <div style={insightSectionStyle}>
-          <div style={insightGridStyle}>
-            <div style={cardStyle}>
-              <div style={cardTitleStyle}>발표 시간</div>
-              <div style={metricRowStyle}>
-                <span style={metricLabelStyle}>총 소요</span>
-                <span style={metricValueStyle}>{formatTime(practiceResult.totalTime)}</span>
-              </div>
-              {goalSeconds !== undefined && (
-                <div style={metricRowStyle}>
-                  <span style={metricLabelStyle}>목표 시간 대비</span>
-                  <span style={metricValueStyle}>
-                    {(() => {
-                      const totalSec = practiceResult.totalTime.minutes * 60 + practiceResult.totalTime.seconds;
-                      const diff = totalSec - goalSeconds;
-                      const sign = diff >= 0 ? '+' : '-';
-                      const abs = Math.abs(diff);
-                      const m = Math.floor(abs / 60);
-                      const s = abs % 60;
-                      return `${sign}${m}분 ${s.toString().padStart(2, '0')}초`;
-                    })()}
-                  </span>
-                </div>
-              )}
-            </div>
-
-            <div style={cardStyle}>
-              <div style={cardTitleStyle}>이 슬라이드에 시간을 많이 썼어요!</div>
-              {(() => {
-                const entries = Object.entries(practiceResult.pageTimes);
-                if (entries.length === 0) return <div style={emptyTextStyle}>데이터 없음</div>;
-                const sorted = entries
-                  .map(([num, t]) => ({ num: Number(num), sec: t.minutes * 60 + t.seconds }))
-                  .sort((a, b) => b.sec - a.sec)
-                  .slice(0, 3);
-                return (
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                    {sorted.map(({ num, sec }) => (
-                      <div key={num} style={chipRowStyle}>
-                        <span style={chipStyle}>슬라이드 {num}</span>
-                        <span style={chipValueStyle}>{`${Math.floor(sec / 60)}분 ${(sec % 60).toString().padStart(2, '0')}초`}</span>
-                      </div>
-                    ))}
-                  </div>
-                );
-              })()}
-            </div>
-
-            <div style={cardStyle}>
-              <div style={cardTitleStyle}>슬라이드별 발표 시간 추이</div>
-              <div style={trendContainerStyle}>
-                {practiceResult.slides.map(slide => {
-                  const t = practiceResult.pageTimes[slide.slideNumber] || { minutes: 0, seconds: 0 };
-                  const sec = t.minutes * 60 + t.seconds;
-                  const maxSec = Math.max(1, ...Object.values(practiceResult.pageTimes).map(v => v.minutes * 60 + v.seconds));
-                  const h = Math.max(4, Math.round((sec / maxSec) * 40));
-                  const hue = 210 - Math.round((sec / maxSec) * 150); // 파랑→주황 그라데이션 느낌
-                  return (
-                    <div key={slide.slideNumber} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px' }}>
-                      <div style={{ width: '10px', height: `${h}px`, borderRadius: '6px', backgroundColor: `hsl(${hue} 90% 55%)` }} />
-                      <span style={{ fontSize: '10px', color: colors.label.neutral }}>#{slide.slideNumber}</span>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-
-            <div style={cardStyle}>
-              <div style={cardTitleStyle}>예상 질문 TOP5</div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                {mockQuestions.map((q, i) => (
-                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <span style={badgeStyle}>{i + 1}</span>
-                    <div style={{ display: 'flex', flexDirection: 'column' }}>
-                      <span style={{ fontSize: '13px', color: colors.label.normal, fontWeight: 600 }}>{q.question}</span>
-                      <span style={{ fontSize: '12px', color: colors.label.neutral }}>{q.reason}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
+        {/* 하단 인사이트 섹션 제거됨 */}
 
         <div style={footerBarStyle}>
           <Button
