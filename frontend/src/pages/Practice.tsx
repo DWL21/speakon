@@ -402,6 +402,15 @@ export function Practice() {
               onViewToggle={handleScriptInputToggle}
               onTimeSettingClick={handleTimeSettingClick}
               onEditScript={handleScriptWritingClick}
+          onGenerateScript={() => {
+            // 현재 슬라이드용 대본 자동 생성 (모킹)
+            setPracticeData(prev => {
+              if (!prev) return prev;
+              const generated = `슬라이드 ${currentSlide} 요약\n- 핵심 포인트 1\n- 핵심 포인트 2\n- 결론`;
+              const nextSlides = prev.slides.map(s => s.slideNumber === currentSlide ? { ...s, content: generated } : s);
+              return { ...prev, slides: nextSlides };
+            })
+          }}
               onPracticeToggle={handlePracticeToggle}
               onEnd={handleExitClick}
               currentPageTime={currentPageTime}

@@ -61,9 +61,9 @@ export const StatusToast: React.FC<StatusToastProps> = ({ visible, variant, titl
             {subtitle ?? defaultTexts.subtitle}
           </div>
           {variant === 'loading' && typeof progress === 'number' && (
-            <div style={{ marginTop: '6px' }}>
+            <div style={{ marginTop: '12px' }}>
               <Progress value={progress} heightPx={6} />
-              <div style={{ marginTop: '4px', fontSize: '12px', color: colors.label.neutral }}>
+              <div style={{ marginTop: '8px', fontSize: '12px', color: colors.label.neutral }}>
                 {Math.floor(progress)}%
               </div>
             </div>
