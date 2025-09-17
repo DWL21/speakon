@@ -9,6 +9,7 @@ export function Result() {
   const location = useLocation();
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = React.useState<number>(1);
+  const [isScriptCardFlipped, setIsScriptCardFlipped] = React.useState(false);
 
   const practiceResult = location.state as PracticeResult;
 
@@ -51,17 +52,31 @@ export function Result() {
     : undefined;
 
   // Mock 예상 질문 TOP5 (MCP 뷰 유지)
-  const mockQuestions: { question: string; reason: string }[] = [
-    { question: 'Q1. 핵심 용어의 정의를 더 자세히 설명해 주세요.', reason: '용어 설명이 간략함' },
-    { question: 'Q2. 대안 비교 기준은 무엇인가요?', reason: '비교 근거 부족' },
-    { question: 'Q3. 성능 수치의 측정 조건은 동일했나요?', reason: '측정 신뢰성' },
-    { question: 'Q4. 실패 사례에서 재현 절차는 어떻게 되나요?', reason: '재현성 확인' },
-    { question: 'Q5. 추후 일정과 리스크 대응 계획은 무엇인가요?', reason: '로드맵 보완' },
+  const mockQuestions: string[] = [
+    '질문 1을 입력하시면 됩니다',
+    '질문 2을 입력하시면 됩니다',
+    '질문 3을 입력하시면 됩니다',
+    '질문 4을 입력하시면 됩니다',
+    '질문 5을 입력하시면 됩니다',
   ];
 
   const diffSec = goalSeconds !== undefined ? totalSec - goalSeconds : undefined;
   const headline = '당신은 완벽한 설계자예요. 계획한 시간 안에서 멋지게 발표를 마쳤네요!';
   const isUnderGoal = goalSeconds !== undefined ? totalSec < goalSeconds : false;
+
+  const longestSlideNumber: number | undefined = (() => {
+    const entries = Object.entries(practiceResult.pageTimes);
+    if (entries.length === 0) return undefined;
+    const sorted = entries
+      .map(([num, t]) => ({ num: Number(num), sec: t.minutes * 60 + t.seconds }))
+      .sort((a, b) => b.sec - a.sec);
+    return sorted[0]?.num;
+  })();
+
+  const longestSlide = longestSlideNumber
+    ? practiceResult.slides.find(s => s.slideNumber === longestSlideNumber)
+    : undefined;
+  const longestScript = longestSlide?.content ?? '';
 
   return (
     <div style={containerStyle}>
@@ -143,8 +158,10 @@ export function Result() {
         {/* 인사이트 (시간 추이 + 질문 TOP5) - MCP 뷰 유지 */}
         <div style={insightRowStyle}>
           <div style={insightLeftStyle}>
-            <div style={insightIntroStyle}>슬라이드마다 시간을 어떻게 썼는지 한눈에 보여드릴게요</div>
-            <div style={insightTitleStyle}>슬라이드별 발표 시간 추이</div>
+            <div style={insightTextGroupStyle}>
+              <div style={insightIntroStyle}>슬라이드마다 시간을 어떻게 썼는지 한눈에 보여드릴게요</div>
+              <div style={insightTitleStyle}>슬라이드별 발표 시간 추이</div>
+            </div>
             <div style={trendBarRowStyle}>
               {practiceResult.slides.map((slide, idx) => {
                 const t = practiceResult.pageTimes[slide.slideNumber] || { minutes: 0, seconds: 0 };
@@ -169,31 +186,25 @@ export function Result() {
             </div>
             <div style={questionCardStyle}>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', width: '100%' }}>
-                {mockQuestions.map((q, i) => (
+                {mockQuestions.map((text, i) => (
                   <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <div style={numberBadgeStyle}>{i + 1}</div>
-                    <div style={{ display: 'flex', flexDirection: 'column' }}>
-                      <span style={{ fontSize: '16px', color: colors.label.normal, fontWeight: 500 }}>{q.question}</span>
-                      <span style={{ fontSize: '14px', color: colors.label.neutral }}>{q.reason}</span>
-                    </div>
+                    <span style={{ fontSize: '16px', color: colors.label.normal, fontWeight: 500 }}>{text}</span>
                   </div>
                 ))}
               </div>
             </div>
+            <div style={questionActionRowStyle}>
+              <Button
+                variant="primary"
+                size="medium"
+                onClick={handleRetry}
+                style={retryButtonStyle}
+              >
+                다시 연습하기
+              </Button>
+            </div>
           </div>
-        </div>
-
-        {/* 하단 인사이트 섹션 제거됨 */}
-
-        <div style={footerBarStyle}>
-          <Button
-            variant="primary"
-            size="medium"
-            onClick={handleRetry}
-            style={retryButtonStyle}
-          >
-            다시 연습하기
-          </Button>
         </div>
       </div>
     </div>
@@ -328,8 +339,15 @@ const insightLeftStyle: React.CSSProperties = {
   width: '550px',
   display: 'flex',
   flexDirection: 'column',
-  gap: '16px',
+  gap: '49px',
   paddingTop: '16px',
+};
+
+// 텍스트 두 줄 간격 4px (Figma)
+const insightTextGroupStyle: React.CSSProperties = {
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '4px',
 };
 
 const insightIntroStyle: React.CSSProperties = {
@@ -349,6 +367,8 @@ const trendBarRowStyle: React.CSSProperties = {
   alignItems: 'flex-end',
   padding: '0 20px',
   height: '225px',
+  maxWidth: '640px',
+  width: '100%',
 };
 
 const insightRightStyle: React.CSSProperties = {
@@ -391,15 +411,15 @@ const numberBadgeStyle: React.CSSProperties = {
 };
 
 
-const footerBarStyle: React.CSSProperties = {
-  padding: '0 0 0 140px',
-  height: '36px',
+const questionActionRowStyle: React.CSSProperties = {
+  padding: '10px 21px 0 0',
   display: 'flex',
   alignItems: 'center',
+  justifyContent: 'flex-end',
 };
 
 const retryButtonStyle: React.CSSProperties = {
-  width: '110px',
+  width: '160px',
   color: '#FFF',
   fontFamily: 'Pretendard',
   fontSize: '13px',
