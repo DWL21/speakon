@@ -29,7 +29,17 @@ function generateId(): string {
 }
 
 export function listFiles(): StoredFileMeta[] {
-  return readAll().sort((a, b) => b.uploadedAt - a.uploadedAt);
+  const files = readAll();
+  // 과거 버전에서 중복 저장된 항목을 이름+크기로 Dedup
+  const map = new Map<string, StoredFileMeta>();
+  for (const f of files) {
+    const key = `${f.name}__${f.size}`;
+    const existing = map.get(key);
+    if (!existing || (existing && f.uploadedAt > existing.uploadedAt)) {
+      map.set(key, f);
+    }
+  }
+  return Array.from(map.values()).sort((a, b) => b.uploadedAt - a.uploadedAt);
 }
 
 export function addFile(meta: Omit<StoredFileMeta, 'id' | 'uploadedAt'> & Partial<Pick<StoredFileMeta, 'uploadedAt'>>): StoredFileMeta {

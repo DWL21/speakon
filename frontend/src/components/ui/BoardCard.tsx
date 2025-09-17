@@ -1,4 +1,6 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
+import { SlideInput } from '../ScriptModal/ScriptModalForm'
 import { colors } from '../../theme/colors'
 import { typography } from '../../theme/typography'
 import { StoredFileMeta } from '../../lib/boardStorage'
@@ -9,10 +11,41 @@ export type BoardCardProps = {
 }
 
 export const BoardCard: React.FC<BoardCardProps> = ({ file, onDelete }) => {
-  const uploadedDate = new Intl.DateTimeFormat('ko-KR', {
-    year: '2-digit', month: '2-digit', day: '2-digit',
-    hour: '2-digit', minute: '2-digit', hour12: true,
-  }).format(new Date(file.uploadedAt)).replace(/\.\s/g, '.')
+  const navigate = useNavigate()
+
+  const formatDateFixed = (d: Date) => {
+    const yy = String(d.getFullYear() % 100).padStart(2, '0')
+    const mm = String(d.getMonth() + 1).padStart(2, '0')
+    const dd = String(d.getDate()).padStart(2, '0')
+    const h = d.getHours()
+    const ampm = h >= 12 ? '오후' : '오전'
+    const hh12 = h % 12 === 0 ? 12 : h % 12
+    const hh = String(hh12).padStart(2, '0')
+    const min = String(d.getMinutes()).padStart(2, '0')
+    return `${yy}.${mm}.${dd} ${ampm} ${hh}:${min}`
+  }
+
+  const uploadedDate = formatDateFixed(new Date(file.uploadedAt))
+
+  const handleOpen = async () => {
+    try {
+      const [pdfResponse, scriptsResponse] = await Promise.all([
+        fetch('/[IT프로젝트]Emileo_중간발표PPT.pdf'),
+        fetch('/example-scripts.json')
+      ])
+      if (!pdfResponse.ok) throw new Error('PDF not found')
+      const blob = await pdfResponse.blob()
+      const pdfFile = new File([blob], file.name || '[IT프로젝트]Emileo_중간발표PPT.pdf', { type: 'application/pdf', lastModified: Date.now() })
+      let slides: SlideInput[] = []
+      if (scriptsResponse.ok) {
+        const data = await scriptsResponse.json()
+        slides = (data?.slides as SlideInput[]) || []
+      }
+      navigate('/practice', { state: { pdfFile, slides } })
+    } catch (e) {
+      alert('준비된 모킹 파일을 불러오지 못했습니다.')
+    }
+  }
 
   return (
     <div
@@ -26,7 +59,7 @@ export const BoardCard: React.FC<BoardCardProps> = ({ file, onDelete }) => {
         gap: '12px',
       }}
     >
-      <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+      <div onClick={handleOpen} style={{ display: 'flex', alignItems: 'center', gap: '16px', cursor: 'pointer' }}>
         <div
           style={{
             width: '46px',
