@@ -53,7 +53,7 @@ export const StatusToast: React.FC<StatusToastProps> = ({ visible, variant, titl
         >
           {icon}
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', width: '212px' }}>
           <div style={{ fontFamily: 'Pretendard, sans-serif', fontWeight: 600, fontSize: '16px', color: colors.label.normal }}>
             {title ?? defaultTexts.title}
           </div>
@@ -62,7 +62,10 @@ export const StatusToast: React.FC<StatusToastProps> = ({ visible, variant, titl
           </div>
           {variant === 'loading' && typeof progress === 'number' && (
             <div style={{ marginTop: '6px' }}>
-              <Progress value={progress} />
+              <Progress value={progress} heightPx={6} />
+              <div style={{ marginTop: '4px', fontSize: '12px', color: colors.label.neutral }}>
+                {Math.floor(progress)}%
+              </div>
             </div>
           )}
         </div>

@@ -57,6 +57,7 @@ export const FileUploadBox = React.forwardRef<{ open: () => void }, FileUploadBo
       setSelectedFile(file);
       setIsUploading(true);
       setToast({ visible: true, variant: 'loading' });
+      setProgress(0);
       
       simulateUpload(file);
     }
@@ -88,7 +89,8 @@ export const FileUploadBox = React.forwardRef<{ open: () => void }, FileUploadBo
           
           return 100;
         }
-        return prev + 10;
+        const next = prev + 10;
+        return next > 100 ? 100 : next;
       });
     }, 200);
   };
