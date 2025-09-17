@@ -136,22 +136,32 @@ export function Result() {
                 </div>
               </div>
             </div>
-            {/* 가장 오래 발표한 슬라이드 */}
-            <div style={{ ...summaryCardStyle, width: '550px' }}>
+            {/* 가장 오래 발표한 슬라이드 - 카드 클릭 시 대본 보기 (뒤집기) */}
+            <div
+              style={{ ...summaryCardStyle, width: '550px', cursor: longestSlideNumber ? 'pointer' : 'default' }}
+              onClick={() => {
+                if (longestSlideNumber) setIsScriptCardFlipped(prev => !prev);
+              }}
+              title={longestSlideNumber ? '카드를 클릭하면 대본을 확인/닫을 수 있어요' : undefined}
+              aria-label="가장 오래 발표한 슬라이드 카드"
+            >
               <div style={summaryCardTitleStyle}>이 슬라이드에 시간을 가장 많이 썼어요!</div>
-              {(() => {
-                const entries = Object.entries(practiceResult.pageTimes);
-                if (entries.length === 0) return <div style={emptyTextStyle}>데이터 없음</div>;
-                const sorted = entries
-                  .map(([num, t]) => ({ num: Number(num), sec: t.minutes * 60 + t.seconds }))
-                  .sort((a, b) => b.sec - a.sec);
-                return (
+              {longestSlideNumber ? (
+                isScriptCardFlipped ? (
+                  <div style={flipBackStyle}>
+                    <div style={scriptBoxStyle}>
+                      <pre style={scriptTextStyle}>{longestScript || '대본이 없습니다.'}</pre>
+                    </div>
+                  </div>
+                ) : (
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                    <div style={summaryBigValueStyle}>슬라이드 {sorted[0].num}</div>
+                    <div style={summaryBigValueStyle}>슬라이드 {longestSlideNumber}</div>
                     <div style={summarySubTextStyle}>카드를 클릭하면 대본을 확인할 수 있어요</div>
                   </div>
-                );
-              })()}
+                )
+              ) : (
+                <div style={emptyTextStyle}>데이터 없음</div>
+              )}
             </div>
           </div>
         </div>
@@ -325,6 +335,43 @@ const summaryBigValueStyle: React.CSSProperties = {
 const summarySubTextStyle: React.CSSProperties = {
   fontSize: '14px',
   color: '#78787b',
+};
+
+// 카드 뒤집기(대본 보기) 뒷면 스타일
+const flipBackStyle: React.CSSProperties = {
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '10px',
+};
+
+const flipBackHeaderStyle: React.CSSProperties = {
+  fontSize: '14px',
+  color: colors.label.normal,
+  fontWeight: 500,
+};
+
+const scriptBoxStyle: React.CSSProperties = {
+  backgroundColor: colors.fill?.normal || '#F4F6F8',
+  borderRadius: '12px',
+  padding: '16px 18px',
+  height: '140px',
+  width: '100%',
+  overflowY: 'auto',
+  boxSizing: 'border-box',
+};
+
+const scriptTextStyle: React.CSSProperties = {
+  margin: 0,
+  fontFamily: 'Pretendard, sans-serif',
+  fontSize: '13px',
+  color: colors.label.normal,
+  whiteSpace: 'pre-wrap',
+  lineHeight: 1.5,
+};
+
+const flipHintStyle: React.CSSProperties = {
+  fontSize: '12px',
+  color: colors.label.neutral,
 };
 
 const insightRowStyle: React.CSSProperties = {
