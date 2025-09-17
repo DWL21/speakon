@@ -143,6 +143,7 @@ export const ScriptModal: React.FC<ScriptModalProps> = ({
     }
   }, [slideInputs, onSave, onSlideChange]);
 
+
   // 에러 상태 렌더링
   if (error) {
     return (
@@ -190,6 +191,12 @@ export const ScriptModal: React.FC<ScriptModalProps> = ({
             slides={slideInputs}
             onSlideChange={handleSlideChange}
             onFocus={handleFocus}
+            onGenerateOne={(n) => {
+              setSlideInputs(prev => prev.map(s => s.slideNumber === n ? {
+                ...s,
+                content: s.content && s.content.trim().length > 0 ? s.content : `슬라이드 ${s.slideNumber} 요약\n- 핵심 포인트 1\n- 핵심 포인트 2\n- 결론`
+              } : s));
+            }}
           />
         </ScriptModalContent>
         <ScriptModalFooter

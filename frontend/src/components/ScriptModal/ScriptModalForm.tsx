@@ -11,16 +11,20 @@ interface ScriptModalFormProps {
   slides: SlideInput[];
   onSlideChange?: (slideNumber: number, content: string) => void;
   onFocus?: (slideNumber: number) => void;
+  selectedSlides?: number[];
+  onGenerateOne?: (slideNumber: number) => void;
 }
 
 export interface ScriptModalFormRef {
   getAllCurrentValues: () => SlideInput[];
 }
 
-const ScriptModalForm = forwardRef<ScriptModalFormRef, ScriptModalFormProps>(({
+const ScriptModalForm = forwardRef<ScriptModalFormRef, ScriptModalFormProps>(({ 
   slides,
   onSlideChange: _onSlideChange,
-  onFocus
+  onFocus,
+  selectedSlides = [],
+  onGenerateOne
 }, ref) => {
   const itemRefs = useRef<Record<number, ScriptModalItemRef | null>>({});
 
@@ -54,6 +58,7 @@ const ScriptModalForm = forwardRef<ScriptModalFormRef, ScriptModalFormProps>(({
 
   return (
     <div style={formSectionStyle}>
+      {/* 선택/전체 선택 컨트롤 제거 */}
       <div style={inputListStyle}>
         {slides.map((slide) => (
           <MemoizedScriptModalItem
@@ -62,6 +67,7 @@ const ScriptModalForm = forwardRef<ScriptModalFormRef, ScriptModalFormProps>(({
               itemRefs.current[slide.slideNumber] = ref;
             }}
             slideNumber={slide.slideNumber}
+            onGenerate={(n) => onGenerateOne?.(n)}
             value={slide.content}
             onChange={slideCallbacks[slide.slideNumber]}
             onFocus={handleFocus}
@@ -84,6 +90,25 @@ const formSectionStyle: React.CSSProperties = {
   alignItems: 'flex-start',
   justifyContent: 'center',
   height: '100%',
+};
+
+const controlBarStyle: React.CSSProperties = {
+  position: 'absolute',
+  top: 0,
+  right: 60,
+  display: 'flex',
+  alignItems: 'center',
+  gap: '8px',
+  padding: '10px 0',
+};
+
+const checkboxLabelStyle: React.CSSProperties = {
+  fontFamily: 'Pretendard',
+  fontSize: '13px',
+  color: '#171719',
+  display: 'flex',
+  alignItems: 'center',
+  gap: '6px',
 };
 
 const inputListStyle: React.CSSProperties = {
