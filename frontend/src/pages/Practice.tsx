@@ -39,6 +39,7 @@ export function Practice() {
   // 대본 입력 영역 포커스 상태
   const [isScriptFocused, setIsScriptFocused] = useState(false);
   const [isScriptInputVisible, setIsScriptInputVisible] = useState(true);
+  const [isGeneratingScript, setIsGeneratingScript] = useState(false);
 
   useEffect(() => {
     const state = location.state as PracticePageState;
@@ -380,20 +381,32 @@ export function Practice() {
 
             {/* 대본 입력 영역 */}
             {isScriptInputVisible && (
-              <div style={scriptInputContainerStyle}>
+              <div style={{ ...scriptInputContainerStyle, position: 'relative' }}>
                 <textarea 
                   value={scriptContent}
                   onChange={(e) => setScriptContent(e.target.value)}
                   onFocus={handleScriptFocus}
                   onBlur={handleScriptBlur}
                   placeholder="해당 슬라이드의 대본을 입력하세요."
+                  disabled={isGeneratingScript}
                   style={{
                     ...textareaStyle,
                     backgroundColor: isScriptFocused ? colors.static.white : colors.fill.normal,
                     border: isScriptFocused ? `3px solid ${colors.primary.normal}` : '3px solid transparent',
-                    transition: 'background-color 0.2s ease, border-color 0.2s ease'
+                    opacity: isGeneratingScript ? 0.6 : 1,
+                    transition: 'background-color 0.2s ease, border-color 0.2s ease, opacity 0.2s ease'
                   }}
                 />
+                {isGeneratingScript && (
+                  <div style={scriptGeneratingOverlayStyle}>
+                    <div style={overlayIconWrapperStyle}>
+                      <svg width="18" height="18" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M8.35973 2.1087C8.35973 2.22888 8.40747 2.34413 8.49245 2.42911C8.57743 2.51409 8.69268 2.56183 8.81286 2.56183C8.93303 2.56183 9.04829 2.51409 9.13326 2.42911C9.21824 2.34413 9.26598 2.22888 9.26598 2.1087V0.451172C9.26598 0.330996 9.21824 0.215742 9.13326 0.130764C9.04829 0.0457867 8.93303 -0.00195312 8.81286 -0.00195312C8.69268 -0.00195312 8.57743 0.0457867 8.49245 0.130764C8.40747 0.215742 8.35973 0.330996 8.35973 0.451172V2.1087ZM12.4379 2.14042C12.5204 2.05496 12.5661 1.9405 12.565 1.82169C12.564 1.70289 12.5163 1.58924 12.4323 1.50522C12.3483 1.42121 12.2347 1.37356 12.1159 1.37252C11.9971 1.37149 11.8826 1.41716 11.7971 1.4997L10.6254 2.67148C10.5821 2.71328 10.5476 2.76328 10.5238 2.81857C10.5001 2.87385 10.4876 2.93331 10.487 2.99347C10.4865 3.05364 10.498 3.11331 10.5208 3.16899C10.5435 3.22468 10.5772 3.27527 10.6197 3.31782C10.6623 3.36036 10.7129 3.39401 10.7686 3.41679C10.8243 3.43958 10.8839 3.45104 10.9441 3.45052C11.0042 3.45 11.0637 3.4375 11.119 3.41375C11.1743 3.39 11.2243 3.35548 11.2661 3.3122L12.4379 2.14042ZM6.35964 3.3122C6.40144 3.35548 6.45144 3.39 6.50672 3.41375C6.562 3.4375 6.62146 3.45 6.68163 3.45052C6.74179 3.45104 6.80146 3.43958 6.85715 3.41679C6.91284 3.39401 6.96343 3.36036 7.00597 3.31782C7.04852 3.27527 7.08216 3.22468 7.10495 3.16899C7.12773 3.11331 7.1392 3.05364 7.13867 2.99347C7.13815 2.93331 7.12565 2.87385 7.1019 2.81857C7.07815 2.76328 7.04363 2.71328 7.00036 2.67148L5.82857 1.4997C5.74311 1.41716 5.62865 1.37149 5.50985 1.37252C5.39104 1.37356 5.27739 1.42121 5.19338 1.50522C5.10936 1.58924 5.06171 1.70289 5.06068 1.82169C5.05964 1.9405 5.10532 2.05496 5.18786 2.14042L6.35964 3.3122Z" fill={colors.primary.normal}/>
+                      </svg>
+                    </div>
+                    <div style={overlayTextStyle}>대본 생성 중...</div>
+                  </div>
+                )}
               </div>
             )}
             
@@ -403,13 +416,18 @@ export function Practice() {
               onTimeSettingClick={handleTimeSettingClick}
               onEditScript={handleScriptWritingClick}
           onGenerateScript={() => {
-            // 현재 슬라이드용 대본 자동 생성 (모킹)
-            setPracticeData(prev => {
-              if (!prev) return prev;
-              const generated = `슬라이드 ${currentSlide} 요약\n- 핵심 포인트 1\n- 핵심 포인트 2\n- 결론`;
-              const nextSlides = prev.slides.map(s => s.slideNumber === currentSlide ? { ...s, content: generated } : s);
-              return { ...prev, slides: nextSlides };
-            })
+            // 대본 생성 중 상태 표시 후 모킹 생성
+            setIsGeneratingScript(true);
+            const generated = `슬라이드 ${currentSlide} 요약\n- 핵심 포인트 1\n- 핵심 포인트 2\n- 결론`;
+            window.setTimeout(() => {
+              setPracticeData(prev => {
+                if (!prev) return prev;
+                const nextSlides = prev.slides.map(s => s.slideNumber === currentSlide ? { ...s, content: generated } : s);
+                return { ...prev, slides: nextSlides };
+              });
+              setScriptContent(generated);
+              setIsGeneratingScript(false);
+            }, 1200);
           }}
               onPracticeToggle={handlePracticeToggle}
               onEnd={handleExitClick}
@@ -550,5 +568,33 @@ const textareaStyle: React.CSSProperties = {
   outline: 'none',
   boxSizing: 'border-box',
   lineHeight: 1.5,
+};
+
+// 대본 생성 중 오버레이
+const scriptGeneratingOverlayStyle: React.CSSProperties = {
+  position: 'absolute',
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  gap: '8px',
+  pointerEvents: 'none',
+};
+
+const overlayIconWrapperStyle: React.CSSProperties = {
+  width: '24px',
+  height: '24px',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+};
+
+const overlayTextStyle: React.CSSProperties = {
+  fontFamily: 'Pretendard, sans-serif',
+  fontSize: '14px',
+  color: colors.label.neutral,
 };
 
