@@ -7,6 +7,8 @@ interface PracticeToolbarProps {
   onEditScript?: () => void;
   onGenerateScript?: () => void;
   onPracticeToggle?: () => void;
+  onHideStatus?: () => void;
+  onToggleTimer?: () => void;
   onEnd?: () => void;
   currentPageTime?: { minutes: number; seconds: number };
   isPracticing?: boolean;
@@ -21,6 +23,8 @@ export const PracticeToolbar: React.FC<PracticeToolbarProps> = ({
   onEditScript,
   onGenerateScript,
   onPracticeToggle,
+  onHideStatus,
+  onToggleTimer,
   onEnd,
   currentPageTime = { minutes: 0, seconds: 0 },
   isPracticing = false,
@@ -35,9 +39,9 @@ export const PracticeToolbar: React.FC<PracticeToolbarProps> = ({
   const formatTime = (value: number) => value.toString().padStart(2, '0');
 
   const handleTimerDisplayClick = () => {
-    if (onPracticeToggle) {
-      onPracticeToggle();
-    }
+    if (onHideStatus) onHideStatus();
+    if (onToggleTimer) onToggleTimer();
+    if (onPracticeToggle) onPracticeToggle();
   };
 
   const handleMouseEnter = () => {
@@ -418,8 +422,15 @@ const PencilIcon = () => (
 );
 
 const ExitIcon = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M10 17l5-5-5-5" stroke="#7D7E83" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
-    <path d="M4 12h11" stroke="#7D7E83" strokeWidth="1.6" strokeLinecap="round"/>
+  <svg width="18" height="18" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <g clipPath="url(#clip0_1424_5165)">
+      <path d="M11.3755 2.72949H3.45882V13.8128C3.45882 14.6873 4.1677 15.3962 5.04215 15.3962H11.3755" stroke="#78787B" strokeWidth="1.58333" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M12.1672 11.4375L14.5422 9.0625M14.5422 9.0625L12.1672 6.6875M14.5422 9.0625H6.62549" stroke="#78787B" strokeWidth="1.58333" strokeLinecap="round" strokeLinejoin="round"/>
+    </g>
+    <defs>
+      <clipPath id="clip0_1424_5165">
+        <rect width="18" height="18" fill="white" transform="translate(0 0.0625)"/>
+      </clipPath>
+    </defs>
   </svg>
 );
