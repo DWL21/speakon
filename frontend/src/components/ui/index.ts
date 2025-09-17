@@ -11,3 +11,4 @@ export { TopNavBar } from './TopNavBar';
 export { Typography } from './Typography';
 export { ErrorMessage } from './ErrorMessage';
 export { ErrorModal } from './ErrorModal'; 
+export { BoardCard } from './BoardCard';

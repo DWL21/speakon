@@ -1,13 +1,20 @@
 import { useNavigate } from 'react-router-dom'
-import { useRef } from 'react'
+import { useRef, useEffect, useState } from 'react'
 import { FileUploadBox } from '../components/upload/FileUploadBox'
 import { SlideInput } from '../components/ScriptModal/ScriptModal'
 import { colors } from '../theme/colors'
 import { typography } from '../theme/typography'
+import { upsertFile, listFiles, removeFile, StoredFileMeta } from '../lib/boardStorage'
+import { BoardCard } from '../components/ui/BoardCard'
 
 export function Home() {
   const navigate = useNavigate()
   const uploadRef = useRef<{ open: () => void }>(null)
+  const [files, setFiles] = useState<StoredFileMeta[]>([])
+
+  useEffect(() => {
+    setFiles(listFiles())
+  }, [])
 
   const handleUploadComplete = async (file: File) => {
     console.log('📁 파일 업로드 완료:', file.name);
@@ -24,6 +31,10 @@ export function Home() {
         content: ''
       }));
       
+      // 보드에 메타 저장 (모킹, 중복 방지)
+      upsertFile({ name: file.name, size: file.size, pageCount })
+      setFiles(listFiles())
+      
       // ScriptModal을 건너뛰고 바로 Practice 페이지로 이동
       navigate('/practice', {
         state: {
@@ -39,6 +50,10 @@ export function Home() {
         pageNumber: 1,
         content: ''
       }];
+      
+      // 보드에 메타 저장 (페이지 수 미상, 중복 방지)
+      upsertFile({ name: file.name, size: file.size })
+      setFiles(listFiles())
       
       navigate('/practice', {
         state: {
@@ -104,7 +119,9 @@ export function Home() {
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
             <div style={{ ...typography.title[3], color: colors.static.black }}>새 발표</div>
-            <div style={{ ...typography.label, color: colors.label.neutral }}>발표 자료를 업로드하고 발표 연습을 시작해보세요.</div>
+            <div style={{ fontFamily: 'Pretendard, sans-serif', fontWeight: 400, fontSize: '14px', lineHeight: '14px', color: colors.label.neutral }}>
+              발표 자료를 업로드하고 발표 연습을 시작해보세요.
+            </div>
           </div>
         </div>
 
@@ -113,10 +130,18 @@ export function Home() {
           <div style={{ ...typography.heading[2], color: '#333333' }}>전체 보드</div>
         </div>
 
-        {/* 빈 상태 */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '400px' }}>
-          <div style={{ ...typography.body.normal, color: colors.label.assistive }}>등록된 파일이 없습니다.</div>
-        </div>
+        {/* 카드 목록 / 빈 상태 */}
+        {files.length === 0 ? (
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '634px' }}>
+            <div style={{ ...typography.body.normal, color: colors.label.assistive }}>등록된 파일이 없습니다.</div>
+          </div>
+        ) : (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(1, minmax(0, 1fr))', gap: '12px', padding: '12px 34px' }}>
+            {files.map(f => (
+              <BoardCard key={f.id} file={f} onDelete={(id: string) => { removeFile(id); setFiles(listFiles()); }} />
+            ))}
+          </div>
+        )}
 
         {/* 숨김 업로드 박스 (상단 카드 클릭으로 트리거) */}
         <div style={{ display: 'none' }}>
