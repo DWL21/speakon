@@ -57,13 +57,13 @@ export function Result() {
     ? (practiceResult as any).goalTime.minutes * 60 + (practiceResult as any).goalTime.seconds
     : undefined;
 
-  // Mock 예상 질문 TOP5 (MCP 뷰 유지)
+  // Mock 예상 질문 TOP5 (모킹 시나리오에 맞춤)
   const mockQuestions: string[] = [
-    '질문 1을 입력하시면 됩니다',
-    '질문 2을 입력하시면 됩니다',
-    '질문 3을 입력하시면 됩니다',
-    '질문 4을 입력하시면 됩니다',
-    '질문 5을 입력하시면 됩니다',
+    '아키텍처에서 대본 생성 모듈의 실패 대비와 재시도 전략은?',
+    'PDF 파싱 정확도와 페이지-슬라이드 매핑 오류 대응은?',
+    '대본 자동 생성 품질을 올리기 위한 프롬프트/튜닝 방법은?',
+    '발표 시간 측정 신뢰도(환경/지연 요인) 보정 방안은?',
+    '팀 협업(리포트 공유/피드백) 기능 로드맵은?',
   ];
 
   const diffSec = goalSeconds !== undefined ? totalSec - goalSeconds : undefined;
