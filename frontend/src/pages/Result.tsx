@@ -144,7 +144,12 @@ export function Result() {
             </div>
             {/* 가장 오래 발표한 슬라이드 - 카드 클릭 시 대본 보기 (뒤집기) */}
             <div
-              style={{ ...summaryCardStyle, width: '550px', cursor: longestSlideNumber ? 'pointer' : 'default' }}
+              style={{
+                ...summaryCardStyle,
+                width: '550px',
+                cursor: longestSlideNumber ? 'pointer' : 'default',
+                height: isScriptCardFlipped ? 'auto' : '180px',
+              }}
               onClick={() => {
                 if (longestSlideNumber) setIsScriptCardFlipped(prev => !prev);
               }}
@@ -153,18 +158,19 @@ export function Result() {
             >
               <div style={summaryCardTitleStyle}>이 슬라이드에 시간을 가장 많이 썼어요!</div>
               {longestSlideNumber ? (
-                isScriptCardFlipped ? (
-                  <div style={flipBackStyle}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                  {!isScriptCardFlipped && (
+                    <>
+                      <div style={summaryBigValueStyle}>슬라이드 {longestSlideNumber}</div>
+                      <div style={summarySubTextStyle}>카드를 클릭하면 대본을 확인할 수 있어요</div>
+                    </>
+                  )}
+                  {isScriptCardFlipped && (
                     <div style={scriptBoxStyle}>
                       <pre style={scriptTextStyle}>{longestScript || '대본이 없습니다.'}</pre>
                     </div>
-                  </div>
-                ) : (
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                    <div style={summaryBigValueStyle}>슬라이드 {longestSlideNumber}</div>
-                    <div style={summarySubTextStyle}>카드를 클릭하면 대본을 확인할 수 있어요</div>
-                  </div>
-                )
+                  )}
+                </div>
               ) : (
                 <div style={emptyTextStyle}>데이터 없음</div>
               )}
@@ -343,12 +349,7 @@ const summarySubTextStyle: React.CSSProperties = {
   color: '#78787b',
 };
 
-// 카드 뒤집기(대본 보기) 뒷면 스타일
-const flipBackStyle: React.CSSProperties = {
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '10px',
-};
+// (사용 안 함)
 
 // const flipBackHeaderStyle: React.CSSProperties = {
 //   fontSize: '14px',
