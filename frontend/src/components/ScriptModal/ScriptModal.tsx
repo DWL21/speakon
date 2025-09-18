@@ -9,7 +9,7 @@ import { ScriptModalFooter } from './ScriptModalFooter';
 import { SlideInput } from './ScriptModalForm';
 import { getPdfPageCount } from '../../lib/pdfUtils';
 import { ErrorModal } from '../ui/ErrorModal';
-import { generateSlideScript, saveSlides } from '../../lib/mockApi';
+import { saveSlides } from '../../lib/mockApi';
 import { getFileKey, getScripts, saveScripts as persistScripts, setScript } from '../../lib/scriptStorage';
 
 export interface ScriptModalProps {
@@ -222,21 +222,6 @@ export const ScriptModal: React.FC<ScriptModalProps> = ({
             slides={slideInputs}
             onSlideChange={handleSlideChange}
             onFocus={handleFocus}
-            onGenerateOne={(n) => {
-              const target = slideInputs.find(s => s.slideNumber === n);
-              if (!target) return;
-              // push current content to undo stack
-              const stack = undoRef.current[n] || (undoRef.current[n] = []);
-              stack.push(target.content || '');
-              generateSlideScript({ slideNumber: target.slideNumber, pageNumber: target.pageNumber, content: target.content })
-                .then(text => {
-                  setSlideInputs(prev => prev.map(s => s.slideNumber === n ? { ...s, content: text } : s));
-                  // persist per file/slide
-                  const fileKey = getFileKey(pdfFile.name, pdfFile.size);
-                  setScript(fileKey, n, text);
-                })
-                .catch(() => {});
-            }}
           />
         </ScriptModalContent>
         <ScriptModalFooter

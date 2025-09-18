@@ -11,7 +11,6 @@ interface ScriptModalFormProps {
   slides: SlideInput[];
   onSlideChange?: (slideNumber: number, content: string) => void;
   onFocus?: (slideNumber: number) => void;
-  onGenerateOne?: (slideNumber: number) => void;
 }
 
 export interface ScriptModalFormRef {
@@ -21,8 +20,7 @@ export interface ScriptModalFormRef {
 const ScriptModalForm = forwardRef<ScriptModalFormRef, ScriptModalFormProps>(({ 
   slides,
   onSlideChange: _onSlideChange,
-  onFocus,
-  onGenerateOne
+  onFocus
 }, ref) => {
   const itemRefs = useRef<Record<number, ScriptModalItemRef | null>>({});
 
@@ -65,7 +63,6 @@ const ScriptModalForm = forwardRef<ScriptModalFormRef, ScriptModalFormProps>(({
               itemRefs.current[slide.slideNumber] = ref;
             }}
             slideNumber={slide.slideNumber}
-            onGenerate={(n) => onGenerateOne?.(n)}
             value={slide.content}
             onChange={slideCallbacks[slide.slideNumber]}
             onFocus={handleFocus}
