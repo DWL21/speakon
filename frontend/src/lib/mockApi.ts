@@ -11,42 +11,53 @@ function delay(ms: number) {
   return new Promise<void>((resolve) => setTimeout(resolve, ms));
 }
 
+// Example scripts loader (from public/example-scripts.json)
+type ExampleScripts = { slides: { slideNumber: number; content: string }[] };
+let exampleScriptsCache: Promise<Map<number, string>> | null = null;
+
+async function loadExampleScripts(): Promise<Map<number, string>> {
+  if (!exampleScriptsCache) {
+    exampleScriptsCache = fetch('/example-scripts.json')
+      .then((res) => {
+        if (!res.ok) throw new Error('example-scripts.json not found');
+        return res.json() as Promise<ExampleScripts>;
+      })
+      .then((json) => {
+        const map = new Map<number, string>();
+        json.slides?.forEach((s) => map.set(s.slideNumber, s.content));
+        return map;
+      });
+  }
+  return exampleScriptsCache;
+}
+
 export async function generateSlideScript(slide: SlideDTO): Promise<string> {
   await delay(400); // simulate network/LLM time
 
-  // Deterministic per-page script (pre-authored). If exists, always return this.
+  // Only example-scripts.json is used in mocked mode
   try {
-    const { getMockPageScript } = await import('./pdfScriptMock');
-    const fixed = getMockPageScript(slide.pageNumber ?? slide.slideNumber);
-    if (fixed) return fixed;
-  } catch {}
-
-  // If we have per-page mock text (from PDF content), synthesize a focused script
-  try {
-    const { getMockPageText } = await import('./pdfContentMock');
-    const mock = getMockPageText('Emileo', slide.pageNumber ?? slide.slideNumber);
-    if (mock) {
-      // Convert brief page text into a concise speaking script
-      const lines = mock.split('\n').filter(Boolean);
-      const [title, ...bullets] = lines;
-      const bulletText = bullets.map(b => `- ${b.replace(/^[-•]\s*/, '')}`).join('\n');
-      return `${title}\n${bulletText}`;
-    }
-  } catch {}
-
-  // Final fallback: concise template
-  const scenario: Record<number, string> = {};
-
-  return scenario[slide.slideNumber]
-    ?? `이번 슬라이드에서는 핵심 내용을 간결하게 정리해 말씀드리겠습니다. 이어지는 흐름 속에서 앞뒤 맥락이 자연스럽게 연결되도록 구성했습니다.`;
+    const map = await loadExampleScripts();
+    const fromJson = map.get(slide.pageNumber ?? slide.slideNumber);
+    return fromJson ?? '';
+  } catch {
+    return '';
+  }
 }
 
 export async function generateBulkScripts(slides: SlideDTO[]): Promise<SlideDTO[]> {
   await delay(700);
-  return slides.map((s) => ({
-    ...s,
-    content: s.content && s.content.trim().length > 0 ? s.content : `슬라이드 ${s.slideNumber} 요약\n- 핵심 포인트 1\n- 핵심 포인트 2\n- 결론`,
-  }));
+  // Only example-scripts.json is used in mocked mode
+  let map: Map<number, string> | undefined;
+  try {
+    map = await loadExampleScripts();
+  } catch {}
+  const results = slides.map((s) => {
+    const n = s.pageNumber ?? s.slideNumber;
+    const fromJson = map?.get(n);
+    const content = fromJson ?? (s.content ?? '');
+    return { ...s, content };
+  });
+  return results;
 }
 
 export async function saveSlides(_slides: SlideDTO[]): Promise<{ ok: boolean }>
