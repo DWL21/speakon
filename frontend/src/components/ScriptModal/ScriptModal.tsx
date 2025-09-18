@@ -9,6 +9,7 @@ import { ScriptModalFooter } from './ScriptModalFooter';
 import { SlideInput } from './ScriptModalForm';
 import { getPdfPageCount } from '../../lib/pdfUtils';
 import { ErrorModal } from '../ui/ErrorModal';
+import { generateSlideScript, saveSlides } from '../../lib/mockApi';
 
 export interface ScriptModalProps {
   /** 모달 열림 상태 */
@@ -50,6 +51,7 @@ export const ScriptModal: React.FC<ScriptModalProps> = ({
   const title = "발표 대본";
   const description = "슬라이드에 맞춘 대본을 미리 작성할 수 있어요.";
 
+
   // PDF 파일의 페이지 수를 가져와서 슬라이드 생성
   useEffect(() => {
     const loadPdfPageCount = async () => {
@@ -66,7 +68,7 @@ export const ScriptModal: React.FC<ScriptModalProps> = ({
         const pageCount = await getPdfPageCount(pdfFile);
         console.log('📄 PDF 페이지 수:', pageCount);
         
-        // PDF 페이지 수에 맞게 슬라이드 생성
+        // PDF 페이지 수에 맞게 슬라이드 생성 + 줄글 고정 대본 기본 주입
         const pdfSlides = Array.from({ length: pageCount }, (_, index) => {
           const slideNumber = index + 1;
           const existingSlide = slides.find(s => s.slideNumber === slideNumber);
@@ -140,6 +142,8 @@ export const ScriptModal: React.FC<ScriptModalProps> = ({
           onSlideChange?.(slide.slideNumber, slide.content);
         }
       });
+      // mock persist
+      saveSlides(currentValues).catch(() => {});
     }
   }, [slideInputs, onSave, onSlideChange]);
 
@@ -192,10 +196,13 @@ export const ScriptModal: React.FC<ScriptModalProps> = ({
             onSlideChange={handleSlideChange}
             onFocus={handleFocus}
             onGenerateOne={(n) => {
-              setSlideInputs(prev => prev.map(s => s.slideNumber === n ? {
-                ...s,
-                content: s.content && s.content.trim().length > 0 ? s.content : `슬라이드 ${s.slideNumber} 요약\n- 핵심 포인트 1\n- 핵심 포인트 2\n- 결론`
-              } : s));
+              const target = slideInputs.find(s => s.slideNumber === n);
+              if (!target) return;
+              generateSlideScript({ slideNumber: target.slideNumber, pageNumber: target.pageNumber, content: target.content })
+                .then(text => {
+                  setSlideInputs(prev => prev.map(s => s.slideNumber === n ? { ...s, content: text } : s));
+                })
+                .catch(() => {});
             }}
           />
         </ScriptModalContent>

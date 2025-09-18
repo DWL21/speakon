@@ -7,6 +7,7 @@ import { ScriptModal } from '../components/ScriptModal';
 import { Sidebar, StatusBar, ExitModal, PracticeGuide, PracticeToolbar } from '../components/practice';
 import { colors } from '../theme/colors';
 import { SlideInput } from '../components/ScriptModal/ScriptModalForm';
+import { generateSlideScript } from '../lib/mockApi';
 
 
 interface PracticePageState {
@@ -416,19 +417,21 @@ export function Practice() {
               onViewToggle={handleScriptInputToggle}
               onTimeSettingClick={handleTimeSettingClick}
               onEditScript={handleScriptWritingClick}
-          onGenerateScript={() => {
-            // 대본 생성 중 상태 표시 후 모킹 생성
+          onGenerateScript={async () => {
+            // 대본 생성 중 상태 표시 후 mock API 호출
             setIsGeneratingScript(true);
-            const generated = `슬라이드 ${currentSlide} 요약\n- 핵심 포인트 1\n- 핵심 포인트 2\n- 결론`;
-            window.setTimeout(() => {
+            try {
+              const existing = practiceData?.slides.find(s => s.slideNumber === currentSlide)?.content || '';
+              const generated = await generateSlideScript({ slideNumber: currentSlide, pageNumber: currentSlide, content: existing });
               setPracticeData(prev => {
                 if (!prev) return prev;
                 const nextSlides = prev.slides.map(s => s.slideNumber === currentSlide ? { ...s, content: generated } : s);
                 return { ...prev, slides: nextSlides };
               });
               setScriptContent(generated);
+            } finally {
               setIsGeneratingScript(false);
-            }, 1200);
+            }
           }}
               onPracticeToggle={handlePracticeToggle}
               onEnd={handleExitClick}
