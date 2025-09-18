@@ -10,6 +10,7 @@ import { SlideInput } from './ScriptModalForm';
 import { getPdfPageCount } from '../../lib/pdfUtils';
 import { ErrorModal } from '../ui/ErrorModal';
 import { generateSlideScript, saveSlides } from '../../lib/mockApi';
+import { getFileKey, getScripts, saveScripts as persistScripts, setScript } from '../../lib/scriptStorage';
 
 export interface ScriptModalProps {
   /** 모달 열림 상태 */
@@ -46,11 +47,12 @@ export const ScriptModal: React.FC<ScriptModalProps> = ({
   
   // ScriptModalForm의 ref
   const formRef = useRef<ScriptModalFormRef>(null);
+  // Undo 스택: 슬라이드 번호별 변경 이력
+  const undoRef = useRef<Record<number, string[]>>({});
 
   // 고정된 제목과 설명
   const title = "발표 대본";
   const description = "슬라이드에 맞춘 대본을 미리 작성할 수 있어요.";
-
 
   // PDF 파일의 페이지 수를 가져와서 슬라이드 생성
   useEffect(() => {
@@ -68,7 +70,7 @@ export const ScriptModal: React.FC<ScriptModalProps> = ({
         const pageCount = await getPdfPageCount(pdfFile);
         console.log('📄 PDF 페이지 수:', pageCount);
         
-        // PDF 페이지 수에 맞게 슬라이드 생성 + 줄글 고정 대본 기본 주입
+        // PDF 페이지 수에 맞게 슬라이드 생성 + 로컬 저장 대본 우선 주입
         const pdfSlides = Array.from({ length: pageCount }, (_, index) => {
           const slideNumber = index + 1;
           const existingSlide = slides.find(s => s.slideNumber === slideNumber);
@@ -78,7 +80,11 @@ export const ScriptModal: React.FC<ScriptModalProps> = ({
             content: ''
           };
         });
-        setSlideInputs(pdfSlides);
+        // 로컬 저장된 스크립트와 병합
+        const fileKey = getFileKey(pdfFile.name, pdfFile.size);
+        const stored = getScripts(fileKey);
+        const merged = pdfSlides.map(s => ({ ...s, content: stored[s.slideNumber] ?? s.content }));
+        setSlideInputs(merged);
       } catch (error) {
         console.error('PDF 페이지 수 가져오기 실패:', error);
         const errorMessage = error instanceof Error ? error.message : 'PDF 파일을 읽을 수 없습니다. 올바른 PDF 파일인지 확인해주세요.';
@@ -91,6 +97,22 @@ export const ScriptModal: React.FC<ScriptModalProps> = ({
 
     loadPdfPageCount();
   }, [pdfFile, slides]);
+
+  // Cmd/Ctrl+Z: 현재 프리뷰 페이지의 직전 내용으로 롤백
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      const isUndo = (e.metaKey || e.ctrlKey) && !e.shiftKey && (e.key === 'z' || e.key === 'Z');
+      if (!isUndo) return;
+      const stack = undoRef.current[currentPreviewPage] || [];
+      if (stack.length === 0) return;
+      const prevText = stack.pop() as string;
+      setSlideInputs(prev => prev.map(s => s.slideNumber === currentPreviewPage ? { ...s, content: prevText } : s));
+      const fileKey = getFileKey(pdfFile.name, pdfFile.size);
+      setScript(fileKey, currentPreviewPage, prevText);
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [currentPreviewPage, pdfFile.name, pdfFile.size]);
 
   const handleSlideChange = useCallback((slideNumber: number, content: string) => {
     console.log('📝 내용 변경 → 상태 업데이트', slideNumber);
@@ -144,8 +166,13 @@ export const ScriptModal: React.FC<ScriptModalProps> = ({
       });
       // mock persist
       saveSlides(currentValues).catch(() => {});
+      // local persist (all slides)
+      const fileKey = getFileKey(pdfFile.name, pdfFile.size);
+      const map: Record<number, string> = {} as any;
+      currentValues.forEach(s => { map[s.slideNumber] = s.content; });
+      persistScripts(fileKey, map);
     }
-  }, [slideInputs, onSave, onSlideChange]);
+  }, [slideInputs, onSave, onSlideChange, pdfFile.name, pdfFile.size]);
 
 
   // 에러 상태 렌더링
@@ -198,9 +225,15 @@ export const ScriptModal: React.FC<ScriptModalProps> = ({
             onGenerateOne={(n) => {
               const target = slideInputs.find(s => s.slideNumber === n);
               if (!target) return;
+              // push current content to undo stack
+              const stack = undoRef.current[n] || (undoRef.current[n] = []);
+              stack.push(target.content || '');
               generateSlideScript({ slideNumber: target.slideNumber, pageNumber: target.pageNumber, content: target.content })
                 .then(text => {
                   setSlideInputs(prev => prev.map(s => s.slideNumber === n ? { ...s, content: text } : s));
+                  // persist per file/slide
+                  const fileKey = getFileKey(pdfFile.name, pdfFile.size);
+                  setScript(fileKey, n, text);
                 })
                 .catch(() => {});
             }}

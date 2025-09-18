@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { SimplePdfViewer } from '../components/ui/SimplePdfViewer';
 import { TopNavBar } from '../components/ui/TopNavBar';
@@ -8,6 +8,7 @@ import { Sidebar, StatusBar, ExitModal, PracticeGuide, PracticeToolbar } from '.
 import { colors } from '../theme/colors';
 import { SlideInput } from '../components/ScriptModal/ScriptModalForm';
 import { generateSlideScript } from '../lib/mockApi';
+import { getFileKey, getScript, setScript } from '../lib/scriptStorage';
 
 
 interface PracticePageState {
@@ -41,6 +42,7 @@ export function Practice() {
   const [isScriptFocused, setIsScriptFocused] = useState(false);
   const [isScriptInputVisible, setIsScriptInputVisible] = useState(true);
   const [isGeneratingScript, setIsGeneratingScript] = useState(false);
+  const undoRef = useRef<Record<number, string[]>>({});
 
   useEffect(() => {
     const state = location.state as PracticePageState;
@@ -78,7 +80,12 @@ export function Practice() {
   useEffect(() => {
     if (practiceData) {
       const currentSlideData = practiceData.slides.find(slide => slide.slideNumber === currentSlide);
-      setScriptContent(currentSlideData?.content || '');
+      const base = currentSlideData?.content || '';
+      const fileKey = getFileKey(practiceData.pdfFile.name, practiceData.pdfFile.size);
+      const saved = getScript(fileKey, currentSlide);
+      setScriptContent(saved || base);
+      // 슬라이드 전환 시 undo 스택 초기화 (해당 슬라이드만)
+      if (!undoRef.current[currentSlide]) undoRef.current[currentSlide] = [];
     }
   }, [currentSlide, practiceData]);
 
@@ -142,6 +149,29 @@ export function Practice() {
     };
   }, [currentSlide, practiceData, isScriptFocused, showGoalTimeModal, showScriptModal, showExitModal]);
 
+  // Cmd/Ctrl+Z: 입력 영역에서도 되돌리기 (로컬 저장 포함)
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      const isUndo = (e.metaKey || e.ctrlKey) && !e.shiftKey && (e.key === 'z' || e.key === 'Z');
+      if (!isUndo) return;
+      // 입력 영역에 포커스가 있을 때만 처리
+      if (!isScriptFocused) return;
+      const stack = undoRef.current[currentSlide] || [];
+      if (stack.length === 0) return;
+      const prev = stack.pop() as string;
+      setScriptContent(prev);
+      if (practiceData) {
+        const updatedSlides = practiceData.slides.map(slide =>
+          slide.slideNumber === currentSlide ? { ...slide, content: prev } : slide
+        );
+        setPracticeData({ ...practiceData, slides: updatedSlides });
+        const fileKey = getFileKey(practiceData.pdfFile.name, practiceData.pdfFile.size);
+        setScript(fileKey, currentSlide, prev);
+      }
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [currentSlide, isScriptFocused, practiceData]);
 
 
   if (!practiceData) {
@@ -211,6 +241,9 @@ export function Practice() {
         ...practiceData,
         slides: updatedSlides
       });
+      // persist to local storage per file/slide
+      const fileKey = getFileKey(practiceData.pdfFile.name, practiceData.pdfFile.size);
+      setScript(fileKey, currentSlide, scriptContent);
     }
   };
 
@@ -386,7 +419,14 @@ export function Practice() {
               <div style={{ ...scriptInputContainerStyle, position: 'relative' }}>
                 <textarea 
                   value={scriptContent}
-                  onChange={(e) => setScriptContent(e.target.value)}
+                  onChange={(e) => {
+                    // 입력 전 상태를 undo 스택에 저장 (연속 입력 최적화는 생략)
+                    const stack = undoRef.current[currentSlide] || (undoRef.current[currentSlide] = []);
+                    if (stack.length === 0 || stack[stack.length - 1] !== scriptContent) {
+                      stack.push(scriptContent);
+                    }
+                    setScriptContent(e.target.value);
+                  }}
                   onFocus={handleScriptFocus}
                   onBlur={handleScriptBlur}
                   placeholder="해당 슬라이드의 대본을 입력하세요."
@@ -421,6 +461,9 @@ export function Practice() {
             // 대본 생성 중 상태 표시 후 mock API 호출
             setIsGeneratingScript(true);
             try {
+              // 덮어쓰기 이전 내용을 undo 스택에 저장
+              const stack = undoRef.current[currentSlide] || (undoRef.current[currentSlide] = []);
+              stack.push(scriptContent || '');
               const existing = practiceData?.slides.find(s => s.slideNumber === currentSlide)?.content || '';
               const generated = await generateSlideScript({ slideNumber: currentSlide, pageNumber: currentSlide, content: existing });
               setPracticeData(prev => {
@@ -429,6 +472,11 @@ export function Practice() {
                 return { ...prev, slides: nextSlides };
               });
               setScriptContent(generated);
+              // persist
+              if (practiceData) {
+                const fileKey = getFileKey(practiceData.pdfFile.name, practiceData.pdfFile.size);
+                setScript(fileKey, currentSlide, generated);
+              }
             } finally {
               setIsGeneratingScript(false);
             }

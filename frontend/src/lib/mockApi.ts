@@ -13,8 +13,6 @@ function delay(ms: number) {
 
 export async function generateSlideScript(slide: SlideDTO): Promise<string> {
   await delay(400); // simulate network/LLM time
-  const base = slide.content && slide.content.trim().length > 0 ? slide.content : undefined;
-  if (base) return base; // keep existing
 
   // Deterministic per-page script (pre-authored). If exists, always return this.
   try {
